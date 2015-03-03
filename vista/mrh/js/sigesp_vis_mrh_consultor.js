@@ -1,5 +1,5 @@
 Ext.onReady(function(){
-	
+	Ext.BLANK_IMAGE_URL = '../../base/librerias/js/ext/resources/images/default/s.gif';
 	//combo rol
 	var reRol = Ext.data.Record.create([
 	    {name: 'codigo'},    
@@ -28,8 +28,26 @@ Ext.onReady(function(){
 	});
 	//fin combo rol
 	
+	//OBETENIEDO LA DATA INICIAL...
+	var myJSONObject = {"operacion":"DAT_INI"};
+	var ObjSon=Ext.util.JSON.encode(myJSONObject);
+	var parametros ='ObjSon='+ObjSon;
+	Ext.Ajax.request({
+		url: '../../controlador/mrh/sigesp_ctr_mrh_consultor.php',
+		params: parametros,
+		method: 'POST',
+		success: function ( result, request ) {
+			var datos = result.responseText;
+			var objData = eval('(' + datos + ')');
+			dsRol.loadData(objData);
+		},
+		failure: function ( result, request){ 
+				Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
+		}
+	});
+	
 	//PANEL PRINCIPAL CONSULTORES
-   	var plUsuario = new Ext.FormPanel({
+   	var plConsultor = new Ext.FormPanel({
 		title: "<H1 align='center'>Consultores</H1>",
 		style: 'position:absolute;top:70px;left:250px', 
 		height: 300,
@@ -42,7 +60,7 @@ Ext.onReady(function(){
             tooltip:'Reiniciar el formulario',
             iconCls:'barralimpiar',
             handler: function() {
-            	limpiarFormulario(plUsuario);
+            	limpiarFormulario(plConsultor);
 			}
   		},{
   			text:'Guardar',
@@ -51,131 +69,98 @@ Ext.onReady(function(){
 	        handler: function() {
 	        	var logcon = Ext.getCmp('logcon').getValue();
 	        	var nomcon = Ext.getCmp('nomcon').getValue();
-	        	var admusu = Ext.getCmp('admusu').getValue();
+	        	var rolcon = Ext.getCmp('rolcon').getValue();
 	        	var claveNueva = Ext.getCmp('clavenue').getValue();
 	        	var claveNuevaRep = Ext.getCmp('clavenuerep').getValue();
-	        	if(admusu){
-	        		admusu = 1;
-	        	}
-	        	else {
-	        		admusu = 0;
-	        	}
-	        	
+	        		        	
 	        	if(logcon!='') {
 	        		if(nomcon!='') {
-	        			if(claveNueva!='' && claveNueva!='' ) {
-	        				if(claveNueva == claveNuevaRep) {
-	        	        		var objetoData = {
-	        	    	        	'operacion': 'GUARDAR_USUARIO',
-	        	    	        	'logcon': logcon,
-	        	    	        	'nomcon': nomcon,
-	        	    	        	'admusu': admusu,
-	        	    	        	'clausu': b64_sha1('b2c'+claveNueva)
-	        	    	        };
-	        	        		
-	        	        		var ObjSon=Ext.util.JSON.encode(objetoData);
-	                           	var parametros ='ObjSon='+ObjSon;
-	                           	Ext.Ajax.request({
-	                           		url: '../../controlador/documentos/sigesp_ctr_edoc_adminusuario.php',
-	                           		params: parametros,
-	                           		method: 'POST',
-	                           		success: function ( result, request ) {
-	                           			var respuesta = result.responseText;
-	                           			var mensaje = '';
-	                           			var icon = '';
-	        							if(respuesta == 1){
-	        								var mensaje = 'El usuario fue actualizado';
-	        								var icon = Ext.MessageBox.INFO;
-	        							}
-	        							else if (respuesta == 2){
-	        								var mensaje = 'El usuario fue insertado';
-	        								var icon = Ext.MessageBox.INFO;
-	        							}
-	        							else if (respuesta == 0){
-	        								var mensaje = 'Ocurrio un error';
-	        								var icon = Ext.MessageBox.ERROR;
-	        							}
-	        							Ext.Msg.show({
-            	    						title:'Mensaje',
-            	    						msg: mensaje,
-            	    						buttons: Ext.Msg.OK,
-            	    						icon: icon
-            	    					});
-	        							limpiarFormulario(plUsuario);
-	                           		},
-	                           		failure: function ( result, request){ 
-	                           			Ext.Msg.show({
-	        	    						title:'Mensaje',
-	        	    						msg: 'Se perdio comunicacion con el servidor, contacte al administrador del sistema',
-	        	    						buttons: Ext.Msg.OK,
-	        	    						icon: Ext.MessageBox.ERROR
-	        	    					}); 
-	                           		}
-	                           	});
-	        	        	}
-	        	        	else {
-	        	        		Ext.Msg.show({
-	        						title:'Mensaje',
-	        						msg: 'Las claves insertadas no son iguales',
-	        						buttons: Ext.Msg.OK,
-	        						icon: Ext.MessageBox.ERROR
-	        					});
-	        	        	}
-			        	}
-	        			else {
-	        				var objetoData = {
-        	    	        	'operacion': 'GUARDAR_USUARIO',
-        	    	        	'logcon': logcon,
-        	    	        	'nomcon': nomcon,
-        	    	        	'admusu': admusu,
-        	    	        	'clausu': ''
-        	    	        };
-        	        		
-        	        		var ObjSon=Ext.util.JSON.encode(objetoData);
-                           	var parametros ='ObjSon='+ObjSon;
-                           	Ext.Ajax.request({
-                           		url: '../../controlador/documentos/sigesp_ctr_edoc_adminusuario.php',
-                           		params: parametros,
-                           		method: 'POST',
-                           		success: function ( result, request ) {
-                           			var respuesta = result.responseText;
-                           			var mensaje = '';
-                           			var icon = '';
-        							if(respuesta == 1){
-        								var mensaje = 'El usuario fue actualizado';
-        								var icon = Ext.MessageBox.INFO;
-        							}
-        							else if (respuesta == 2){
-        								var mensaje = 'El usuario fue insertado';
-        								var icon = Ext.MessageBox.INFO;
-        							}
-        							else if (respuesta == 0){
-        								var mensaje = 'Ocurrio un error';
-        								var icon = Ext.MessageBox.ERROR;
-        							}
-        							Ext.Msg.show({
-        	    						title:'Mensaje',
-        	    						msg: mensaje,
-        	    						buttons: Ext.Msg.OK,
-        	    						icon: icon
-        	    					});
-        							limpiarFormulario(plUsuario);
-                           		},
-                           		failure: function ( result, request){ 
-                           			Ext.Msg.show({
-        	    						title:'Mensaje',
-        	    						msg: 'Se perdio comunicacion con el servidor, contacte al administrador del sistema',
-        	    						buttons: Ext.Msg.OK,
-        	    						icon: Ext.MessageBox.ERROR
-        	    					}); 
-                           		}
-                           	});
-        	        	}
+	        			if(rolcon!='') {
+		        			if(claveNueva!='' && claveNuevaRep!='' ) {
+		        				if(claveNueva == claveNuevaRep) {
+		        					var operacion = '';
+		        	        		if (Ext.getCmp('catalogo').getValue() == '0') {
+		        	        			operacion = 'INS_CON';
+		        	        		}
+		        	        		else {
+		        	        			operacion = 'MOD_CON';
+		        	        		}
+		        	        		var objetoData = {
+		        	    	        	'operacion': operacion,
+		        	    	        	'logcon': logcon,
+		        	    	        	'nomcon': nomcon,
+		        	    	        	'rolcon': rolcon,
+		        	    	        	'pascon': b64_sha1('b2c'+claveNueva)
+		        	    	        };
+		        	        		
+		        	        		var ObjSon=Ext.util.JSON.encode(objetoData);
+		                           	var parametros ='ObjSon='+ObjSon;
+		                           	Ext.Ajax.request({
+		                           		url: '../../controlador/mrh/sigesp_ctr_mrh_consultor.php',
+		                           		params: parametros,
+		                           		method: 'POST',
+		                           		success: function ( result, request ) {
+		                           			var respuesta = result.responseText;
+		    	    						var datajson = eval('(' + respuesta + ')');
+		    	    						if(datajson.raiz.valido==true){
+		    	    							Ext.Msg.show({
+		    	    	    						title:'Mensaje',
+		    	    	    						msg: datajson.raiz.mensaje,
+		    	    	    						buttons: Ext.Msg.OK,
+		    	    	    						icon: Ext.MessageBox.INFO
+		    	    	    					});
+		    	    							limpiarFormulario(plConsultor);
+		    	    						}
+		    	    						else {
+		    	    							Ext.Msg.show({
+		    	    	    						title:'Mensaje',
+		    	    	    						msg: datajson.raiz.mensaje,
+		    	    	    						buttons: Ext.Msg.OK,
+		    	    	    						icon: Ext.MessageBox.ERROR
+		    	    	    					});
+		    	    						}
+		        						},
+		                           		failure: function ( result, request){ 
+		                           			Ext.Msg.show({
+		        	    						title:'Mensaje',
+		        	    						msg: 'Se perdio comunicacion con el servidor, contacte al administrador del sistema',
+		        	    						buttons: Ext.Msg.OK,
+		        	    						icon: Ext.MessageBox.ERROR
+		        	    					}); 
+		                           		}
+		                           	});
+		        	        	}
+		        	        	else {
+		        	        		Ext.Msg.show({
+		        						title:'Mensaje',
+		        						msg: 'Las claves insertadas no son iguales',
+		        						buttons: Ext.Msg.OK,
+		        						icon: Ext.MessageBox.ERROR
+		        					});
+		        	        	}
+				        	}
+		        			else {
+		        				Ext.Msg.show({
+		    						title:'Mensaje',
+		    						msg: 'Debe asignarle un password al consultor',
+		    						buttons: Ext.Msg.OK,
+		    						icon: Ext.MessageBox.ERROR
+		    					});
+		    	        	}
+		        		}
+		        		else {
+	    	        		Ext.Msg.show({
+	    						title:'Mensaje',
+	    						msg: 'Debe indicar el nombre completo del consultor',
+	    						buttons: Ext.Msg.OK,
+	    						icon: Ext.MessageBox.ERROR
+	    					});
+	    	        	}
 		        	}
 	        		else {
     	        		Ext.Msg.show({
     						title:'Mensaje',
-    						msg: 'Debe indicar el nombre completo del usuario',
+    						msg: 'Debe indicar el nombre completo del consultor',
     						buttons: Ext.Msg.OK,
     						icon: Ext.MessageBox.ERROR
     					});
@@ -184,7 +169,7 @@ Ext.onReady(function(){
 	        	else {
 	        		Ext.Msg.show({
 						title:'Mensaje',
-						msg: 'Debe asignarle un login al usuario',
+						msg: 'Debe asignarle un login al consultor',
 						buttons: Ext.Msg.OK,
 						icon: Ext.MessageBox.ERROR
 					});
@@ -195,7 +180,7 @@ Ext.onReady(function(){
 	        tooltip:'Le permite buscar un consultor',
 	        iconCls:'barrabuscar',
 	        handler: function() {
-	        	limpiarFormulario(plUsuario);
+	        	limpiarFormulario(plConsultor);
 	        	var reUsuario = Ext.data.Record.create([
 	        	    {name: 'logcon'},
 	        	    {name: 'nomcon'},
@@ -228,7 +213,7 @@ Ext.onReady(function(){
                		parametros: 'ObjSon='+Ext.util.JSON.encode({'operacion': 'BUSCAR_USUARIO'}),
                		tipbus:'L',
                		setdatastyle:'F',
-               		formulario:plUsuario
+               		formulario:plConsultor
                	});
                	
                	comCatUsuario.mostrarVentana();
@@ -271,7 +256,7 @@ Ext.onReady(function(){
 	    						buttons: Ext.Msg.OK,
 	    						icon: icon
 	    					});
-							limpiarFormulario(plUsuario);
+							limpiarFormulario(plConsultor);
                    		},
                    		failure: function ( result, request){ 
                    			Ext.Msg.show({
@@ -301,6 +286,10 @@ Ext.onReady(function(){
 	        }
   		}],
 		items:[{
+			xtype: 'hidden',
+			id: 'catalogo',
+			value:'0'
+		},{
 			layout: "column",
 			defaults: {border: false},
 			items: [{
