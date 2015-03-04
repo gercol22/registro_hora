@@ -4,7 +4,7 @@ Ext.onReady(function(){
 	var plCliente = new Ext.FormPanel({
 		title: "<H1 align='center'>Cliente</H1>",
 		style: 'position:relative;top:10px;left:100px', 
-		height: 460,
+		height: 480,
 		width: 815,
 	   	applyTo:'formulario',
 	   	frame: true,
@@ -76,6 +76,9 @@ Ext.onReady(function(){
 	        iconCls:'barrabuscar',
 	        handler: function() {
 	        	limpiarFormulario(plCliente);
+	        	function macarCatalogo() {
+	        		Ext.getCmp('catalogo').setValue('1');
+	        	}
 	        	
 	        	var reCliente = Ext.data.Record.create([
 	        		{name: 'rifcli'},
@@ -84,8 +87,10 @@ Ext.onReady(function(){
 	        		{name: 'punref'},
 	        		{name: 'telcli'},
 	        		{name: 'conpag'},
+	        		{name: 'telpag'},
 	        		{name: 'emaconpag'},
 	        		{name: 'consis'},
+	        		{name: 'telsis'},
 	        		{name: 'emaconsis'}
 	        	]);
 	        	
@@ -115,11 +120,12 @@ Ext.onReady(function(){
 	        		parametros: "ObjSon={'operacion': 'BUS_CLI'",
 	        		tipbus:'P',
 	        		setdatastyle:'F',
-	        		formulario:plCliente
+	        		formulario:plCliente,
+	        		onAceptar:true,
+	        		fnOnAceptar: macarCatalogo
 	        	});
 	        	
 	        	comCatCliente.mostrarVentana();
-	        	Ext.getCmp('catalogo').setValue('1');
 	        }
   		},{
   			text:'Eliminar',
@@ -304,10 +310,10 @@ Ext.onReady(function(){
 		},{
 			xtype:"fieldset", 
 		    title:'Persona Contacto Dpto. Administraci&#243;n (Pagos)',
-		    style: 'position:absolute;left:10px;top:190px',
+		    style: 'position:absolute;left:10px;top:180px',
 		    border:true,
 		    width: 650,
-		    height: 90,
+		    height: 110,
 		    items: [{
 				xtype:'textfield',
 				fieldLabel:'Nombre',
@@ -315,6 +321,17 @@ Ext.onReady(function(){
 				width:150,
 				width:425,
 				autoCreate: {tag: 'input', type: 'text', autocomplete: 'off', maxlength: '255'},
+				labelSeparator:'',
+				binding:true,
+				hiddenvalue:'',
+				defaultvalue:'',
+				allowBlank:false
+			},{
+				xtype:'textfield',
+				fieldLabel:'Tel&#233;fono',
+				id:'telpag',
+				width:150,
+				autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '20'},
 				labelSeparator:'',
 				binding:true,
 				hiddenvalue:'',
@@ -350,10 +367,10 @@ Ext.onReady(function(){
 		},{
 			xtype:"fieldset", 
 		    title:'Persona Contacto Dpto. Sistemas',
-		    style: 'position:absolute;left:10px;top:300px',
+		    style: 'position:absolute;left:10px;top:305px',
 		    border:true,
 		    width: 650,
-		    height: 90,
+		    height: 110,
 		    items: [{
 				xtype:'textfield',
 				fieldLabel:'Nombre',
@@ -366,6 +383,17 @@ Ext.onReady(function(){
 				hiddenvalue:'',
 				defaultvalue:'',
 				allowBlank:true
+			},{
+				xtype:'textfield',
+				fieldLabel:'Tel&#233;fono',
+				id:'telsis',
+				width:150,
+				autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '20'},
+				labelSeparator:'',
+				binding:true,
+				hiddenvalue:'',
+				defaultvalue:'',
+				allowBlank:false
 			},{
 				xtype:'textfield',
 				fieldLabel:'Email',

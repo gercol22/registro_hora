@@ -72,63 +72,27 @@ Ext.onReady(function(){
 	        	var rolcon = Ext.getCmp('rolcon').getValue();
 	        	var claveNueva = Ext.getCmp('clavenue').getValue();
 	        	var claveNuevaRep = Ext.getCmp('clavenuerep').getValue();
+	        	var objetoData = null;
+	        	var operacion  = '';
+        		if (Ext.getCmp('catalogo').getValue() == '0') {
+        			operacion = 'INS_CON';
+        		}
+        		else {
+        			operacion = 'MOD_CON';
+        		}
 	        		        	
 	        	if(logcon!='') {
 	        		if(nomcon!='') {
 	        			if(rolcon!='') {
 		        			if(claveNueva!='' && claveNuevaRep!='' ) {
 		        				if(claveNueva == claveNuevaRep) {
-		        					var operacion = '';
-		        	        		if (Ext.getCmp('catalogo').getValue() == '0') {
-		        	        			operacion = 'INS_CON';
-		        	        		}
-		        	        		else {
-		        	        			operacion = 'MOD_CON';
-		        	        		}
-		        	        		var objetoData = {
+		        					objetoData = {
 		        	    	        	'operacion': operacion,
 		        	    	        	'logcon': logcon,
 		        	    	        	'nomcon': nomcon,
 		        	    	        	'rolcon': rolcon,
 		        	    	        	'pascon': b64_sha1('b2c'+claveNueva)
 		        	    	        };
-		        	        		
-		        	        		var ObjSon=Ext.util.JSON.encode(objetoData);
-		                           	var parametros ='ObjSon='+ObjSon;
-		                           	Ext.Ajax.request({
-		                           		url: '../../controlador/mrh/sigesp_ctr_mrh_consultor.php',
-		                           		params: parametros,
-		                           		method: 'POST',
-		                           		success: function ( result, request ) {
-		                           			var respuesta = result.responseText;
-		    	    						var datajson = eval('(' + respuesta + ')');
-		    	    						if(datajson.raiz.valido==true){
-		    	    							Ext.Msg.show({
-		    	    	    						title:'Mensaje',
-		    	    	    						msg: datajson.raiz.mensaje,
-		    	    	    						buttons: Ext.Msg.OK,
-		    	    	    						icon: Ext.MessageBox.INFO
-		    	    	    					});
-		    	    							limpiarFormulario(plConsultor);
-		    	    						}
-		    	    						else {
-		    	    							Ext.Msg.show({
-		    	    	    						title:'Mensaje',
-		    	    	    						msg: datajson.raiz.mensaje,
-		    	    	    						buttons: Ext.Msg.OK,
-		    	    	    						icon: Ext.MessageBox.ERROR
-		    	    	    					});
-		    	    						}
-		        						},
-		                           		failure: function ( result, request){ 
-		                           			Ext.Msg.show({
-		        	    						title:'Mensaje',
-		        	    						msg: 'Se perdio comunicacion con el servidor, contacte al administrador del sistema',
-		        	    						buttons: Ext.Msg.OK,
-		        	    						icon: Ext.MessageBox.ERROR
-		        	    					}); 
-		                           		}
-		                           	});
 		        	        	}
 		        	        	else {
 		        	        		Ext.Msg.show({
@@ -137,16 +101,55 @@ Ext.onReady(function(){
 		        						buttons: Ext.Msg.OK,
 		        						icon: Ext.MessageBox.ERROR
 		        					});
+		        	        		return false;
 		        	        	}
 				        	}
 		        			else {
-		        				Ext.Msg.show({
-		    						title:'Mensaje',
-		    						msg: 'Debe asignarle un password al consultor',
-		    						buttons: Ext.Msg.OK,
-		    						icon: Ext.MessageBox.ERROR
-		    					});
-		    	        	}
+		        				objetoData = {
+	        	    	        	'operacion': operacion,
+	        	    	        	'logcon': logcon,
+	        	    	        	'nomcon': nomcon,
+	        	    	        	'rolcon': rolcon,
+	        	    	        	'pascon': ''
+	        	    	        };
+		        			}
+		        			
+		        			var ObjSon=Ext.util.JSON.encode(objetoData);
+                           	var parametros ='ObjSon='+ObjSon;
+                           	Ext.Ajax.request({
+                           		url: '../../controlador/mrh/sigesp_ctr_mrh_consultor.php',
+                           		params: parametros,
+                           		method: 'POST',
+                           		success: function ( result, request ) {
+                           			var respuesta = result.responseText;
+    	    						var datajson = eval('(' + respuesta + ')');
+    	    						if(datajson.raiz.valido==true){
+    	    							Ext.Msg.show({
+    	    	    						title:'Mensaje',
+    	    	    						msg: datajson.raiz.mensaje,
+    	    	    						buttons: Ext.Msg.OK,
+    	    	    						icon: Ext.MessageBox.INFO
+    	    	    					});
+    	    							limpiarFormulario(plConsultor);
+    	    						}
+    	    						else {
+    	    							Ext.Msg.show({
+    	    	    						title:'Mensaje',
+    	    	    						msg: datajson.raiz.mensaje,
+    	    	    						buttons: Ext.Msg.OK,
+    	    	    						icon: Ext.MessageBox.ERROR
+    	    	    					});
+    	    						}
+        						},
+                           		failure: function ( result, request){ 
+                           			Ext.Msg.show({
+        	    						title:'Mensaje',
+        	    						msg: 'Se perdio comunicacion con el servidor, contacte al administrador del sistema',
+        	    						buttons: Ext.Msg.OK,
+        	    						icon: Ext.MessageBox.ERROR
+        	    					}); 
+                           		}
+                           	});
 		        		}
 		        		else {
 	    	        		Ext.Msg.show({
@@ -181,42 +184,49 @@ Ext.onReady(function(){
 	        iconCls:'barrabuscar',
 	        handler: function() {
 	        	limpiarFormulario(plConsultor);
-	        	var reUsuario = Ext.data.Record.create([
+	        	
+	        	function macarCatalogo() {
+	        		Ext.getCmp('catalogo').setValue('1');
+	        	}
+	        	
+	        	var reConsultor = Ext.data.Record.create([
 	        	    {name: 'logcon'},
 	        	    {name: 'nomcon'},
-	        	    {name: 'admusu'}
+	        	    {name: 'rolcon'}
 	        	]);
 	        	                       	
-               	var dsUsuario =  new Ext.data.Store({
-               		reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reUsuario)
+               	var dsConsultor =  new Ext.data.Store({
+               		reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reConsultor)
                	});
                						
-               	var cmUsuario = new Ext.grid.ColumnModel([
+               	var cmConsultor = new Ext.grid.ColumnModel([
                     {header: "Login", width: 20, sortable: true, dataIndex: 'logcon'},
                     {header: "Nombre", width: 60, sortable: true, dataIndex: 'nomcon'}
                 ]);
                	//fin creando datastore y columnmodel para el catalogo de agencias
                	
-               	var comCatUsuario = new com.gerco.vista.comCatalogo({
-               		titvencat: 'Catalogo de Usuarios',
+               	var comCatConsultor = new com.gerco.vista.comCatalogo({
+               		titvencat: 'Catalogo de Consultores',
                		anchoformbus: 450,
                		altoformbus:130,
                		anchogrid: 450,
                		altogrid: 400,
                		anchoven: 500,
                		altoven: 430,
-               		datosgridcat: dsUsuario,
-               		colmodelocat: cmUsuario,
+               		datosgridcat: dsConsultor,
+               		colmodelocat: cmConsultor,
                		arrfiltro:[{etiqueta:'Login',id:'logusu',valor:'logcon'},
                				   {etiqueta:'Nombre',id:'nousu',valor:'nomcon'}],
-               		rutacontrolador:'../../controlador/documentos/sigesp_ctr_edoc_adminusuario.php',
-               		parametros: 'ObjSon='+Ext.util.JSON.encode({'operacion': 'BUSCAR_USUARIO'}),
+               		rutacontrolador:'../../controlador/mrh/sigesp_ctr_mrh_consultor.php',
+               		parametros: 'ObjSon='+Ext.util.JSON.encode({'operacion': 'BUS_CON'}),
                		tipbus:'L',
                		setdatastyle:'F',
-               		formulario:plConsultor
+               		formulario:plConsultor,
+               		onAceptar:true,
+	        		fnOnAceptar: macarCatalogo
                	});
                	
-               	comCatUsuario.mostrarVentana();
+               	comCatConsultor.mostrarVentana();
 	        }
   		},{
   			text:'Eliminar',
@@ -224,39 +234,38 @@ Ext.onReady(function(){
 	        iconCls:'barraeliminar',
 	        handler: function() {
 	        	var logcon = Ext.getCmp('logcon').getValue();
-	        	var nomcon = Ext.getCmp('nomcon').getValue();
-	        	if(logcon!='' && nomcon!='') {
+	        	if(logcon!='') {
 	        		var objetoData = {
-	        	    	'operacion': 'ELIMINAR_USUARIO',
-	        	    	'logcon': logcon,
-	        	    	'nomcon': nomcon,
+	        	    	'operacion': 'ELI_CON',
+	        	    	'logcon': logcon
 	        	    };
 	        		
 	        		var ObjSon=Ext.util.JSON.encode(objetoData);
                    	var parametros ='ObjSon='+ObjSon;
                    	Ext.Ajax.request({
-                   		url: '../../controlador/documentos/sigesp_ctr_edoc_adminusuario.php',
+                   		url: '../../controlador/mrh/sigesp_ctr_mrh_consultor.php',
                    		params: parametros,
                    		method: 'POST',
                    		success: function ( result, request ) {
                    			var respuesta = result.responseText;
-                   			var mensaje = '';
-                   			var icon = '';
-							if(respuesta == 1){
-								var mensaje = 'El usuario fue eliminado';
-								var icon = Ext.MessageBox.INFO;
-							}
-							else if (respuesta == 0){
-								var mensaje = 'Ocurrio un error';
-								var icon = Ext.MessageBox.ERROR;
-							}
-							Ext.Msg.show({
-	    						title:'Mensaje',
-	    						msg: mensaje,
-	    						buttons: Ext.Msg.OK,
-	    						icon: icon
-	    					});
-							limpiarFormulario(plConsultor);
+    						var datajson = eval('(' + respuesta + ')');
+    						if(datajson.raiz.valido==true){
+    							Ext.Msg.show({
+    	    						title:'Mensaje',
+    	    						msg: datajson.raiz.mensaje,
+    	    						buttons: Ext.Msg.OK,
+    	    						icon: Ext.MessageBox.INFO
+    	    					});
+    							limpiarFormulario(plConsultor);
+    						}
+    						else {
+    							Ext.Msg.show({
+    	    						title:'Mensaje',
+    	    						msg: datajson.raiz.mensaje,
+    	    						buttons: Ext.Msg.OK,
+    	    						icon: Ext.MessageBox.ERROR
+    	    					});
+    						}
                    		},
                    		failure: function ( result, request){ 
                    			Ext.Msg.show({
@@ -271,7 +280,7 @@ Ext.onReady(function(){
 	        	else {
 	        		Ext.Msg.show({
 						title:'Mensaje',
-						msg: 'Debe seleccionar un usuario registrado para su eliminacion',
+						msg: 'Debe seleccionar un consultor a eliminar',
 						buttons: Ext.Msg.OK,
 						icon: Ext.MessageBox.INFO
 					});

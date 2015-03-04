@@ -20,19 +20,27 @@ if ($_POST['ObjSon']) {
 			unset($servicioConsultor);
 			break;
 			
-		case 'MOD_CLI':
-			$servicioCliente = new ServicioCliente();
-			$respuesta = $servicioCliente->modificarCliente($objetoData);
-			$resultado['mensaje'] = $servicioCliente->mensaje;
+		case 'BUS_CON':
+			$servicioConsultor = new ServicioConsultor();
+			$dataConsultor = $servicioConsultor->buscarConsultores();
+			echo generarJson($dataConsultor);
+			unset($dataConsultor);
+			unset($servicioConsultor);
+			break;
+			
+		case 'MOD_CON':
+			$servicioConsultor = new ServicioConsultor();
+			$respuesta = $servicioConsultor->modificarConsultor($objetoData);
+			$resultado['mensaje'] = $servicioConsultor->mensaje;
 			$resultado['valido']  = $respuesta;
 			echo  json_encode(array('raiz'=>$resultado));
-			unset($servicioCliente);
+			unset($servicioConsultor);
 			break;
-		
-		case 'ELI_CLI':
-			$servicioCliente = new ServicioCliente();
-			$respuesta = $servicioCliente->eliminarCliente($objetoData->rifcli);
-			$resultado['mensaje'] = $servicioCliente->mensaje;
+			
+		case 'ELI_CON':
+			$servicioConsultor = new ServicioConsultor();
+			$respuesta = $servicioConsultor->eliminarConsultor($objetoData->logcon);
+			$resultado['mensaje'] = $servicioConsultor->mensaje;
 			$resultado['valido']  = $respuesta;
 			echo  json_encode(array('raiz'=>$resultado));
 			break;

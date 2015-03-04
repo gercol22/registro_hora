@@ -62,7 +62,7 @@
 	{
 		margin: 0px auto;
 		width: 1100px;
-		height: 430px;
+		height: 450px;
 	}
 /*********************************************************************************/
 /* Image Style                                                                   */
@@ -429,8 +429,8 @@
 
 	#copyright
 	{
-		padding: 1em 0em;
-		font-size: 0.70em;
+		padding: 0.5em 0em;
+		font-size: 0.60em;
 		letter-spacing: 0.20em;
 		text-align: center;
 		text-transform: uppercase;

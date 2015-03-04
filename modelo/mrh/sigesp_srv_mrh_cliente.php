@@ -78,8 +78,10 @@ class ServicioCliente {
 			$this->daoCliente->punref    = $objJson->punref;
 			$this->daoCliente->telcli    = $objJson->telcli;
 			$this->daoCliente->conpag    = $objJson->conpag;
+			$this->daoCliente->telpag    = $objJson->telpag;
 			$this->daoCliente->emaconpag = $objJson->emaconpag;
 			$this->daoCliente->consis    = $objJson->consis;
+			$this->daoCliente->telsis    = $objJson->telsis;
 			$this->daoCliente->emaconsis = $objJson->emaconsis;
 			if ($this->daoCliente->modificar() != 0) {
 				$this->mensaje = 'El cliente fue actualizado correctamente';

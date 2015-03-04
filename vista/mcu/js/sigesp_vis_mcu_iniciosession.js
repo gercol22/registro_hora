@@ -69,7 +69,7 @@ Ext.onReady(function(){
 					location.href="vista/mrh/sigesp_vis_mrh_menuprincipal.html";
 				}
 				else{
-					Ext.MessageBox.alert('Error', 'Nombre de usuario o contrase�a incorrecta');
+					Ext.MessageBox.alert('Error', 'Nombre de usuario o contrase&#241;a incorrecta');
 				}
 			},
 			failure: function (result,request) 
