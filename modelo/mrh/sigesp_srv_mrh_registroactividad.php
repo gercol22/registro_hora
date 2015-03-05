@@ -24,7 +24,9 @@ class ServicioRegistroActividad {
   						FROM programacion PRO
   						INNER JOIN contrato CNT ON PRO.codcon = CNT.codcon
   						INNER JOIN cliente CLI ON CNT.rifcli = CLI.rifcli
-						WHERE PRO.numpro NOT IN (SELECT numpro from actividad) AND PRO.logcon = '{$logcon}' AND PRO.numpro <> '------'";
+						WHERE PRO.numpro NOT IN (SELECT numpro from actividad) 
+						AND PRO.logcon = '{$logcon}' AND PRO.numpro <> '------' 
+						ORDER BY 1";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}
 	
@@ -149,7 +151,7 @@ class ServicioRegistroActividad {
 	
 	public function buscarTareasProgramadas($numpro) {
 		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
-		$cadenaSQL = "SELECT codmod, casman, canhorest as canhor, CAST('S' AS char) AS estbdt
+		$cadenaSQL = "SELECT codmod, desact AS desinc, casman, canhorest AS canhor, CAST('S' AS char) AS estbdt
 						FROM modpro
 						WHERE numpro = '{$numpro}'";
 		return $this->conexionBD->Execute($cadenaSQL);
@@ -174,5 +176,15 @@ class ServicioRegistroActividad {
 			$respuesta = $this->daoModAct->eliminar();
 		}
 		return $respuesta;
+	}
+	
+	public function reporteActivida($numact) {
+		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
+		$cadenaSQL = "SELECT CLI.razsoc, CON.nomcon
+						FROM actividad ACT
+							INNER JOIN cliente CLI ON ACT.rifcli = CLI.rifcli
+							INNER JOIN consultor CON ON ACT.logcon = CON.logcon
+						WHERE ACT.numact='{$numact}'";
+		return $this->conexionBD->Execute($cadenaSQL);
 	}
 }

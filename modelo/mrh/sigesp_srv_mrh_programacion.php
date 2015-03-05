@@ -49,7 +49,7 @@ class ServicioProgramacion {
   						INNER JOIN consultor CON ON PRO.logcon = CON.logcon
   						INNER JOIN cliente CLI ON CNT.rifcli = CLI.rifcli
 						WHERE PRO.numpro ILIKE '%{$numpro}%' AND CLI.razsoc ILIKE '%{$razsoc}%'
-		       			AND PRO.numpro <> '------'";
+		       			AND PRO.numpro <> '------' ORDER BY 1";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}
 	

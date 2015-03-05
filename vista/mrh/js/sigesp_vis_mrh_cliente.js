@@ -3,7 +3,7 @@ Ext.onReady(function(){
 	//PANEL PRINCIPAL CLIENTES
 	var plCliente = new Ext.FormPanel({
 		title: "<H1 align='center'>Cliente</H1>",
-		style: 'position:relative;top:10px;left:100px', 
+		style: 'position:relative;top:5px;left:100px', 
 		height: 480,
 		width: 815,
 	   	applyTo:'formulario',
@@ -261,7 +261,7 @@ Ext.onReady(function(){
 					binding:true,
 					hiddenvalue:'',
 					defaultvalue:'',
-					allowBlank:true,
+					allowBlank:false,
 					autoCreate: {tag: 'textarea', type: 'text', size: '100', onkeypress: "return keyRestrict(event,'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.;,!@%&/\()�?�-+*[]{}');"},
 				}]
 			}]
@@ -325,7 +325,7 @@ Ext.onReady(function(){
 				binding:true,
 				hiddenvalue:'',
 				defaultvalue:'',
-				allowBlank:false
+				allowBlank:true
 			},{
 				xtype:'textfield',
 				fieldLabel:'Tel&#233;fono',
@@ -336,7 +336,7 @@ Ext.onReady(function(){
 				binding:true,
 				hiddenvalue:'',
 				defaultvalue:'',
-				allowBlank:false
+				allowBlank:true
 			},{
 				xtype:'textfield',
 				fieldLabel:'Email',
@@ -348,7 +348,7 @@ Ext.onReady(function(){
 				binding:true,
 				hiddenvalue:'',
 				defaultvalue:'',
-				allowBlank:false,
+				allowBlank:true,
 				listeners:{
 					'blur' : function(campo){
 						var regExEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -393,7 +393,7 @@ Ext.onReady(function(){
 				binding:true,
 				hiddenvalue:'',
 				defaultvalue:'',
-				allowBlank:false
+				allowBlank:true
 			},{
 				xtype:'textfield',
 				fieldLabel:'Email',

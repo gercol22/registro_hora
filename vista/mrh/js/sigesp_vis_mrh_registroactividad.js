@@ -13,6 +13,7 @@ Ext.onReady(function(){
 				var datos = result.responseText;
 				var objData = eval('(' + datos + ')');
 				gridTareas.store.loadData(objData);
+				calcularTotal();
 			},
 			failure: function ( result, request){ 
 					Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
@@ -306,6 +307,7 @@ Ext.onReady(function(){
 		                	if(gridTareas.store.getCount() > 1){
 		                		if(regEliminar.get('estbdt') == 'N') {
 		                			gridTareas.store.remove(regEliminar);
+		                			calcularTotal();
 		                		}
 		                		else {
 		                			var myJSONObject = {"operacion":"ELI_TAR","codmod":regEliminar.get('codmod'),"numact":Ext.getCmp('numact').getValue()};
@@ -319,6 +321,7 @@ Ext.onReady(function(){
 		                					var respuesta = result.responseText;
 		                					if (respuesta == 1) {
 		                						gridTareas.store.remove(regEliminar);
+		                						calcularTotal();
 		                					}
 		                					else {
 		                						Ext.Msg.show({
@@ -587,6 +590,16 @@ Ext.onReady(function(){
 	        	});
 	        	
 	        	comCatActividad.mostrarVentana();
+	        }
+  		},{
+  			text:'Imprimir',
+	        tooltip:'Imprimir informe de actividad',
+	        iconCls:'barraimprimir',
+	        handler: function() {
+	        	
+	        	
+	        	var pagina  = "reportes/sigesp_vis_rpp_informeactividad.php";
+	        	window.open(pagina,"Reporte","menubar=no,toolbar=no,scrollbars=yes,width=800,height=600,left=0,top=0,location=no,resizable=yes");
 	        }
   		},{
   			text:'Eliminar',

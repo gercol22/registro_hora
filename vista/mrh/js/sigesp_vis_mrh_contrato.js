@@ -162,48 +162,38 @@ Ext.onReady(function(){
 	     		   	fn: function(btn) {
 	     		   		if (btn == 'yes') {
 		     		   		var regEliminar = gridNotas.getSelectionModel().getSelected();
-		                	if(gridNotas.store.getCount() > 1){
-		                		if(regEliminar.get('estbdt') == 'N') {
-		                			gridNotas.store.remove(regEliminar);
-		                		}
-		                		else {
-		                			var myJSONObject = {"operacion":"ELI_NOT","numnot":regEliminar.get('numnot'),"codcon":Ext.getCmp('codcon').getValue()};
-		                			var ObjSon=Ext.util.JSON.encode(myJSONObject);
-		                			var parametros ='ObjSon='+ObjSon;
-		                			Ext.Ajax.request({
-		                				url: '../../controlador/mrh/sigesp_ctr_mrh_contrato.php',
-		                				params: parametros,
-		                				method: 'POST',
-		                				success: function ( result, request ) {
-		                					var respuesta = result.responseText;
-		                					if (respuesta == 1) {
-		                						gridNotas.store.remove(regEliminar);
-		                					}
-		                					else {
-		                						Ext.Msg.show({
-		    	    	    						title:'Mensaje',
-		    	    	    						msg: 'Ocurrio un error al tratar de eliminar la nota',
-		    	    	    						buttons: Ext.Msg.OK,
-		    	    	    						icon: Ext.MessageBox.ERROR
-		    	    	    					});
-		                					}
-		                					
-		                				},
-		                				failure: function ( result, request){ 
-		                						Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
-		                				}
-		                			});
-		                		}
-		                	}
-		                	else {
-		                		Ext.Msg.show({
-		    						title:'Mensaje',
-		    						msg: 'La actividad debe contener al menos una tarea realizada',
-		    						buttons: Ext.Msg.OK,
-		    						icon: Ext.MessageBox.WARNING
-		    					});
-		                	}
-	     		   		}
+	     		   			if(regEliminar.get('estbdt') == 'N') {
+	                			gridNotas.store.remove(regEliminar);
+	                		}
+	                		else {
+	                			var myJSONObject = {"operacion":"ELI_NOT","numnot":regEliminar.get('numnot'),"codcon":Ext.getCmp('codcon').getValue()};
+	                			var ObjSon=Ext.util.JSON.encode(myJSONObject);
+	                			var parametros ='ObjSon='+ObjSon;
+	                			Ext.Ajax.request({
+	                				url: '../../controlador/mrh/sigesp_ctr_mrh_contrato.php',
+	                				params: parametros,
+	                				method: 'POST',
+	                				success: function ( result, request ) {
+	                					var respuesta = result.responseText;
+	                					if (respuesta == 1) {
+	                						gridNotas.store.remove(regEliminar);
+	                					}
+	                					else {
+	                						Ext.Msg.show({
+	    	    	    						title:'Mensaje',
+	    	    	    						msg: 'Ocurrio un error al tratar de eliminar la nota',
+	    	    	    						buttons: Ext.Msg.OK,
+	    	    	    						icon: Ext.MessageBox.ERROR
+	    	    	    					});
+	                					}
+	                					
+	                				},
+	                				failure: function ( result, request){ 
+	                						Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
+	                				}
+	                			});
+	                		}
+		                }
 	     		   	}
             	});
             } 		

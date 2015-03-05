@@ -37,7 +37,7 @@ Ext.onReady(function(){
 	]);
 	//fin creando datastore y columnmodel para el catalogo programacion
 	
-	//componente campocatalogo para el campo programacion
+	//componente campocatalogo para el campo cliente
 	var comtcCliente = new com.gerco.vista.comCampoCatalogo({
 		titvencat: 'Clientes',
 		anchoformbus: 450,
@@ -69,11 +69,11 @@ Ext.onReady(function(){
 		onAceptar:true,
 		fnOnAceptar:buscarContrato
 	});
-	//fin componente campocatalogo para el campo programacion
+	//fin componente campocatalogo para el campo cliente
 	
 	//creando datastore y columnmodel para el catalogo consultores
 	var reConsultor = Ext.data.Record.create([
-		{name: 'cedcon'},
+		{name: 'logcon'},
 		{name: 'nomcon'}
 	]);
 	
@@ -82,12 +82,12 @@ Ext.onReady(function(){
 	});
 						
 	var cmConsultor = new Ext.grid.ColumnModel([
-	    {header: "C&#233;dula", width: 20, sortable: true,   dataIndex: 'cedcon'},
+	    {header: "C&#233;dula", width: 20, sortable: true,   dataIndex: 'logcon'},
 		{header: "Nombre", width: 40, sortable: true, dataIndex: 'nomcon'}
 	]);
 	//fin creando datastore y columnmodel para el catalogo consultores
 	
-	//componente campocatalogo para el campo programacion
+	//componente campocatalogo para el campo consultor
 	var comtcConsultor = new com.gerco.vista.comCampoCatalogo({
 		titvencat: 'Consultores',
 		anchoformbus: 450,
@@ -101,12 +101,12 @@ Ext.onReady(function(){
 		colmodelocat: cmConsultor,
 		rutacontrolador:'../../controlador/mrh/sigesp_ctr_mrh_programacion.php',
 		parametros: "ObjSon={'operacion': 'OBT_CON'}",
-		arrfiltro:[{etiqueta:'C&#233;dula',id:'cedcons',valor:'cedcon'},
+		arrfiltro:[{etiqueta:'C&#233;dula',id:'logcons',valor:'logcon'},
 				   {etiqueta:'Nombre',id:'nomcons',valor:'nomcon'}],
 		posicion:'position:absolute;left:5px;top:100px',
 		tittxt:'Consultor',
-		idtxt:'cedcon',
-		campovalue:'cedcon',
+		idtxt:'logcon',
+		campovalue:'logcon',
 		anchoetiquetatext:130,
 		anchotext:130,
 		anchocoltext:0.40,
@@ -120,7 +120,7 @@ Ext.onReady(function(){
 		defaultvalue:'',
 		allowblank:false,
 	});
-	//fin componente campocatalogo para el campo programacion
+	//fin componente campocatalogo para el campo consultor
 	
 	//combo tipo actividad
 	var reTipoActividad = Ext.data.Record.create([
@@ -263,6 +263,7 @@ Ext.onReady(function(){
 		                	if(gridTareas.store.getCount() > 1){
 		                		if(regEliminar.get('estbdt') == 'N') {
 		                			gridTareas.store.remove(regEliminar);
+		                			calcularTotal();
 		                		}
 		                		else {
 		                			var myJSONObject = {"operacion":"ELI_TAR","codmod":regEliminar.get('codmod'),"numpro":Ext.getCmp('numpro').getValue()};
@@ -276,6 +277,7 @@ Ext.onReady(function(){
 		                					var respuesta = result.responseText;
 		                					if (respuesta == 1) {
 		                						gridTareas.store.remove(regEliminar);
+		                						calcularTotal();
 		                					}
 		                					else {
 		                						Ext.Msg.show({
@@ -490,7 +492,7 @@ Ext.onReady(function(){
 	        		{name: 'numpro'},
 	        		{name: 'rifcli'},
 	        		{name: 'razsoc'},
-	        		{name: 'cedcon'},
+	        		{name: 'logcon'},
 	        		{name: 'nomcon'},
 	        		{name: 'codcon'},
 	        		{name: 'tipcon'},

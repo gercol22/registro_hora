@@ -71,7 +71,7 @@ $arrTipCon[0]['descripcion'] = 'Implantaci&#243;n';
 $arrTipCon[1]['codigo'] = 'C2';
 $arrTipCon[1]['descripcion'] = 'Mantenimiento';
 $arrTipCon[2]['codigo'] = 'C3';
-$arrTipCon[2]['descripcion'] = 'Entrenamiento y Consultoria';
+$arrTipCon[2]['descripcion'] = 'Servicios de Consultoria';
 
 /***********************ESTADO CONTRATO*******************************/
 $arrEstCon[0]['codigo'] = 'I';
