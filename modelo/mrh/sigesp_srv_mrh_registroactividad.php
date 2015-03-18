@@ -178,13 +178,47 @@ class ServicioRegistroActividad {
 		return $respuesta;
 	}
 	
-	public function reporteActivida($numact) {
+	public function reporteActividad($numact) {
 		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
-		$cadenaSQL = "SELECT CLI.razsoc, CON.nomcon
+		$cadenaSQL = "SELECT CLI.razsoc, CON.nomcon, ACT.fecact , ACT.rescli
 						FROM actividad ACT
 							INNER JOIN cliente CLI ON ACT.rifcli = CLI.rifcli
 							INNER JOIN consultor CON ON ACT.logcon = CON.logcon
 						WHERE ACT.numact='{$numact}'";
 		return $this->conexionBD->Execute($cadenaSQL);
+	}
+	
+	public function reporteActividadTarea($numact) {
+		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
+		$cadenaSQL = "SELECT codmod, desinc, desact, canhor,
+		                      (CASE WHEN MOD.tipinc='I1' 
+									 THEN 'Error Usuario (Configuración)'
+									WHEN MOD.tipinc='I2' 
+									 THEN 'Error Usuario (Procedimiento)'
+									WHEN MOD.tipinc='I3' 
+									 THEN 'Error Sistema'
+									WHEN MOD.tipinc='I4' 
+									 THEN 'Error Data'
+									WHEN MOD.tipinc='I5' 
+									 THEN 'Nuevo Requerimiento'   
+									ELSE 'Entrenamiento / Otros'
+									END) AS tipinc
+								   ,ACT.rescli 
+						FROM modact MOD INNER JOIN actividad ACT ON MOD.numact=ACT.numact 
+						WHERE MOD.numact = '{$numact}'";
+		return $this->conexionBD->Execute($cadenaSQL);
+	}
+	
+	public function reporteTotalHora($numact) {
+		$total = 0;
+		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
+		$cadenaSQL = "SELECT SUM (canhor) AS total
+						FROM modact WHERE numact = '{$numact}'";
+		$dataTotal = $this->conexionBD->Execute($cadenaSQL);
+		if (!$dataTotal->EOF) {
+			$total = $dataTotal->fields['total'];
+		}
+		
+		return $total;
 	}
 }

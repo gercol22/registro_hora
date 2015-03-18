@@ -596,9 +596,8 @@ Ext.onReady(function(){
 	        tooltip:'Imprimir informe de actividad',
 	        iconCls:'barraimprimir',
 	        handler: function() {
-	        	
-	        	
-	        	var pagina  = "reportes/sigesp_vis_rpp_informeactividad.php";
+	        	var numact = Ext.getCmp('numact').getValue();
+	        	var pagina = "reportes/sigesp_vis_rpp_informeactividad.php?numact="+numact;
 	        	window.open(pagina,"Reporte","menubar=no,toolbar=no,scrollbars=yes,width=800,height=600,left=0,top=0,location=no,resizable=yes");
 	        }
   		},{
