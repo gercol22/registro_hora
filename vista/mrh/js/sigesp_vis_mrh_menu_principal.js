@@ -28,6 +28,13 @@ Ext.onReady(function(){
        	href: 'sigesp_vis_mrh_programacion.html'
 	});
 	
+	var impHor = new  Ext.menu.Item({
+		text: 'Imputar Horas',
+		id:'impHor',
+       	//iconCls: 'menumigrardatos',
+       	href: 'sigesp_vis_mrh_imputarhora.html'
+	});
+	
 	menuRegistroHoras.addItem(salir);
 	
 	
@@ -84,6 +91,7 @@ Ext.onReady(function(){
 					//PROCESOS
 					menuRegistroHoras.addItem(regAct);
 					menuRegistroHoras.addItem(proAct);
+					menuRegistroHoras.addItem(impHor);
 					//DEFINICIONES
 					menuDefinicion.addItem(cliente);
 					menuDefinicion.addItem(contrato);
