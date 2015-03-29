@@ -55,6 +55,24 @@ class reporteEzpdf{
 		$this->objPDF->stopObject($io_encabezado); // Detener el objeto pie de página
 	}
 	
+	public function encabezadoFechaReporte($as_titulo) {
+		//ABRIENDO OBJETO
+		$io_encabezado=$this->objPDF->openObject();
+		$this->objPDF->saveState();
+		$this->objPDF->setStrokeColor(0,0,0);
+		//TITULO E IMAGEN
+		$this->objPDF->addJpegFromFile('../../../base/imagenes/logo_sigesp.jpg',25,703,95,70); // Agregar Logo
+		$li_tm=$this->objPDF->getTextWidth(11,$as_titulo);
+		$tm=296-($li_tm/2);
+		$this->objPDF->addText($tm,730,14,$as_titulo); // Agregar el título
+		$this->objPDF->addText(510,760,7,date("d/m/Y")); // Agregar la Fecha
+		//CERRANDO OBJETO PARA QUE SE REPITA EN CADA HOJA
+		$this->objPDF->restoreState();
+		$this->objPDF->closeObject();
+		$this->objPDF->addObject($io_encabezado,'all');
+		$this->objPDF->stopObject($io_encabezado); // Detener el objeto pie de página
+	}
+	
 	public function imprimirReporte() {
 		$this->objPDF->ezStopPageNumbers(1,1); // Detenemos la impresión de los números de página
 		$this->objPDF->ezStream(); // Mostramos el reporte;
@@ -63,6 +81,24 @@ class reporteEzpdf{
 	public function formatoFecha($fecha) {
 		$fecha = new DateTime($fecha);
 		return $fecha->format('d/m/Y');
+	}
+	
+	public function obtenerDenCon($arrTipCon, $tipcon, $codcon) {
+		foreach ($arrTipCon as $regTipcon) {
+			if ($regTipcon['codigo'] == $tipcon) {
+				$descripcion = str_replace('&#243;', 'ó', $regTipcon['descripcion']);
+				return $codcon." - ".$descripcion;
+			}
+		}
+	}
+	
+	public function obtenerDenominacion($arrEsta, $codigo) {
+		foreach ($arrEsta as $registro) {
+			if ($registro['codigo'] == $codigo) {
+				$descripcion = str_replace('&#243;', 'ó', $registro['descripcion']);
+				return $descripcion;
+			}
+		}
 	}
 }
 ?>

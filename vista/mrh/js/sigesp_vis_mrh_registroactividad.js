@@ -592,9 +592,9 @@ Ext.onReady(function(){
 	        	comCatActividad.mostrarVentana();
 	        }
   		},{
-  			text:'Imprimir',
-	        tooltip:'Imprimir informe de actividad',
-	        iconCls:'barraimprimir',
+  			text:'Emitir',
+	        tooltip:'Emite archivo pdf con informe de actividad',
+	        iconCls:'barrapdf',
 	        handler: function() {
 	        	var numact = Ext.getCmp('numact').getValue();
 	        	var pagina = "reportes/sigesp_vis_rpp_informeactividad.php?numact="+numact;

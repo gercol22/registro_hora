@@ -17,21 +17,21 @@ Ext.onReady(function(){
 	var regAct = new  Ext.menu.Item({
 		text: 'Registro Actividades',
 		id:'regAct',
-       	//iconCls: 'menumigrardatos',
+       	iconCls: 'menuproceso',
        	href: 'sigesp_vis_mrh_registroactividad.html'
 	});
 	
 	var proAct = new  Ext.menu.Item({
 		text: 'Programaci&#243;n',
 		id:'proAct',
-       	//iconCls: 'menumigrardatos',
+       	iconCls: 'menuproceso',
        	href: 'sigesp_vis_mrh_programacion.html'
 	});
 	
 	var impHor = new  Ext.menu.Item({
 		text: 'Imputar Horas',
 		id:'impHor',
-       	//iconCls: 'menumigrardatos',
+       	iconCls: 'menuproceso',
        	href: 'sigesp_vis_mrh_imputarhora.html'
 	});
 	
@@ -46,23 +46,64 @@ Ext.onReady(function(){
 	var cliente = new  Ext.menu.Item({
 		text: 'Cliente',
 		id:'cliente',
-       	//iconCls: 'menumigrardatos',
+       	iconCls: 'menudefinicion',
        	href: 'sigesp_vis_mrh_cliente.html'
 	});
 	
 	var contrato = new  Ext.menu.Item({
 		text: 'Contrato',
 		id:'contrato',
-       	//iconCls: 'menumigrardatos',
+       	iconCls: 'menudefinicion',
        	href: 'sigesp_vis_mrh_contrato.html'
 	});
 	
 	var consultor = new  Ext.menu.Item({
 		text: 'Consultor',
 		id:'consultor',
-       	//iconCls: 'menumigrardatos',
+       	iconCls: 'menudefinicion',
        	href: 'sigesp_vis_mrh_consultor.html'
 	});
+	
+	//Reportes
+	var menuReporte = new Ext.menu.Menu({
+		id: 'men_rep'
+	});
+	
+	var totalHora = new  Ext.menu.Item({
+		text: 'Total Horas',
+		id:'totHor',
+       	iconCls: 'menureporte',
+       	href: 'sigesp_vis_mrh_totalhora.html'
+	});
+	
+	var listadoActividad = new  Ext.menu.Item({
+		text: 'Listado de Actividades',
+		id:'lisAct',
+       	iconCls: 'menureporte',
+       	href: 'sigesp_vis_mrh_listadohora.html'
+	});
+	
+	var listadoProgramacion = new  Ext.menu.Item({
+		text: 'Listado de Programaciones',
+		id:'lisPro',
+       	iconCls: 'menureporte',
+       	href: 'sigesp_vis_mrh_listadohora.html'
+	});
+	
+	var listadoContrato = new  Ext.menu.Item({
+		text: 'Listado de Contratos',
+		id:'lisCon',
+       	iconCls: 'menureporte',
+       	href: 'sigesp_vis_mrh_listadohora.html'
+	});
+	
+	var listadoCliente = new  Ext.menu.Item({
+		text: 'Listado de Cliente',
+		id:'lisCli',
+       	iconCls: 'menureporte',
+       	href: 'sigesp_vis_mrh_listadohora.html'
+	});
+	
 	
 		
 	// Tool Bar que va a obtener las Opciones de Menu
@@ -100,6 +141,17 @@ Ext.onReady(function(){
 						text:'Definiciones',
 				        iconCls: 'menuprincipal', 
 				        menu: menuDefinicion
+				    });
+					//REPORTES
+					menuReporte.addItem(totalHora);
+					menuReporte.addItem(listadoActividad);
+					menuReporte.addItem(listadoProgramacion);
+					menuReporte.addItem(listadoContrato);
+					menuReporte.addItem(listadoCliente);
+					menuRegistroHoras.add({
+						text:'Reportes',
+				        iconCls: 'menuprincipal', 
+				        menu: menuReporte
 				    });
 				}
 				else if (resultado[1] == 'B') {

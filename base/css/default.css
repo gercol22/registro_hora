@@ -652,24 +652,19 @@
 	background-image: url( ../../base/imagenes/salirmodulo.png) !important;
 }
 
-.menucambiarclave
+.menuproceso
 {
-	background-image: url( ../../base/imagenes/cambiarclave.png) !important;
+	background-image: url( ../../base/imagenes/proceso.png) !important;
 }
 
-.menumigrardatos
+.menudefinicion
 {
-	background-image: url( ../../base/imagenes/migrar.png) !important;
+	background-image: url( ../../base/imagenes/definicion.png) !important;
 }
 
-.menuconsulta
+.menureporte
 {
-	background-image: url( ../../base/imagenes/consultarecibo.png) !important;
-}
-
-.menuprestaciones
-{
-	background-image: url( ../../base/imagenes/prestaciones.png) !important;
+	background-image: url( ../../base/imagenes/reporte.png) !important;
 }
 
 .menuusuarios
@@ -730,5 +725,10 @@
 .barraquitar
 {
 	background-image: url( ../../base/imagenes/quitar.gif) !important;
+}
+
+.barrapdf
+{
+	background-image: url( ../../base/imagenes/pdf.png) !important;
 }
 
