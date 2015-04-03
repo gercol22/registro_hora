@@ -6,15 +6,15 @@ $dirsrvdoc = str_replace('\\','/',$dirsrvdoc);
 $dirsrvdoc = str_replace('/modelo/mrh','',$dirsrvdoc);
 require_once ($dirsrvdoc.'/base/librerias/php/gerco/gerco_lib_fabricadao.php');
 
-class ServicioTotalHora {
+class ServicioListadoActividad {
 	private $conexionBD;
 	public  $mensaje = '';
 		
-	public function ServicioTotalHora() {
+	public function ServicioListadoActividad() {
 		$this->conexionBD   = null;
 	}
 	
-	public function totalHoras($objFiltro) {
+	public function listadoActividad($objFiltro) {
 		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
 		$filtroSQL = '';
 		
@@ -71,13 +71,12 @@ class ServicioTotalHora {
 			$filtroSQL = ' WHERE '.$filtroSQL;
 		}
 		
-		$cadenaSQL = "SELECT CLI.razsoc, ACT.codcon, CON.tipcon, SUM(MOD.canhor) AS canhor
+		$cadenaSQL = "SELECT CLI.razsoc, ACT.codcon, ACT.fecact, CON.tipcon, MOD.casman, MOD.desact, MOD.canhor
   						FROM actividad ACT
 							INNER JOIN cliente CLI ON ACT.rifcli=CLI.rifcli
 							INNER JOIN modact MOD ON ACT.numact=MOD.numact
 							INNER JOIN contrato CON ON ACT.codcon=CON.codcon
-						{$filtroSQL}
-  						GROUP BY 1,2,3";
+						{$filtroSQL} ";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}
 }

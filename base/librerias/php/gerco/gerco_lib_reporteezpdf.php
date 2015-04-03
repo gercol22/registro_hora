@@ -28,6 +28,7 @@ class reporteEzpdf{
 		$io_encabezado=$this->objPDF->openObject();
 		$this->objPDF->saveState();
 		$this->objPDF->setStrokeColor(0,0,0);
+		
 		//TITULO E IMAGEN
 		$this->objPDF->addJpegFromFile('../../../base/imagenes/logo_sigesp.jpg',100,530,95,70); // Agregar Logo
 		$li_tm=$this->objPDF->getTextWidth(11,$as_titulo);
@@ -55,22 +56,50 @@ class reporteEzpdf{
 		$this->objPDF->stopObject($io_encabezado); // Detener el objeto pie de página
 	}
 	
-	public function encabezadoFechaReporte($as_titulo) {
+	public function encabezadoFechaReporte($as_titulo, $orientacion = 'portrait') {
 		//ABRIENDO OBJETO
 		$io_encabezado=$this->objPDF->openObject();
 		$this->objPDF->saveState();
 		$this->objPDF->setStrokeColor(0,0,0);
+		
 		//TITULO E IMAGEN
-		$this->objPDF->addJpegFromFile('../../../base/imagenes/logo_sigesp.jpg',25,703,95,70); // Agregar Logo
-		$li_tm=$this->objPDF->getTextWidth(11,$as_titulo);
-		$tm=296-($li_tm/2);
-		$this->objPDF->addText($tm,730,14,$as_titulo); // Agregar el título
-		$this->objPDF->addText(510,760,7,date("d/m/Y")); // Agregar la Fecha
+		if ($orientacion == 'portrait') {
+			$this->objPDF->addJpegFromFile('../../../base/imagenes/logo_sigesp.jpg',25,703,95,70); // Agregar Logo
+			$li_tm=$this->objPDF->getTextWidth(11,$as_titulo);
+			$tm=296-($li_tm/2);
+			$this->objPDF->addText($tm,730,14,$as_titulo); // Agregar el título
+			$this->objPDF->addText(510,760,7,date("d/m/Y")); // Agregar la Fecha
+		}
+		else {
+			$this->objPDF->addJpegFromFile('../../../base/imagenes/logo_sigesp.jpg',100,530,95,70); // Agregar Logo
+			$li_tm=$this->objPDF->getTextWidth(11,$as_titulo);
+			$tm=406-($li_tm/2);
+			$this->objPDF->addText($tm,550,14,$as_titulo); // Agregar el título
+			$this->objPDF->addText(650,580,7,date("d/m/Y")); // Agregar la Fecha
+		}
+		
+		
 		//CERRANDO OBJETO PARA QUE SE REPITA EN CADA HOJA
 		$this->objPDF->restoreState();
 		$this->objPDF->closeObject();
 		$this->objPDF->addObject($io_encabezado,'all');
 		$this->objPDF->stopObject($io_encabezado); // Detener el objeto pie de página
+	}
+	
+	public function cabeceraEstandar($arrCampos) {
+		$la_columna=array('etiqueta'=>'','valor'=>'');
+		$la_config=array('showHeadings'=>0, // Mostrar encabezados
+				'fontSize' => 8, // Tamaño de Letras
+				'showLines'=>1, // Mostrar Líneas
+				'shaded'=>2, // Sombra entre líneas
+				'shadeCol' =>array(0.9,0.9,0.9),
+				'shadeCol2' =>array(0.9,0.9,0.9),
+				'width'=>385, // Ancho de la tabla
+				'maxWidth'=>385, // Ancho Máximo de la tabla
+				'xOrientation'=>'center', // Orientación de la tabla
+				'cols'=>array('etiqueta'=>array('justification'=>'left','width'=>105),
+						'valor'=>array('justification'=>'left','width'=>280)));
+		$this->objPDF->ezTable($arrCampos,$la_columna,'',$la_config);
 	}
 	
 	public function imprimirReporte() {

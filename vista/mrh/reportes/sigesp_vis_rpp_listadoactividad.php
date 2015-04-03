@@ -1,7 +1,7 @@
 <?php
-require_once("../../../modelo/mrh/sigesp_srv_mrh_totalhora.php");
+require_once("../../../modelo/mrh/sigesp_srv_mrh_listadoactividad.php");
 require_once ('../../../base/conf/data_estatica.php');
-require_once("sigesp_vis_clas_totalhora.php");
+require_once("sigesp_vis_clas_listadoactividad.php");
 
 
 $objetoData = str_replace('\\','',$_GET['ObjSon']);
@@ -9,11 +9,11 @@ $json = new Services_JSON;
 $objetoData = $json->decode($objetoData);
 
 //RECIBIENDO PARAMETRO BUSCANDO DATA
-$servicioTotalHora = new ServicioTotalHora();
-$dataReporte = $servicioTotalHora->totalHoras($objetoData);
+$servicioListadoActividad = new ServicioListadoActividad();
+$dataReporte = $servicioListadoActividad->listadoActividad($objetoData);
 $arrCabecera  = array();
 if (!$dataReporte->EOF) {
-	$reporte = new reporteTotalHora(4, 3, 2, 2, 'portrait');
+	$reporte = new reporteListadoActividad(4, 3, 2, 2);
 	if ($objetoData->rifcli != '') {
 		$arrCabecera[] = array('etiqueta'=>'<b>Cliente</b>','valor'=>$dataReporte->fields['razsoc']);
 	}
@@ -56,15 +56,17 @@ if (!$dataReporte->EOF) {
 	while (!$dataReporte->EOF) {
 		$total += $dataReporte->fields['canhor'];
 		$contrato = $reporte->obtenerDenCon($arrTipCon, $dataReporte->fields['tipcon'], $dataReporte->fields['codcon']);
-		$arrDataDetalle[] = array('razsoc'=>$dataReporte->fields['razsoc'],'codcon'=>$contrato,'canhor'=>$dataReporte->fields['canhor']);
+		$arrDataDetalle[] = array('razsoc'=>$dataReporte->fields['razsoc'],'codcon'=>$contrato,'fecact'=>$reporte->formatoFecha($dataReporte->fields['fecact']),
+				     			  'casman'=>$dataReporte->fields['casman'],'desact'=>$dataReporte->fields['desact'],
+								  'canhor'=>$dataReporte->fields['canhor']);
 		
 		$dataReporte->MoveNext();
 	}
 	unset($dataReporte);
 	
 	//CONSTRUYENDO REPORTE
-	$reporte->encabezadoFechaReporte('REPORTE TOTAL HORAS');
-	$reporte->cabeceraTotalHora($arrCabecera);
-	$reporte->detalleTotalHora($arrDataDetalle,$total);
+	$reporte->encabezadoFechaReporte('LISTADO DE ACTIVIDADES EJECUTADAS', 'landscape');
+	$reporte->cabeceraEstandar($arrCabecera);
+	$reporte->detalleListadoActividad($arrDataDetalle,$total);
 	$reporte->imprimirReporte();
 }

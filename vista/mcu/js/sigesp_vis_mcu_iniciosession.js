@@ -10,7 +10,7 @@ Ext.onReady(function(){
 	var plInicioSession = new Ext.FormPanel({
 		height: 210,
 		width: 370,
-	   	title: 'Inicio de Session',
+	   	title: "<H1 align='center'>Inicio de Session</H1>",
 		bodyStyle:'padding:20px 20px 0',
 		applyTo:'ventana_principal',
 		style: 'position:relative;top:100px;left:360px', 

@@ -80,7 +80,7 @@ Ext.onReady(function(){
 		text: 'Listado de Actividades',
 		id:'lisAct',
        	iconCls: 'menureporte',
-       	href: 'sigesp_vis_mrh_listadohora.html'
+       	href: 'sigesp_vis_mrh_listadoactividad.html'
 	});
 	
 	var listadoProgramacion = new  Ext.menu.Item({
