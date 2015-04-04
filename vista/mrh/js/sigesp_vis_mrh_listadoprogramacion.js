@@ -6,7 +6,7 @@ Ext.onReady(function(){
 		var ObjSon=Ext.util.JSON.encode(myJSONObject);
 		var parametros ='ObjSon='+ObjSon;
 		Ext.Ajax.request({
-			url: '../../controlador/mrh/sigesp_ctr_mrh_listadoactividad.php',
+			url: '../../controlador/mrh/sigesp_ctr_mrh_listadoprogramacion.php',
 			params: parametros,
 			method: 'POST',
 			success: function ( result, request ) {
@@ -49,7 +49,7 @@ Ext.onReady(function(){
 		anchofieldset:850,
 		datosgridcat: dsCliente,
 		colmodelocat: cmCliente,
-		rutacontrolador:'../../controlador/mrh/sigesp_ctr_mrh_listadoactividad.php',
+		rutacontrolador:'../../controlador/mrh/sigesp_ctr_mrh_listadoprogramacion.php',
 		parametros: "ObjSon={'operacion': 'OBT_CLI'",
 		arrfiltro:[{etiqueta:'RIF',id:'rifclie',valor:'rifcli'},
 				   {etiqueta:'Raz&#243;n Social',id:'razsoci',valor:'razsoc'}],
@@ -99,113 +99,60 @@ Ext.onReady(function(){
 	});
 	//fin combo contrato
 	
-	//combo tipo actividad
-	var reTipoActividad = Ext.data.Record.create([
-	    {name: 'codigo'},    
-	    {name: 'descripcion'}
+	//creando datastore y columnmodel para el catalogo consultores
+	var reConsultor = Ext.data.Record.create([
+		{name: 'logcon'},
+		{name: 'nomcon'}
 	]);
-	                               	                               	                                  	
-	var dsTipoActividad =  new Ext.data.Store({
-	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reTipoActividad)
-	});
 	
-	var cmbTipoActividad = new Ext.form.ComboBox({
-		store: dsTipoActividad,
-		labelSeparator: '',
-		fieldLabel:'Tipo Actividad',
-		displayField:'descripcion',
-		valueField:'codigo',
-        id:'tipact',
-        forceSelection: true,  
-        typeAhead: true,
-        mode: 'local',
-        binding:true,
-        editable: false,
-        width:200,
-        triggerAction: 'all',
-        allowBlank:false
+	var dsConsultor =  new Ext.data.Store({
+		reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reConsultor)
 	});
-	//fin combo tipo actividad
-	
-	//combo modulo
-	var reModulo = Ext.data.Record.create([
-	    {name: 'codigo'},    
-	    {name: 'descripcion'}
+						
+	var cmConsultor = new Ext.grid.ColumnModel([
+	    {header: "C&#233;dula", width: 20, sortable: true,   dataIndex: 'logcon'},
+		{header: "Nombre", width: 40, sortable: true, dataIndex: 'nomcon'}
 	]);
-	                               	                               	                                  	
-	var dsModulo =  new Ext.data.Store({
-	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reModulo)
-	});
+	//fin creando datastore y columnmodel para el catalogo consultores
 	
-	var cmbModulo = new Ext.form.ComboBox({
-		store: dsModulo,
-		labelSeparator: '',
-		fieldLabel:'Modulo',
-		displayField:'descripcion',
-		valueField:'codigo',
-        id:'codmod',
-        forceSelection: true,  
-        typeAhead: true,
-        mode: 'local',
-        binding:true,
-        editable: false,
-        triggerAction: 'all'
+	//componente campocatalogo para el campo consultor
+	var comtcConsultor = new com.gerco.vista.comCampoCatalogo({
+		titvencat: 'Consultores',
+		anchoformbus: 450,
+		altoformbus:130,
+		anchogrid: 450,
+		altogrid: 350,
+		anchoven: 500,
+		altoven: 420,
+		anchofieldset:850,
+		datosgridcat: dsConsultor,
+		colmodelocat: cmConsultor,
+		rutacontrolador:'../../controlador/mrh/sigesp_ctr_mrh_listadoprogramacion.php',
+		parametros: "ObjSon={'operacion': 'OBT_CON'}",
+		arrfiltro:[{etiqueta:'C&#233;dula',id:'logcons',valor:'logcon'},
+				   {etiqueta:'Nombre',id:'nomcons',valor:'nomcon'}],
+		posicion:'position:absolute;left:5px;top:115px',
+		tittxt:'Consultor',
+		idtxt:'logcon',
+		campovalue:'logcon',
+		anchoetiquetatext:130,
+		anchotext:130,
+		anchocoltext:0.40,
+		idlabel:'nomcon',
+		labelvalue:'nomcon',
+		anchocoletiqueta:0.53,
+		anchoetiqueta:250,
+		tipbus:'L',
+		binding:'C',
+		hiddenvalue:'',
+		defaultvalue:'',
+		allowblank:false,
 	});
-	//fin combo modulo
-	
-	//combo tipo situacion
-	var reTipInc = Ext.data.Record.create([
-	    {name: 'codigo'},    
-	    {name: 'descripcion'}
-	]);
-	                               	                               	                                  	
-	var dsTipInc =  new Ext.data.Store({
-	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reTipInc)
-	});
-	
-	var cmbTipInc = new Ext.form.ComboBox({
-		store: dsTipInc,
-		labelSeparator: '',
-		fieldLabel:'Tipo Situacion',
-		displayField:'descripcion',
-		valueField:'codigo',
-        id:'tipinc',
-        forceSelection: true,  
-        typeAhead: true,
-        mode: 'local',
-        listWidth : 200,
-        binding:true,
-        editable: false,
-        triggerAction: 'all'
-	});
-	//fin combo tipo situacion
-	
-	//OBETENIEDO LA DATA INICIAL...
-	var myJSONObject = {"operacion":"DAT_INI"};
-	var ObjSon=Ext.util.JSON.encode(myJSONObject);
-	var parametros ='ObjSon='+ObjSon;
-	Ext.Ajax.request({
-		url: '../../controlador/mrh/sigesp_ctr_mrh_listadoactividad.php',
-		params: parametros,
-		method: 'POST',
-		success: function ( result, request ) {
-			var datos = result.responseText;
-			var datos = datos.split("|");;
-			var objDataAct = eval('(' + datos[0] + ')');
-			var objDataMod = eval('(' + datos[1] + ')');
-			var objDataTip = eval('(' + datos[2] + ')');
-			dsTipoActividad.loadData(objDataAct);
-			dsModulo.loadData(objDataMod);
-			dsTipInc.loadData(objDataTip);
-		},
-		failure: function ( result, request){ 
-			Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
-		}
-	});
+	//fin componente campocatalogo para el campo consultor
 	
 	//PANEL PRINCIPAL REPORTE TOTAL HORA
-	var plListadoActividad = new Ext.FormPanel({
-		title: "<H1 align='center'>Listado Actividades</H1>",
+	var plListadoProgramacion = new Ext.FormPanel({
+		title: "<H1 align='center'>Listado Programaciones</H1>",
 		style: 'position:relative;top:50px;left:150px', 
 		height: 340,
 		width: 750,
@@ -216,7 +163,7 @@ Ext.onReady(function(){
             tooltip:'Limpia el formulario para una nueva busqueda',
             iconCls:'barralimpiar',
             handler: function() {
-            	limpiarFormulario(plListadoActividad);
+            	limpiarFormulario(plListadoProgramacion);
             	
 			}
   		},{
@@ -228,11 +175,10 @@ Ext.onReady(function(){
 	        						"codcon":Ext.getCmp('codcon').getValue(),
 	        						"fecdes":Ext.getCmp('fecdes').getValue(),
 	        						"fechas":Ext.getCmp('fechas').getValue(),
-	        						"tipact":Ext.getCmp('tipact').getValue(),
-	        						"codmod":Ext.getCmp('codmod').getValue(),
-	        						"tipinc":Ext.getCmp('tipinc').getValue()};
+	        						"logcon":Ext.getCmp('logcon').getValue(),
+	        						"nomcon":Ext.getCmp('nomcon').getValue()};
 	    		var ObjSon=Ext.util.JSON.encode(myJSONObject);
-	    		var pagina = "reportes/sigesp_vis_rpp_listadoactividad.php?ObjSon="+ObjSon;
+	    		var pagina = "reportes/sigesp_vis_rpp_listadoprogramacion.php?ObjSon="+ObjSon;
 	        	window.open(pagina,"Reporte","menubar=no,toolbar=no,scrollbars=yes,width=800,height=600,left=0,top=0,location=no,resizable=yes");
 	        }
   		},{
@@ -297,34 +243,6 @@ Ext.onReady(function(){
 					allowBlank:false,
 				}]
 			}]
-		},{
-			layout: "column",
-			defaults: {border: false},
-			style: 'position:absolute;left:15px;top:125px',
-			items: [{
-				width: 350,
-				layout: "form",
-				border: false,
-				labelWidth: 130,
-				items: [cmbTipoActividad]
-			},{
-				width: 350,
-				layout: "form",
-				border: false,
-				labelWidth: 130,
-				style: 'padding-left:25px',
-				items: [cmbModulo]				
-			}]
-		},{
-			layout: "column",
-			defaults: {border: false},
-			style: 'position:absolute;left:15px;top:160px',
-			items: [{
-				layout: "form",
-				border: false,
-				labelWidth: 130,
-				items: [cmbTipInc]
-			}]
-		}]
+		},comtcConsultor.fieldsetCatalogo]
 	});
 });

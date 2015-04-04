@@ -204,7 +204,7 @@ Ext.onReady(function(){
 	});
 	
 	//PANEL PRINCIPAL REPORTE TOTAL HORA
-	var plImputarHora = new Ext.FormPanel({
+	var plTotalHora = new Ext.FormPanel({
 		title: "<H1 align='center'>Reporte Total Hora</H1>",
 		style: 'position:relative;top:50px;left:150px', 
 		height: 340,
@@ -216,7 +216,7 @@ Ext.onReady(function(){
             tooltip:'Limpia el formulario y la grid para una nueva busqueda',
             iconCls:'barralimpiar',
             handler: function() {
-            	limpiarFormulario(plImputarHora);
+            	limpiarFormulario(plTotalHora);
             	
 			}
   		},{

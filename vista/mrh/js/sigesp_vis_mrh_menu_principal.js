@@ -87,14 +87,14 @@ Ext.onReady(function(){
 		text: 'Listado de Programaciones',
 		id:'lisPro',
        	iconCls: 'menureporte',
-       	href: 'sigesp_vis_mrh_listadohora.html'
+       	href: 'sigesp_vis_mrh_listadoprogramacion.html'
 	});
 	
 	var listadoContrato = new  Ext.menu.Item({
 		text: 'Listado de Contratos',
 		id:'lisCon',
        	iconCls: 'menureporte',
-       	href: 'sigesp_vis_mrh_listadohora.html'
+       	href: 'sigesp_vis_mrh_listadocontrato.html'
 	});
 	
 	var listadoCliente = new  Ext.menu.Item({
