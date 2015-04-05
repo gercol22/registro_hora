@@ -88,6 +88,7 @@ class ServicioRegistroActividad {
 		$cadenaPk = "numact = '{$objJson->numact}'";
 		$this->daoActividad = FabricaDao::CrearDAO('C', 'actividad', array(), $cadenaPk);
 		$this->daoActividad->rifcli = $objJson->rifcli;
+		$this->daoActividad->numpro = $objJson->numpro;
 		$this->daoActividad->tipact = $objJson->tipact;
 		$this->daoActividad->fecact = $objJson->fecact;
 		$this->daoActividad->estvis = $objJson->estvis;
@@ -132,11 +133,15 @@ class ServicioRegistroActividad {
 	
 	public function buscarActividad($logcon, $numact, $razsoc) {
 		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
+		$filtroUSU = '';
+		if($_SESSION['rolcon'] != 'A'){
+			$filtroUSU = " logcon = '{$logcon}' AND ";			
+		}
+		
 		$cadenaSQL = "SELECT ACT.numact, ACT.numpro, ACT.rifcli, CLI.razsoc, ACT.tipact, ACT.fecact, ACT.estvis, ACT.rescli, ACT.estfac
 						FROM actividad ACT
 						INNER JOIN cliente CLI ON ACT.rifcli = CLI.rifcli 
-						WHERE logcon = '{$logcon}'
-						AND (ACT.numact ILIKE '%{$numact}%' OR CLI.razsoc ILIKE '%{$razsoc}%') 
+						WHERE {$filtroUSU} (ACT.numact ILIKE '%{$numact}%' OR CLI.razsoc ILIKE '%{$razsoc}%') 
 						ORDER BY 1";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}

@@ -29,7 +29,7 @@ Ext.onReady(function(){
 		anchofieldset:850,
 		datosgridcat: dsCliente,
 		colmodelocat: cmCliente,
-		rutacontrolador:'../../controlador/mrh/sigesp_ctr_mrh_listadoprogramacion.php',
+		rutacontrolador:'../../controlador/mrh/sigesp_ctr_mrh_listadocontrato.php',
 		parametros: "ObjSon={'operacion': 'OBT_CLI'",
 		arrfiltro:[{etiqueta:'RIF',id:'rifclie',valor:'rifcli'},
 				   {etiqueta:'Raz&#243;n Social',id:'razsoci',valor:'razsoc'}],
@@ -48,6 +48,33 @@ Ext.onReady(function(){
 		allowblank:true
 	});
 	//fin componente campocatalogo para el campo cliente
+	
+	//combo tipo contrato
+	var reTipCon = Ext.data.Record.create([
+	    {name: 'codigo'},    
+	    {name: 'descripcion'}
+	]);
+	                               	                               	                                  	
+	var dsTipCon =  new Ext.data.Store({
+	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reTipCon)
+	});
+	
+	var cmbTipCon = new Ext.form.ComboBox({
+		store: dsTipCon,
+		labelSeparator: '',
+		fieldLabel:'Tipo Contrato',
+		displayField:'descripcion',
+		valueField:'codigo',
+        id:'tipcon',
+        forceSelection: true,  
+        typeAhead: true,
+        mode: 'local',
+        binding:true,
+        editable: false,
+        width:200,
+        triggerAction: 'all'
+	});
+	//fin combo tipo contrato
 	
 	//combo estado contrato
 	var reEstado = Ext.data.Record.create([
@@ -72,10 +99,30 @@ Ext.onReady(function(){
         binding:true,
         editable: false,
         width:150,
-        triggerAction: 'all',
-        allowBlank:false
+        triggerAction: 'all'
 	});
 	//fin combo estado contrato
+	
+	//OBETENIEDO LA DATA INICIAL...
+	var myJSONObject = {"operacion":"DAT_INI"};
+	var ObjSon=Ext.util.JSON.encode(myJSONObject);
+	var parametros ='ObjSon='+ObjSon;
+	Ext.Ajax.request({
+		url: '../../controlador/mrh/sigesp_ctr_mrh_listadocontrato.php',
+		params: parametros,
+		method: 'POST',
+		success: function ( result, request ) {
+			var datos = result.responseText;
+			var datos = datos.split("|");
+			var objDataTip = eval('(' + datos[0] + ')');
+			var objDataEst = eval('(' + datos[1] + ')');
+			dsTipCon.loadData(objDataTip);
+			dsEstado.loadData(objDataEst);
+		},
+		failure: function ( result, request){ 
+				Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
+		}
+	});
 		
 	//PANEL PRINCIPAL REPORTE TOTAL HORA
 	var plListadoProgramacion = new Ext.FormPanel({
@@ -99,13 +146,14 @@ Ext.onReady(function(){
 	        iconCls:'barrapdf',
 	        handler: function() {
 	        	var myJSONObject = {"rifcli":Ext.getCmp('rifcli').getValue(),
-	        						"codcon":Ext.getCmp('codcon').getValue(),
+	        						"tipcon":Ext.getCmp('tipcon').getValue(),
+	        						"estcon":Ext.getCmp('estcon').getValue(),
 	        						"fecdes":Ext.getCmp('fecdes').getValue(),
 	        						"fechas":Ext.getCmp('fechas').getValue(),
-	        						"logcon":Ext.getCmp('logcon').getValue(),
-	        						"nomcon":Ext.getCmp('nomcon').getValue()};
+	        						"hordes":Ext.getCmp('canhorma').getValue(),
+	        						"horhas":Ext.getCmp('canhorme').getValue()};
 	    		var ObjSon=Ext.util.JSON.encode(myJSONObject);
-	    		var pagina = "reportes/sigesp_vis_rpp_listadoprogramacion.php?ObjSon="+ObjSon;
+	    		var pagina = "reportes/sigesp_vis_rpp_listadocontrato.php?ObjSon="+ObjSon;
 	        	window.open(pagina,"Reporte","menubar=no,toolbar=no,scrollbars=yes,width=800,height=600,left=0,top=0,location=no,resizable=yes");
 	        }
   		},{
@@ -121,9 +169,17 @@ Ext.onReady(function(){
 			defaults: {border: false},
 			style: 'position:absolute;left:15px;top:55px',
 			items: [{
+				width: 350,
 				layout: "form",
 				border: false,
 				labelWidth: 130,
+				items: [cmbTipCon]
+			},{
+				width: 350,
+				layout: "form",
+				border: false,
+				labelWidth: 130,
+				style: 'padding-left:25px',
 				items: [cmbEstado]
 			}]
 		},{

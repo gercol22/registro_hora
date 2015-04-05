@@ -97,15 +97,6 @@ Ext.onReady(function(){
        	href: 'sigesp_vis_mrh_listadocontrato.html'
 	});
 	
-	var listadoCliente = new  Ext.menu.Item({
-		text: 'Listado de Cliente',
-		id:'lisCli',
-       	iconCls: 'menureporte',
-       	href: 'sigesp_vis_mrh_listadohora.html'
-	});
-	
-	
-		
 	// Tool Bar que va a obtener las Opciones de Menu
 	var barramenu = new Ext.Toolbar();
 	
@@ -147,7 +138,6 @@ Ext.onReady(function(){
 					menuReporte.addItem(listadoActividad);
 					menuReporte.addItem(listadoProgramacion);
 					menuReporte.addItem(listadoContrato);
-					menuReporte.addItem(listadoCliente);
 					menuRegistroHoras.add({
 						text:'Reportes',
 				        iconCls: 'menuprincipal', 

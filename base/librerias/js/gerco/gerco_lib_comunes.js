@@ -1,6 +1,5 @@
 /* Estilos */
 document.write("<link rel='stylesheet' type='text/css' href='../../base/librerias/js/ext/resources/css/ext-all.css'/>");
-document.write("<link rel='stylesheet' type='text/css' href='../../base/librerias/js/ext/resources/css/xtheme-gray.css'/>");
 document.write("<link rel='stylesheet' type='text/css' href='../../base/css/default.css'/>");
 document.write("<link rel='stylesheet' type='text/css' href='../../base/css/fonts.css'/>");
 /* Librer�as */
