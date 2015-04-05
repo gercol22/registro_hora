@@ -57,14 +57,6 @@ $arrActAdm[8]['descripcion'] = 'Consultoria Tel&#233;fonica';
 $arrActAdm[9]['codigo'] = 'F5';
 $arrActAdm[9]['descripcion'] = 'Instalaci&#243;n';
 
-/***********************DATA MODULO**************************************/
-$arrMod[0]['codigo'] = 'APR';
-$arrMod[0]['descripcion'] = 'Apertura';
-$arrMod[1]['codigo'] = 'CFG';
-$arrMod[1]['descripcion'] = 'Configuraci&#243;n';
-$arrMod[2]['codigo'] = 'CXP';
-$arrMod[2]['descripcion'] = 'Cuentas por pagar';
-
 /***********************DATA TIPO CONTRATO*******************************/
 $arrTipCon[0]['codigo'] = 'C1';
 $arrTipCon[0]['descripcion'] = 'Implantaci&#243;n';
@@ -92,3 +84,45 @@ $arrRolCon[2]['codigo'] = 'A';
 $arrRolCon[2]['descripcion'] = 'Administrador';
 $arrRolCon[3]['codigo'] = 'B';
 $arrRolCon[3]['descripcion'] = 'Asistente administrativo';
+
+/***********************DATA MODULO**************************************/
+$arrMod[0]['codigo'] = 'SAF';
+$arrMod[0]['descripcion'] = 'Activos Fijos';
+$arrMod[1]['codigo'] = 'APR';
+$arrMod[1]['descripcion'] = 'Apertura';
+$arrMod[2]['codigo'] = 'SCB';
+$arrMod[2]['descripcion'] = 'Banco';
+$arrMod[3]['codigo'] = 'SOC';
+$arrMod[3]['descripcion'] = 'Compras';
+$arrMod[4]['codigo'] = 'CFG';
+$arrMod[4]['descripcion'] = 'Configuraci&#243;n';
+$arrMod[5]['codigo'] = 'SCF';
+$arrMod[5]['descripcion'] = 'Contabilidad Fiscal';
+$arrMod[6]['codigo'] = 'SCV';
+$arrMod[6]['descripcion'] = 'Control de Viaticos';
+$arrMod[7]['codigo'] = 'CXP';
+$arrMod[7]['descripcion'] = 'Cuentas por Pagar';
+$arrMod[8]['codigo'] = 'SFP';
+$arrMod[8]['descripcion'] = 'Formulaci&#243;nn de Presupuesto';
+$arrMod[9]['codigo'] = 'MIS';
+$arrMod[9]['descripcion'] = 'Integrador';
+$arrMod[10]['codigo'] = 'SIV';
+$arrMod[10]['descripcion'] = 'Inventario';
+$arrMod[11]['codigo'] = 'SNO';
+$arrMod[11]['descripcion'] = 'Nomina';
+$arrMod[12]['codigo'] = 'SOB';
+$arrMod[12]['descripcion'] = 'Obras';
+$arrMod[13]['codigo'] = 'SPG';
+$arrMod[13]['descripcion'] = 'Presupuesto de Gastos';
+$arrMod[14]['codigo'] = 'SPI';
+$arrMod[14]['descripcion'] = 'Presupuesto de Ingresos';
+$arrMod[15]['codigo'] = 'RPC';
+$arrMod[15]['descripcion'] = 'Proveedores y Beneficiarios';
+$arrMod[16]['codigo'] = 'SRH';
+$arrMod[16]['descripcion'] = 'Recursos Humanos';
+$arrMod[17]['codigo'] = 'SSS';
+$arrMod[17]['descripcion'] = 'Seguridad';
+$arrMod[18]['codigo'] = 'SEP';
+$arrMod[18]['descripcion'] = 'Solicitud de Ejecuci&#243;n Presupuestaria';
+
+
