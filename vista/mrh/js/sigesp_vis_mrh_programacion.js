@@ -194,6 +194,7 @@ Ext.onReady(function(){
 		displayField:'descripcion',
 		valueField:'codigo',
         id:'codmod',
+        listWidth : 250,
         forceSelection: true,  
         typeAhead: true,
         mode: 'local',
