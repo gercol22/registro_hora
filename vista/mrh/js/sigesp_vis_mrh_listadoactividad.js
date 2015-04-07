@@ -224,13 +224,18 @@ Ext.onReady(function(){
 	        tooltip:'Emite archivo pdf con reporte total horas',
 	        iconCls:'barrapdf',
 	        handler: function() {
+	        	var esthorimp = 0;
+	        	if(Ext.getCmp('esthorimp').getValue()){
+	        		esthorimp = 1;
+	        	}
 	        	var myJSONObject = {"rifcli":Ext.getCmp('rifcli').getValue(),
 	        						"codcon":Ext.getCmp('codcon').getValue(),
 	        						"fecdes":Ext.getCmp('fecdes').getValue(),
 	        						"fechas":Ext.getCmp('fechas').getValue(),
 	        						"tipact":Ext.getCmp('tipact').getValue(),
 	        						"codmod":Ext.getCmp('codmod').getValue(),
-	        						"tipinc":Ext.getCmp('tipinc').getValue()};
+	        						"tipinc":Ext.getCmp('tipinc').getValue(),
+	        						"esthorimp":esthorimp};
 	    		var ObjSon=Ext.util.JSON.encode(myJSONObject);
 	    		var pagina = "reportes/sigesp_vis_rpp_listadoactividad.php?ObjSon="+ObjSon;
 	        	window.open(pagina,"Reporte","menubar=no,toolbar=no,scrollbars=yes,width=800,height=600,left=0,top=0,location=no,resizable=yes");
@@ -324,6 +329,21 @@ Ext.onReady(function(){
 				border: false,
 				labelWidth: 130,
 				items: [cmbTipInc]
+			}]
+		},{
+			layout: "column",
+			defaults: {border: false},
+			style: 'position:absolute;left:15px;top:200px',
+			items: [{
+				layout: "form",
+				border: false,
+				labelWidth: 130,
+				items: [{
+		            xtype: "checkbox",
+		            fieldLabel: "Mostrar actividades no imputadas",
+		            labelSeparator: '',
+		            id: 'esthorimp'
+		        }]
 			}]
 		}]
 	});

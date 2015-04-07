@@ -49,6 +49,15 @@ class ServicioListadoContrato {
 			}
 		}
 		
+		if ($objFiltro->esthorimp == 0) {
+			if ($filtroSQL == '') {
+				$filtroSQL .= " MOD.estfac = 1 ";
+			}
+			else {
+				$filtroSQL .= " AND MOD.estfac = 1 ";
+			}
+		}
+		
 		$filtroSUM = '';
 		if ($objFiltro->hordes != '' && $objFiltro->horhas != '') {
 			$filtroSUM .= " HAVING SUM(MOD.canhor) BETWEEN {$objFiltro->hordes} AND {$objFiltro->horhas} ";

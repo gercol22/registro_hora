@@ -49,12 +49,12 @@ class ServicioRegistroActividad {
 		$this->daoActividad = FabricaDao::CrearDAO('N', 'actividad');
 		$this->daoActividad->setData($objJson);
 		$this->daoActividad->logcon = $_SESSION['logcon'];
-		$this->daoActividad->estfac = 0;
 		if ($this->daoActividad->incluir(false, true, 'numact', 6)) {
 			foreach ($objJson->arrModAct as $recdetalle) {
 				$this->daoModAct = FabricaDao::CrearDAO('N', 'modact');
 				$this->daoModAct->setData($recdetalle);
 				$this->daoModAct->numact = $this->daoActividad->numact;
+				$this->daoModAct->estfac = 0;
 				if (!$this->daoModAct->incluir()) {
 					$this->mensaje = 'Ocurri&#243; un error al insertar los destalles '.$this->daoModAct->ErrorMsg();
 					$this->eliminarTareas($this->daoActividad->numact);
@@ -100,6 +100,7 @@ class ServicioRegistroActividad {
 				if (!$this->daoModAct->_saved) {
 					$this->daoModAct->setData($recdetalle);
 					$this->daoModAct->numact = $this->daoActividad->numact;
+					$this->daoModAct->estfac = 0;
 				}
 				else {
 					$this->daoModAct->desinc = $recdetalle->desinc;
@@ -138,7 +139,10 @@ class ServicioRegistroActividad {
 			$filtroUSU = " logcon = '{$logcon}' AND ";			
 		}
 		
-		$cadenaSQL = "SELECT ACT.numact, ACT.numpro, ACT.rifcli, CLI.razsoc, ACT.tipact, ACT.fecact, ACT.estvis, ACT.rescli, ACT.estfac
+		$cadenaSQL = "SELECT ACT.numact, ACT.numpro, ACT.rifcli, CLI.razsoc, ACT.tipact, ACT.fecact, ACT.estvis, ACT.rescli, 
+							 COALESCE((SELECT MOD.estfac 
+           								FROM modact MOD 
+           								WHERE MOD.numact=ACT.numact AND MOD.estfac=1),0) AS estfac	
 						FROM actividad ACT
 						INNER JOIN cliente CLI ON ACT.rifcli = CLI.rifcli 
 						WHERE {$filtroUSU} (ACT.numact ILIKE '%{$numact}%' OR CLI.razsoc ILIKE '%{$razsoc}%') 

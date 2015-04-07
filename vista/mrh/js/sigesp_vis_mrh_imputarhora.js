@@ -49,34 +49,7 @@ Ext.onReady(function(){
 	});
 	//fin componente campocatalogo para el campo cliente
 	
-	 //combo Imputable
-    var Tipo = [['SI', 1], ['NO', 0]]
-    var storeTipo = new Ext.data.SimpleStore({
-    	fields: ['etiqueta', 'valor'],
-        data: Tipo
-    });
-    
-    var cmbImputable = new Ext.form.ComboBox({
-    	store: storeTipo,
-        editable: false,
-        displayField: 'etiqueta',
-        valueField: 'valor',
-        typeAhead: true,
-        triggerAction: 'all',
-        mode: 'local'
-    })
-    //fin combo Imputable
-    
-    function mostrarImputable(imp) {
-    	if (imp==1) {
-			return 'SI';
-		}
-		else if (imp=='0') {
-			return 'NO';	
-		}
-	}
-	
-    function catalogoContrato(regActividad) {
+	function catalogoContrato(regActividad) {
     	//registro contrato
     	var reContrato = Ext.data.Record.create([
     	    {name: 'codcon'},
@@ -159,6 +132,250 @@ Ext.onReady(function(){
     	venContrato.show();
     }
     
+    //VENTANA PARA PROCESAR LAS TAREAS DE UNA ACTIVIDAD
+    function ventanaTarea(regActividad) {
+    	if (regActividad.get('codcon') != '----') {
+	    	 //combo Imputable
+	        var Tipo = [['SI', 1], ['NO', 0]]
+	        var storeTipo = new Ext.data.SimpleStore({
+	        	fields: ['etiqueta', 'valor'],
+	            data: Tipo
+	        });
+	        
+	        var cmbImputable = new Ext.form.ComboBox({
+	        	store: storeTipo,
+	            editable: false,
+	            displayField: 'etiqueta',
+	            valueField: 'valor',
+	            typeAhead: true,
+	            triggerAction: 'all',
+	            mode: 'local'
+	        })
+	        //fin combo Imputable
+	        
+	        function mostrarImputable(imp) {
+	        	if (imp==1) {
+	    			return 'SI';
+	    		}
+	    		else if (imp=='0') {
+	    			return 'NO';	
+	    		}
+	    	}
+	    	
+	    	//registro tarea
+	    	var reTarea = Ext.data.Record.create([
+	    	    {name: 'codmod'},
+	    	    {name: 'desact'},
+	    	    {name: 'canhor'},
+	    	    {name: 'casman'},
+	    	    {name: 'estfac'}
+	    	]);
+	    	
+	    	var dsTarea =  new Ext.data.Store({
+	    		reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reTarea)
+	    	});
+	    	
+	    	var myJSONObject = {"operacion":"BUS_TAR", "numact":regActividad.get('numact')};
+			var ObjSon = Ext.util.JSON.encode(myJSONObject);
+			var parametros ='ObjSon='+ObjSon;
+			Ext.Ajax.request({
+				url: '../../controlador/mrh/sigesp_ctr_mrh_imputarhora.php',
+				params: parametros,
+				method: 'POST',
+				success: function ( result, request ) {
+					var datos = result.responseText;
+					var objData = eval('(' + datos + ')');
+					dsTarea.loadData(objData);
+				},
+				failure: function ( result, request) { 
+						Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
+				}
+			});
+	    	
+	    	//Grid tareas a procesar
+	    	var gridTarea = new Ext.grid.EditorGridPanel({
+	    		width:700,
+	    	    height:100,
+	    	    ds: dsTarea,
+	    	    style: 'position:absolute;left:5px;top:110px',
+	           	cm: new Ext.grid.ColumnModel([
+	                {header: "M&#243;dulo", width: 15, sortable: true, dataIndex: 'codmod'},
+	                {header: "Descripci&#243;n", width: 70, setEditable: true, sortable: true, dataIndex: 'desact'},
+	                {header: "Caso mantis", width: 20, setEditable: true, sortable: true, dataIndex: 'casman'},
+	                {header: "Cant. Horas", width: 20, setEditable: true, sortable: true, dataIndex: 'canhor'},
+	                {header: "Imputable", width: 20, setEditable: true, sortable: true, dataIndex: 'estfac',editor:cmbImputable,renderer:mostrarImputable}
+	            ]),
+	           	sm: new Ext.grid.CheckboxSelectionModel({}),
+	    		viewConfig: {forceFit:true},
+	            columnLines: true
+	        });
+	    	
+	    	var plTarea = new Ext.FormPanel({
+	    		height: 275,
+	    		width: 730,
+	    	   	frame: true,
+	    	   	tbar:[{
+	      			text:'Procesar',
+	    	        tooltip:'Procesa las actividades actualizadas en pantalla',
+	    	        iconCls:'barraprocesar',
+	    	        handler: function() {
+	    	        	var dataAct = gridTarea.store.getModifiedRecords();
+	    	        	if(dataAct.length > 0) {
+	    		        	var cadenaJson = "{'operacion':'PRO_TAR','data':[";
+	    		        	for (var i = 0; i <= dataAct.length - 1; i++) {
+	    		        		if (i == 0) {
+	    		        			cadenaJson += "{'numact':'"+Ext.getCmp('actividad').getValue()+"','codmod':'"+dataAct[i].get('codmod')+"','estfac':'"+dataAct[i].get('estfac')+"'}";
+	    						} 
+	    		        		else {
+	    		        			cadenaJson += ",{'numact':'"+Ext.getCmp('actividad').getValue()+"','codmod':'"+dataAct[i].get('codmod')+"','estfac':'"+dataAct[i].get('estfac')+"'}";
+	    		        		}
+	    		        	}
+	    		        	cadenaJson += "]}";
+	    		        	var parametros ='ObjSon='+cadenaJson;
+	    		        	Ext.Ajax.request({
+	        	        		url: '../../controlador/mrh/sigesp_ctr_mrh_imputarhora.php',
+	        	        		params: parametros,
+	        	        		method: 'POST',
+	        	        		success: function ( result, request ) {
+	        	        			var respuesta = result.responseText;
+	        						var datajson = eval('(' + respuesta + ')');
+	        						if(datajson.raiz.valido==true){
+	        							Ext.Msg.show({
+	        	    						title:'Mensaje',
+	        	    						msg: datajson.raiz.mensaje,
+	        	    						buttons: Ext.Msg.OK,
+	        	    						icon: Ext.MessageBox.INFO
+	        	    					});
+	        							gridTarea.store.commitChanges();
+	        						}
+	        						else {
+	        							Ext.Msg.show({
+	        	    						title:'Mensaje',
+	        	    						msg: datajson.raiz.mensaje,
+	        	    						buttons: Ext.Msg.OK,
+	        	    						icon: Ext.MessageBox.ERROR
+	        	    					});
+	        						}
+	        	        		},
+	        	        		failure: function ( result, request){ 
+	        	        				Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
+	        	        		}
+	        	        	});
+	    		        }
+	    	        	else {
+	    	        		Ext.Msg.show({
+	    						title:'Mensaje',
+	    						msg: 'No hay actividades modificadas para procesar',
+	    						buttons: Ext.Msg.OK,
+	    						icon: Ext.MessageBox.WARNING
+	    					});
+	    	        	}
+	    	        }
+	            },{
+	      			text:'Salir',
+	    	        tooltip:'Le permite volver al menu principal',
+	    	        iconCls:'barrasalir',
+	    	        handler: function() {
+	    	        	venTarea.destroy();
+	    	        }
+	      		}],
+	    		items: [{
+	    			layout: "column",
+	    			defaults: {border: false},
+	    			style: 'position:absolute;left:15px;top:15px',
+	    			items: [{
+	    				width: 250,
+	    				layout: "form",
+	    				border: false,
+	    				labelWidth: 80,
+	    				items: [{
+	    					xtype:'textfield',
+	    					fieldLabel:'Actividad',
+	    					style:'font-weight: bold; border:none;background:#f1f1f1',
+	    					id:'actividad',
+	    					width:90,
+	    					labelSeparator:'',
+	    					value:regActividad.get('numact'),
+	    					readOnly:true
+	    				}]
+	    			},{
+	    				width: 450,
+	    				layout: "form",
+	    				border: false,
+	    				labelWidth: 80,
+	    				style: 'padding-left:5px',
+	    				items: [{
+	    					xtype:'textfield',
+	    					fieldLabel:'Cliente',
+	    					style:'font-weight: bold; border:none;background:#f1f1f1',
+	    					id:'cliente',
+	    					width:200,
+	    					labelSeparator:'',
+	    					value:regActividad.get('razsoc'),
+	    					readOnly:true
+	    				}]
+	    			}]
+	    		},{
+	    			layout: "column",
+	    			defaults: {border: false},
+	    			style: 'position:absolute;left:15px;top:55px',
+	    			items: [{
+	    				width: 250,
+	    				layout: "form",
+	    				border: false,
+	    				labelWidth: 80,
+	    				items: [{
+	    					xtype:'textfield',
+	    					fieldLabel:'Contrato',
+	    					style:'font-weight: bold; border:none;background:#f1f1f1',
+	    					id:'contrato',
+	    					width:90,
+	    					labelSeparator:'',
+	    					value:regActividad.get('codcon'),
+	    					readOnly:true
+	    				}]
+	    			},{
+	    				width: 450,
+	    				layout: "form",
+	    				border: false,
+	    				labelWidth: 80,
+	    				style: 'padding-left:5px',
+	    				items: [{
+	    					xtype:'textfield',
+	    					fieldLabel:'Fecha',
+	    					style:'font-weight: bold; border:none;background:#f1f1f1',
+	    					id:'fecha',
+	    					width:150,
+	    					labelSeparator:'',
+	    					value:regActividad.get('fecact'),
+	    					readOnly:true
+	    				}]
+	    			}]
+	    		},gridTarea]
+	    	});
+	    	
+	    	//Ventana de tareas a procesar
+	    	var venTarea = new Ext.Window({
+	    		title: "<H1 align='center'>Tareas</H1>",
+			    width:740,
+	            height:320,
+	            modal: true,
+	            closable:false,
+	            plain: false,
+	            items:[plTarea]
+	        });
+	    	venTarea.show();
+    	}
+    	else {
+    		Ext.Msg.show({
+				title:'Mensaje',
+				msg: 'La actividad debe tener un contrato asignado',
+				buttons: Ext.Msg.OK,
+				icon: Ext.MessageBox.WARNING
+			});
+    	}
+    }
+    
 	//registro y store de la grid de actividades
 	reActividad = Ext.data.Record.create([
 	    {name: 'numact'},
@@ -166,15 +383,14 @@ Ext.onReady(function(){
 	    {name: 'razsoc'},
 	    {name: 'fecact'},
 	    {name: 'canhor'},
-	    {name: 'codcon'},
-	    {name: 'estfac'}
+	    {name: 'codcon'}
 	]);
 	
 	var dsActividad =  new Ext.data.Store({
 		reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reActividad)
 	});
 	
-	//Grid de tareas por modulo
+	//Grid de actividades
 	var gridActividades = new Ext.grid.EditorGridPanel({
 		title: "<H1 align='center'>Actividades</H1>",
 		width:750,
@@ -186,9 +402,7 @@ Ext.onReady(function(){
             {header: "Actividad", width: 20, sortable: true, dataIndex: 'numact'},
             {header: "Cliente", width: 60, sortable: true, dataIndex: 'razsoc'},
             {header: "Fecha", width: 20, setEditable: true, sortable: true, dataIndex: 'fecact'},
-            {header: "Cant. Horas", width: 20, setEditable: true, sortable: true, dataIndex: 'canhor'},
             {header: "Contrato", width: 20, setEditable: true, sortable: true, dataIndex: 'codcon',editor:new Ext.form.TextField({autoCreate: {tag: 'input', type: 'text', size: '15', autocomplete: 'off', maxlength: '4'}})},
-            {header: "Imputable", width: 20, setEditable: true, sortable: true, dataIndex: 'estfac',editor:cmbImputable,renderer:mostrarImputable}
         ]),
        	sm: new Ext.grid.CheckboxSelectionModel({}),
 		viewConfig: {forceFit:true},
@@ -200,6 +414,9 @@ Ext.onReady(function(){
 		var campo  = grid.getColumnModel().getDataIndex(columnIndex);
 		if(campo == 'codcon') {
 			catalogoContrato(record);
+		}
+		else {
+			ventanaTarea(record);
 		}
 	});
 	
@@ -254,10 +471,10 @@ Ext.onReady(function(){
 		        	var cadenaJson = "{'operacion':'PRO_IMP','data':[";
 		        	for (var i = 0; i <= dataAct.length - 1; i++) {
 		        		if (i == 0) {
-		        			cadenaJson += "{'numact':'"+dataAct[i].get('numact')+"','codcon':'"+dataAct[i].get('codcon')+"','estfac':'"+dataAct[i].get('estfac')+"'}";
+		        			cadenaJson += "{'numact':'"+dataAct[i].get('numact')+"','codcon':'"+dataAct[i].get('codcon')+"'}";
 						} 
 		        		else {
-		        			cadenaJson += ",{'numact':'"+dataAct[i].get('numact')+"','codcon':'"+dataAct[i].get('codcon')+"','estfac':'"+dataAct[i].get('estfac')+"'}";
+		        			cadenaJson += ",{'numact':'"+dataAct[i].get('numact')+"','codcon':'"+dataAct[i].get('codcon')+"'}";
 		        		}
 		        	}
 		        	cadenaJson += "]}";

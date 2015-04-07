@@ -249,6 +249,7 @@ Ext.onReady(function(){
 	    {name: 'casman'},
 	    {name: 'desinc'},
 	    {name: 'tipinc'},
+	    {name: 'estfac'},
 	    {name: 'estbdt'}
 	]);
 	
@@ -303,50 +304,60 @@ Ext.onReady(function(){
 	     		   	icon: Ext.MessageBox.QUESTION,
 	     		   	fn: function(btn) {
 	     		   		if (btn == 'yes') {
-		     		   		var regEliminar = gridTareas.getSelectionModel().getSelected();
-		                	if(gridTareas.store.getCount() > 1){
-		                		if(regEliminar.get('estbdt') == 'N') {
-		                			gridTareas.store.remove(regEliminar);
-		                			calcularTotal();
-		                		}
-		                		else {
-		                			var myJSONObject = {"operacion":"ELI_TAR","codmod":regEliminar.get('codmod'),"numact":Ext.getCmp('numact').getValue()};
-		                			var ObjSon=Ext.util.JSON.encode(myJSONObject);
-		                			var parametros ='ObjSon='+ObjSon;
-		                			Ext.Ajax.request({
-		                				url: '../../controlador/mrh/sigesp_ctr_mrh_registroactividad.php',
-		                				params: parametros,
-		                				method: 'POST',
-		                				success: function ( result, request ) {
-		                					var respuesta = result.responseText;
-		                					if (respuesta == 1) {
-		                						gridTareas.store.remove(regEliminar);
-		                						calcularTotal();
-		                					}
-		                					else {
-		                						Ext.Msg.show({
-		    	    	    						title:'Mensaje',
-		    	    	    						msg: 'Ocurrio un error al tratar de eliminar la tarea',
-		    	    	    						buttons: Ext.Msg.OK,
-		    	    	    						icon: Ext.MessageBox.ERROR
-		    	    	    					});
-		                					}
-		                					
-		                				},
-		                				failure: function ( result, request){ 
-		                						Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
-		                				}
-		                			});
-		                		}
-		                	}
-		                	else {
-		                		Ext.Msg.show({
+	     		   			var regEliminar = gridTareas.getSelectionModel().getSelected();
+	     		   			if(regEliminar.get('estfac') != '1') {
+			     		   		if(gridTareas.store.getCount() > 1){
+			                		if(regEliminar.get('estbdt') == 'N') {
+			                			gridTareas.store.remove(regEliminar);
+			                			calcularTotal();
+			                		}
+			                		else {
+			                			var myJSONObject = {"operacion":"ELI_TAR","codmod":regEliminar.get('codmod'),"numact":Ext.getCmp('numact').getValue()};
+			                			var ObjSon=Ext.util.JSON.encode(myJSONObject);
+			                			var parametros ='ObjSon='+ObjSon;
+			                			Ext.Ajax.request({
+			                				url: '../../controlador/mrh/sigesp_ctr_mrh_registroactividad.php',
+			                				params: parametros,
+			                				method: 'POST',
+			                				success: function ( result, request ) {
+			                					var respuesta = result.responseText;
+			                					if (respuesta == 1) {
+			                						gridTareas.store.remove(regEliminar);
+			                						calcularTotal();
+			                					}
+			                					else {
+			                						Ext.Msg.show({
+			    	    	    						title:'Mensaje',
+			    	    	    						msg: 'Ocurrio un error al tratar de eliminar la tarea',
+			    	    	    						buttons: Ext.Msg.OK,
+			    	    	    						icon: Ext.MessageBox.ERROR
+			    	    	    					});
+			                					}
+			                					
+			                				},
+			                				failure: function ( result, request){ 
+			                						Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
+			                				}
+			                			});
+			                		}
+			                	}
+			                	else {
+			                		Ext.Msg.show({
+			    						title:'Mensaje',
+			    						msg: 'La actividad debe contener al menos una tarea realizada',
+			    						buttons: Ext.Msg.OK,
+			    						icon: Ext.MessageBox.WARNING
+			    					});
+			                	}
+	     		   			}
+		     		   		else {
+			        			Ext.Msg.show({
 		    						title:'Mensaje',
-		    						msg: 'La actividad debe contener al menos una tarea realizada',
+		    						msg: 'Esta tarea fue maracada para facturar no puede ser eliminada',
 		    						buttons: Ext.Msg.OK,
 		    						icon: Ext.MessageBox.WARNING
 		    					});
-		                	}
+			        		}
 	     		   		}
 	     		   	}
             	});

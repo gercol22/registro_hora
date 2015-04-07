@@ -32,9 +32,26 @@ if ($_POST['ObjSon']) {
 			unset($servicioImputarHora);
 			break;
 			
+		case 'BUS_TAR':
+			$servicioImputarHora = new ServicioImputarHora();
+			$dataTarea = $servicioImputarHora->buscarTarea($objetoData->numact);
+			echo generarJson($dataTarea);
+			unset($dataTarea);
+			unset($servicioImputarHora);
+			break;
+		
 		case 'PRO_IMP':
 			$servicioImputarHora = new ServicioImputarHora();
 			$respuesta = $servicioImputarHora->imputarActividad($objetoData->data);
+			$resultado['mensaje'] = $servicioImputarHora->mensaje;
+			$resultado['valido']  = $respuesta;
+			echo  json_encode(array('raiz'=>$resultado));
+			unset($servicioImputarHora);
+			break;
+			
+		case 'PRO_TAR':
+			$servicioImputarHora = new ServicioImputarHora();
+			$respuesta = $servicioImputarHora->imputarTarea($objetoData->data);
 			$resultado['mensaje'] = $servicioImputarHora->mensaje;
 			$resultado['valido']  = $respuesta;
 			echo  json_encode(array('raiz'=>$resultado));

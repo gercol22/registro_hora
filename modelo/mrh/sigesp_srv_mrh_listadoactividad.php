@@ -67,6 +67,15 @@ class ServicioListadoActividad {
 			}
 		}
 		
+		if ($objFiltro->esthorimp == 0) {
+			if ($filtroSQL == '') {
+				$filtroSQL .= " MOD.estfac = 1 ";
+			}
+			else {
+				$filtroSQL .= " AND MOD.estfac = 1 ";
+			}
+		}
+		
 		if ($filtroSQL != '') {
 			$filtroSQL = ' WHERE '.$filtroSQL;
 		}

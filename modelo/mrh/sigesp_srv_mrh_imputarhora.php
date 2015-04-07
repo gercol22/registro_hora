@@ -9,6 +9,7 @@ require_once ($dirsrvdoc.'/base/librerias/php/gerco/gerco_lib_fabricadao.php');
 class ServicioImputarHora {
 	private $conexionBD;
 	private $daoActividad;
+	private $daoModAct;
 	public  $mensaje = '';
 		
 	public function ServicioImputarHora() {
@@ -22,12 +23,19 @@ class ServicioImputarHora {
 		if ($fecact != '') {
 			$filtroFecha = "  AND fecact = '{$fecact}' ";
 		}
-		$cadenaSQL = "SELECT ACT.numact, ACT.rifcli, CLI.razsoc, ACT.fecact, ACT.codcon, ACT.estfac, SUM(canhor) AS canhor
+		$cadenaSQL = "SELECT ACT.numact, ACT.rifcli, CLI.razsoc, ACT.fecact, ACT.codcon
 						FROM actividad ACT 
 							INNER JOIN cliente CLI ON ACT.rifcli=CLI.rifcli 
-							INNER JOIN modact MOD ON ACT.numact=MOD.numact
 						WHERE ACT.rifcli ILIKE '%{$rifcli}%' {$filtroFecha}
-						GROUP BY ACT.numact, CLI.razsoc, ACT.fecact, ACT.codcon";
+						ORDER BY 1";
+		return $this->conexionBD->Execute($cadenaSQL);
+	}
+	
+	public function buscarTarea($numact) {
+		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
+		$cadenaSQL = "SELECT codmod, canhor, desact, casman, estfac
+  						FROM modact
+						WHERE numact='{$numact}'";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}
 		
@@ -38,8 +46,7 @@ class ServicioImputarHora {
 			$this->daoActividad = FabricaDao::CrearDAO('C', 'actividad', array(), $cadenaPk);
 			if ($this->daoActividad->_saved) {
 				$this->daoActividad->codcon = $arrJson[$j]->codcon;
-				$this->daoActividad->estfac = $arrJson[$j]->estfac;
-				
+							
 				if ($this->daoActividad->modificar() === 0) {
 					$this->mensaje = 'Ocurri&#243; un error al procesar las actividades';
 					$respuesta = false;
@@ -57,6 +64,34 @@ class ServicioImputarHora {
 			$this->mensaje = "Las actividades fueron procesadas con exito";
 		}
 		
+		return $respuesta;
+	}
+	
+	public function imputarTarea($arrJson) {
+		$respuesta = true;
+		for($j=0;$j<=count($arrJson)-1;$j++) {
+			$cadenaPk = "numact = '{$arrJson[$j]->numact}' AND codmod = '{$arrJson[$j]->codmod}'";
+			$this->daoModAct = FabricaDao::CrearDAO('C', 'modact', array(), $cadenaPk);
+			if ($this->daoModAct->_saved) {
+				$this->daoModAct->estfac = $arrJson[$j]->estfac;
+					
+				if ($this->daoModAct->modificar() === 0) {
+					$this->mensaje = 'Ocurri&#243; un error al procesar las tareas';
+					$respuesta = false;
+					break;
+				}
+			}
+			else {
+				$this->mensaje = "La tarea del modulo {$arrJson[$j]->codmod} no esta registrada en la base de datos";
+				$respuesta = false;
+				break;
+			}
+		}
+	
+		if ($respuesta) {
+			$this->mensaje = "Las tareas fueron procesadas con exito";
+		}
+	
 		return $respuesta;
 	}
 	
