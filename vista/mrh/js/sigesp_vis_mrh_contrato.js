@@ -260,7 +260,7 @@ Ext.onReady(function(){
 		        			operacion = 'MOD_CON';
 		        		}
 		        		var strJsonConNot = "{'operacion':'"+operacion+"',"+strJsonContrato+",'arrNota':"+strJsonGrid+"}";
-			        	var objjson = Ext.util.JSON.decode(strJsonConNot);
+		        		var objjson = Ext.util.JSON.decode(strJsonConNot);
 		        		if (typeof(objjson) == 'object') {
 		        			var parametros ='ObjSon='+strJsonConNot;
 		    	        	Ext.Ajax.request({
@@ -497,12 +497,11 @@ Ext.onReady(function(){
 				border: false,
 				labelWidth: 130,
 				items: [{
-					xtype:'numberfield',
+					xtype: 'textfield',
 					fieldLabel:'Cantidad Horas',
 					id:'canhor',
 					width:50,
-					decimalPrecision : 2,
-					decimalSeparator : ',',
+					autoCreate: {tag: 'input', type: 'text', size: '10', autocomplete: 'off', maxlength: '3',onkeypress: "return keyRestrict(event,'0123456789');"},
 					labelSeparator:'',
 					binding:true,
 					hiddenvalue:'',
