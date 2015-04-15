@@ -15,7 +15,9 @@ class reporteEzpdf{
 	
 	public function reporteEzpdf($top, $bottom, $left, $right, $orientacion = 'portrait') {
 		$this->objPDF = new Cezpdf('LETTER',$orientacion); // Instancia de la clase PDF
-		$this->objPDF->selectFont('../../../base/librerias/php/ezpdf/fonts/Helvetica.afm'); // Seleccionamos el tipo de letra
+		//$this->objPDF->selectFont('../../../base/librerias/php/ezpdf/fonts/Helvetica.afm'); // Seleccionamos el tipo de letra
+		$this->objPDF->tempPath = '../../../base/librerias/php/ezpdf/fonts/';
+		$this->objPDF->selectFont('Helvetica'); // Seleccionamos el tipo de letra
 		$this->objPDF->ezSetCmMargins($top,$bottom,$left,$right); // Configuración de los margenes en centímetros
 	}
 	
@@ -53,7 +55,7 @@ class reporteEzpdf{
 		$this->objPDF->restoreState();
 		$this->objPDF->closeObject();
 		$this->objPDF->addObject($io_encabezado,'all');
-		$this->objPDF->stopObject($io_encabezado); // Detener el objeto pie de página
+		//$this->objPDF->stopObject($io_encabezado); // Detener el objeto pie de página
 	}
 	
 	public function encabezadoFechaReporte($as_titulo, $orientacion = 'portrait') {

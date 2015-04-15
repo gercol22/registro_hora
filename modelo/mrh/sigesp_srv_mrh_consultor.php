@@ -69,7 +69,7 @@ class ServicioConsultor {
 		$cadenaPk = "logcon = '{$objJson->logcon}'";
 		$this->daoConsultor = FabricaDao::CrearDAO('C', 'consultor', array(), $cadenaPk);
 		if ($this->daoConsultor->_saved) {
-			$this->daoConsultor->nomcon    = $objJson->nomcon;
+			$this->daoConsultor->nomcon    = utf8_decode($objJson->nomcon);
 			$this->daoConsultor->rolcon    = $objJson->rolcon;
 			if ($objJson->pascon != '') {
 				$this->daoConsultor->pascon = $objJson->pascon;

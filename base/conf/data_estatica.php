@@ -15,47 +15,47 @@ $arrTipInc[5]['descripcion'] = 'Entrenamiento / Otros';
 
 /***********************DATA TIPO ACTIVIDAD******************************/
 $arrActTec[0]['codigo'] = 'T1';
-$arrActTec[0]['descripcion'] = 'Desarrollo Mantenimiento';
-$arrActTec[1]['codigo'] = 'T2';
+$arrActTec[0]['descripcion'] = 'Desarrollo';
+/*$arrActTec[1]['codigo'] = 'T2';
 $arrActTec[1]['descripcion'] = 'Nuevo Desarrollo';
 $arrActTec[2]['codigo'] = 'T3';
 $arrActTec[2]['descripcion'] = 'Entrenamiento T&#233;cnico';
 $arrActTec[3]['codigo'] = 'T4';
 $arrActTec[3]['descripcion'] = 'Consultoria T&#233;cnica';
 $arrActTec[4]['codigo'] = 'T5';
-$arrActTec[4]['descripcion'] = 'Instalaci&#243;n';
+$arrActTec[4]['descripcion'] = 'Instalaci&#243;n';*/
 
 $arrActFun[0]['codigo'] = 'F1';
-$arrActFun[0]['descripcion'] = 'Entrenamiento Simulado';
+$arrActFun[0]['descripcion'] = 'Atenci&#243;n al cliente';
 $arrActFun[1]['codigo'] = 'F2';
-$arrActFun[1]['descripcion'] = 'Entrenamiento en Vivo';
+$arrActFun[1]['descripcion'] = 'Implantaci&#243;n';
 $arrActFun[2]['codigo'] = 'F3';
-$arrActFun[2]['descripcion'] = 'Consultoria en Sitio';
+$arrActFun[2]['descripcion'] = 'Mantenimiento';
 $arrActFun[3]['codigo'] = 'F4';
-$arrActFun[3]['descripcion'] = 'Consultoria Tel&#233;fonica';
+$arrActFun[3]['descripcion'] = 'Servicio de Consultoria';
 $arrActFun[4]['codigo'] = 'F5';
-$arrActFun[4]['descripcion'] = 'Instalaci&#243;n';
+$arrActFun[4]['descripcion'] = 'Presentaci&#243;n';
 
 $arrActAdm[0]['codigo'] = 'T1';
-$arrActAdm[0]['descripcion'] = 'Desarrollo Mantenimiento';
-$arrActAdm[1]['codigo'] = 'T2';
+$arrActAdm[0]['descripcion'] = 'Desarrollo';
+/*$arrActAdm[1]['codigo'] = 'T2';
 $arrActAdm[1]['descripcion'] = 'Nuevo Desarrollo';
 $arrActAdm[2]['codigo'] = 'T3';
 $arrActAdm[2]['descripcion'] = 'Entrenamiento T&#233;cnico';
 $arrActAdm[3]['codigo'] = 'T4';
 $arrActAdm[3]['descripcion'] = 'Consultoria T&#233;cnica';
 $arrActAdm[4]['codigo'] = 'T5';
-$arrActAdm[4]['descripcion'] = 'Instalaci&#243;n';
-$arrActAdm[5]['codigo'] = 'F1';
-$arrActAdm[5]['descripcion'] = 'Entrenamiento Simulado';
-$arrActAdm[6]['codigo'] = 'F2';
-$arrActAdm[6]['descripcion'] = 'Entrenamiento en Vivo';
-$arrActAdm[7]['codigo'] = 'F3';
-$arrActAdm[7]['descripcion'] = 'Consultoria en Sitio';
-$arrActAdm[8]['codigo'] = 'F4';
-$arrActAdm[8]['descripcion'] = 'Consultoria Tel&#233;fonica';
-$arrActAdm[9]['codigo'] = 'F5';
-$arrActAdm[9]['descripcion'] = 'Instalaci&#243;n';
+$arrActAdm[4]['descripcion'] = 'Instalaci&#243;n';*/
+$arrActAdm[1]['codigo'] = 'F1';
+$arrActAdm[1]['descripcion'] = 'Atenci&#243;n al cliente';
+$arrActAdm[2]['codigo'] = 'F2';
+$arrActAdm[2]['descripcion'] = 'Implantaci&#243;n';
+$arrActAdm[3]['codigo'] = 'F3';
+$arrActAdm[3]['descripcion'] = 'Mantenimiento';
+$arrActAdm[4]['codigo'] = 'F4';
+$arrActAdm[4]['descripcion'] = 'Servicio de Consultoria';
+$arrActAdm[5]['codigo'] = 'F5';
+$arrActAdm[5]['descripcion'] = 'Presentaci&#243;n';
 
 /***********************DATA TIPO CONTRATO*******************************/
 $arrTipCon[0]['codigo'] = 'C1';
@@ -124,5 +124,7 @@ $arrMod[17]['codigo'] = 'SSS';
 $arrMod[17]['descripcion'] = 'Seguridad';
 $arrMod[18]['codigo'] = 'SEP';
 $arrMod[18]['descripcion'] = 'Solicitud de Ejecuci&#243;n Presupuestaria';
+$arrMod[19]['codigo'] = 'NAP';
+$arrMod[19]['descripcion'] = 'No Aplica';
 
 

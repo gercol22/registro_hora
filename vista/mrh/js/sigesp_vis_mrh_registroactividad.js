@@ -470,7 +470,7 @@ Ext.onReady(function(){
 				        			operacion = 'MOD_ACT';
 				        		}
 				        		var strJsonActTar = "{'operacion':'"+operacion+"',"+strJsonActividad+",'arrModAct':"+strJsonGrid+"}";
-					        	var objjson = Ext.util.JSON.decode(strJsonActTar);
+				        		var objjson = Ext.util.JSON.decode(strJsonActTar);
 				        		if (typeof(objjson) == 'object') {
 				        			var parametros ='ObjSon='+strJsonActTar;
 				    	        	Ext.Ajax.request({

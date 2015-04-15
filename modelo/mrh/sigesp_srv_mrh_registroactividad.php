@@ -92,7 +92,7 @@ class ServicioRegistroActividad {
 		$this->daoActividad->tipact = $objJson->tipact;
 		$this->daoActividad->fecact = $objJson->fecact;
 		$this->daoActividad->estvis = $objJson->estvis;
-		$this->daoActividad->rescli = $objJson->rescli;
+		$this->daoActividad->rescli = utf8_decode($objJson->rescli);
 		if ($this->daoActividad->modificar() != 0) {
 			foreach ($objJson->arrModAct as $recdetalle) {
 				$cadenaPkDt = "codmod = '{$recdetalle->codmod}' AND numact = '{$this->daoActividad->numact}'";
@@ -103,9 +103,9 @@ class ServicioRegistroActividad {
 					$this->daoModAct->estfac = 0;
 				}
 				else {
-					$this->daoModAct->desinc = $recdetalle->desinc;
+					$this->daoModAct->desinc = utf8_decode($recdetalle->desinc);
 					$this->daoModAct->tipinc = $recdetalle->tipinc;
-					$this->daoModAct->desact = $recdetalle->desact;
+					$this->daoModAct->desact = utf8_decode($recdetalle->desact);
 					$this->daoModAct->canhor = $recdetalle->canhor;
 					$this->daoModAct->casman = $recdetalle->casman;
 				}
@@ -142,7 +142,7 @@ class ServicioRegistroActividad {
 		$cadenaSQL = "SELECT ACT.numact, ACT.numpro, ACT.rifcli, CLI.razsoc, ACT.tipact, ACT.fecact, ACT.estvis, ACT.rescli, 
 							 COALESCE((SELECT MOD.estfac 
            								FROM modact MOD 
-           								WHERE MOD.numact=ACT.numact AND MOD.estfac=1),0) AS estfac	
+           								WHERE MOD.numact=ACT.numact AND MOD.estfac=1 LIMIT 1),0) AS estfac	
 						FROM actividad ACT
 						INNER JOIN cliente CLI ON ACT.rifcli = CLI.rifcli 
 						WHERE {$filtroUSU} (ACT.numact ILIKE '%{$numact}%' OR CLI.razsoc ILIKE '%{$razsoc}%') 

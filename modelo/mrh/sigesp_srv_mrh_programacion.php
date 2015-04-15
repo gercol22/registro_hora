@@ -120,7 +120,7 @@ class ServicioProgramacion {
 					$this->daoModPro->numpro = $this->daoProgramacion->numpro;
 				}
 				else {
-					$this->daoModPro->desact    = $recdetalle->desact;
+					$this->daoModPro->desact    = utf8_decode($recdetalle->desact);
 					$this->daoModPro->canhorest = $recdetalle->canhorest;
 					$this->daoModPro->casman    = $recdetalle->casman;
 				}

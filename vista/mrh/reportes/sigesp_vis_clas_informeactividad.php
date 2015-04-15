@@ -34,22 +34,22 @@ class reporteInformeActividad extends reporteEzpdf {
 	}
 	
 	public function detalleActividad($arrCampos, $total) {
-		$this->obtenerObjPdf()->ezSetDy(-20);
+		$this->obtenerObjPdf()->ezSetDy(-10);
 		$la_columna=array('codmod'=>'<b>Modulo</b>','rescli'=>'<b>Solicitante</b>','desinc'=>'<b>Situacion Planteada/Asignacion Recibida</b>',
 						  'tipinc'=>'<b>Tipo de Problema</b>','desact'=>'<b>Solucion/Recomendacion/Observaciones</b>','canhor'=>'<b>Cant. Horas</b>');
 		$la_config=array('showHeadings'=>1, // Mostrar encabezados
 						 'titleFontSize' => 11, //Tamaño de Letras Encabezado
 						 'fontSize' => 8, // Tamaño de Letras
-						 'showLines'=>1, // Mostrar Líneas
-						 'shaded'=>1, // Sombra entre líneas
-						 'width'=>610, // Ancho de la tabla
-						 'maxWidth'=>610, // Ancho Máximo de la tabla
+						 'gridlines'=> EZ_GRIDLINE_DEFAULT, // Mostrar Líneas
+						 'shaded'=>0, // Sombra entre líneas
+						 'width'=>660, // Ancho de la tabla
+						 'maxWidth'=>660, // Ancho Máximo de la tabla
 						 'xOrientation'=>'center', // Orientación de la tabla
 						 'cols'=>array('codmod'=>array('justification'=>'center','width'=>50),
 							  		   'rescli'=>array('justification'=>'left','width'=>80),
 							  		   'desinc'=>array('justification'=>'left','width'=>150),
 						      		   'tipinc'=>array('justification'=>'left','width'=>80),
-							  		   'desact'=>array('justification'=>'left','width'=>200),
+							  		   'desact'=>array('justification'=>'left','width'=>250),
 							  		   'canhor'=>array('justification'=>'center','width'=>50)));
 		$this->obtenerObjPdf()->ezTable($arrCampos,$la_columna,'',$la_config);
 		$dataTotal[] = array('etiqueta'=>'<b>TOTAL</b>','valor'=>'<b>'.number_format($total, 1, ',', '.').'</b>');
@@ -63,7 +63,7 @@ class reporteInformeActividad extends reporteEzpdf {
 						 'width'=>610, // Ancho de la tabla
 						 'maxWidth'=>610, // Ancho Máximo de la tabla
 						 'xOrientation'=>'center', // Orientación de la tabla
-						 'cols'=>array('etiqueta'=>array('justification'=>'right','width'=>560),
+						 'cols'=>array('etiqueta'=>array('justification'=>'right','width'=>610),
 									   'valor'=>array('justification'=>'center','width'=>50)));
 		$this->obtenerObjPdf()->ezTable($dataTotal,$la_columna,'',$la_config);
 	}

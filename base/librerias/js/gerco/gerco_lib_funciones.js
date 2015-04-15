@@ -682,7 +682,7 @@ function limpiarSaltoLinea(cadena){
 		letra = cadena.substr(j, 1);
 		cod = escape(letra);
 		if (cod == '%0A') {
-			letra = '|';
+			letra = ' ';
 		}
 		cadfinal = cadfinal + letra;
 	}
@@ -2522,7 +2522,7 @@ function getJsonGrid(store, arrCampos) {
 		if (i == 0) {
 			cadenajson = cadenajson + "{";
 			for(var j = 0; j <= arrCampos.length - 1; j++) {
-				valorCampo = String(store.getAt(i).get(arrCampos[j].campo)).replace(',','.');
+				valorCampo = store.getAt(i).get(arrCampos[j].campo);
 				if (valorCampo == '' && arrCampos[j].requerido) {
 					Ext.Msg.show({
 						title:'Mensaje',
@@ -2535,6 +2535,7 @@ function getJsonGrid(store, arrCampos) {
 				
 				if (j == 0) {
 					if(arrCampos[j].tipo == 'n'){
+						valorCampo = String(valorCampo).replace(',','.');
 						cadenajson = cadenajson + "'"+arrCampos[j].campo+"':"+valorCampo;
 					}
 					else if(arrCampos[j].tipo == 'f'){
@@ -2544,11 +2545,13 @@ function getJsonGrid(store, arrCampos) {
 						cadenajson = cadenajson + "'"+arrCampos[j].campo+"':'"+fechaformato+"'";
 					}
 					else {
+						valorCampo = limpiarSaltoLinea(valorCampo);
 						cadenajson = cadenajson + "'"+arrCampos[j].campo+"':'"+valorCampo+"'";
 					}
 				}
 				else {
 					if(arrCampos[j].tipo == 'n'){
+						valorCampo = String(valorCampo).replace(',','.');
 						cadenajson = cadenajson + ",'"+arrCampos[j].campo+"':"+valorCampo;
 					}
 					else if(arrCampos[j].tipo == 'f'){
@@ -2558,6 +2561,7 @@ function getJsonGrid(store, arrCampos) {
 						cadenajson = cadenajson + ",'"+arrCampos[j].campo+"':'"+fechaformato+"'";
 					}
 					else {
+						valorCampo = limpiarSaltoLinea(valorCampo);
 						cadenajson = cadenajson + ",'"+arrCampos[j].campo+"':'"+valorCampo+"'";
 					}
 				}
@@ -2567,7 +2571,7 @@ function getJsonGrid(store, arrCampos) {
 		else {
 			cadenajson = cadenajson + ",{";
 			for(var j = 0; j <= arrCampos.length - 1; j++) {
-				valorCampo = String(store.getAt(i).get(arrCampos[j].campo)).replace(',','.');
+				valorCampo = store.getAt(i).get(arrCampos[j].campo);
 				if (valorCampo == '' && arrCampos[j].requerido) {
 					Ext.Msg.show({
 						title:'Mensaje',
@@ -2580,6 +2584,7 @@ function getJsonGrid(store, arrCampos) {
 				
 				if (j == 0) {
 					if(arrCampos[j].tipo == 'n'){
+						valorCampo = String(valorCampo).replace(',','.');
 						cadenajson = cadenajson + "'"+arrCampos[j].campo+"':"+valorCampo;
 					}
 					else if(arrCampos[j].tipo == 'f'){
@@ -2589,11 +2594,13 @@ function getJsonGrid(store, arrCampos) {
 						cadenajson = cadenajson + "'"+arrCampos[j].campo+"':'"+fechaformato+"'";
 					}
 					else {
+						valorCampo = limpiarSaltoLinea(valorCampo);
 						cadenajson = cadenajson + "'"+arrCampos[j].campo+"':'"+valorCampo+"'";
 					}
 				}
 				else {
 					if(arrCampos[j].tipo == 'n'){
+						valorCampo = String(valorCampo).replace(',','.');
 						cadenajson = cadenajson + ",'"+arrCampos[j].campo+"':"+valorCampo;
 					}
 					else if(arrCampos[j].tipo == 'f'){
@@ -2603,6 +2610,7 @@ function getJsonGrid(store, arrCampos) {
 						cadenajson = cadenajson + ",'"+arrCampos[j].campo+"':'"+fechaformato+"'";
 					}
 					else {
+						valorCampo = limpiarSaltoLinea(valorCampo);
 						cadenajson = cadenajson + ",'"+arrCampos[j].campo+"':'"+valorCampo+"'";
 					}
 				}

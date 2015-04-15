@@ -74,12 +74,12 @@ class ServicioCliente {
 		$this->daoCliente = FabricaDao::CrearDAO('C', 'cliente', array(), $cadenaPk);
 		if ($this->daoCliente->_saved) {
 			$this->daoCliente->razsoc    = $objJson->razsoc;
-			$this->daoCliente->dircli    = $objJson->dircli;
-			$this->daoCliente->punref    = $objJson->punref;
+			$this->daoCliente->dircli    = utf8_decode($objJson->dircli);
+			$this->daoCliente->punref    = utf8_decode($objJson->punref);
 			$this->daoCliente->telcli    = $objJson->telcli;
-			$this->daoCliente->conpag    = $objJson->conpag;
+			$this->daoCliente->conpag    = utf8_decode($objJson->conpag);
 			$this->daoCliente->telpag    = $objJson->telpag;
-			$this->daoCliente->emaconpag = $objJson->emaconpag;
+			$this->daoCliente->emaconpag = utf8_decode($objJson->emaconpag);
 			$this->daoCliente->consis    = $objJson->consis;
 			$this->daoCliente->telsis    = $objJson->telsis;
 			$this->daoCliente->emaconsis = $objJson->emaconsis;
