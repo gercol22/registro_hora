@@ -15,13 +15,6 @@ if (!$dataCabecera->EOF) {
 	
 	//DATA DETALLE 
 	$dataDetalle = $servicioRegistroActividad->reporteActividadTarea($_GET['numact']);
-	/*while (!$dataDetalle->EOF) {
-		$arrDataDetalle[] = array('codmod'=>$dataDetalle->fields['codmod'],'desinc'=>$dataDetalle->fields['desinc'],
-								  'desact'=>$dataDetalle->fields['desact'],'canhor'=>$dataDetalle->fields['canhor'],
-								  'tipinc'=>$dataDetalle->fields['tipinc'],'rescli'=>$dataDetalle->fields['rescli']);
-		
-		$dataDetalle->MoveNext();
-	}*/
 	$total = $servicioRegistroActividad->reporteTotalHora($_GET['numact']);
 	
 	$objTcpdf = new reporteTcpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -29,12 +22,9 @@ if (!$dataCabecera->EOF) {
 	$objTcpdf->SetCreator(PDF_CREATOR);
 	$objTcpdf->SetAuthor('Gerardo Cordero');
 	$objTcpdf->SetTitle('INFORME ACTIVIDAD');
-	//$objTcpdf->SetSubject('iN');
-	//$objTcpdf->SetKeywords('TCPDF, PDF, example, test, guide');
+	
 	
 	// set default header data
-	
-	
 	$objTcpdf->SetHeaderData('logo_sigesp.jpg', PDF_HEADER_LOGO_WIDTH, '', str_repeat(' ',50).'INFORME DIARIO');
 	
 	// set header and footer fonts
