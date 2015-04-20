@@ -32,7 +32,6 @@ class ServicioContrato {
 	public function insertarContrato($objJson) {
 		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
 		$respuesta = true;
-		//ConexionBaseDatos::getInstanciaConexion()->debug = true;
 		$this->daoContrato = FabricaDao::CrearDAO('N', 'contrato');
 		$this->daoContrato->setData($objJson);
 		if ($this->daoContrato->incluir(false, true, 'codcon', 4)) {
@@ -88,7 +87,6 @@ class ServicioContrato {
 	public function modificarContrato($objJson) {
 		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
 		$respuesta = true;
-		//ConexionBaseDatos::getInstanciaConexion()->debug = true;
 		$cadenaPk = "codcon = '{$objJson->codcon}'";
 		$this->daoContrato = FabricaDao::CrearDAO('C', 'contrato', array(), $cadenaPk);
 		$this->daoContrato->rifcli = $objJson->rifcli;
@@ -98,7 +96,8 @@ class ServicioContrato {
 		$this->daoContrato->canhor = $objJson->canhor;
 		$this->daoContrato->fecini = $objJson->fecini;
 		$this->daoContrato->fecfinest = $objJson->fecfinest;
-		$this->daoContrato->estcon = $objJson->estcon;
+		$this->daoContrato->contra = $objJson->contra;
+		$this->daoContrato->moncon = $objJson->moncon;
 		if ($this->daoContrato->modificar() != 0) {
 			foreach ($objJson->arrNota as $recdetalle) {
 				if ($recdetalle->estbdt == 'N') {

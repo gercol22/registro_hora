@@ -1,7 +1,6 @@
 <?php
 require_once("../../../modelo/mrh/sigesp_srv_mrh_registroactividad.php");
 require_once("../../../base/librerias/php/gerco/gerco_lib_reportetcpdf.php");
-//require_once("sigesp_vis_clas_informeactividad.php");
 
 
 //RECIBIENDO PARAMETRO BUSCANDO DATA
@@ -9,9 +8,9 @@ $servicioRegistroActividad = new ServicioRegistroActividad();
 $dataCabecera = $servicioRegistroActividad->reporteActividad($_GET['numact']);
 $arrCabecera  = array();
 if (!$dataCabecera->EOF) {
-	$arrCabecera[0] = array('anchoet'=>150,'etiqueta'=>'<b>Cliente</b>','anchoval'=>300,'valor'=>$dataCabecera->fields['razsoc']);
-	$arrCabecera[1] = array('anchoet'=>150,'etiqueta'=>'<b>Consultor/Desarrollador</b>','anchoval'=>300,'valor'=>$dataCabecera->fields['nomcon']);
-	$arrCabecera[2] = array('anchoet'=>150,'etiqueta'=>'<b>Fecha</b>','anchoval'=>300,'valor'=>convertirFecha($dataCabecera->fields['fecact']));
+	$arrCabecera[0] = array('anchoet'=>150,'etiqueta'=>'<b>Cliente</b>','anchoval'=>450,'valor'=>$dataCabecera->fields['razsoc']);
+	$arrCabecera[1] = array('anchoet'=>150,'etiqueta'=>'<b>Consultor/Desarrollador</b>','anchoval'=>450,'valor'=>$dataCabecera->fields['nomcon']);
+	$arrCabecera[2] = array('anchoet'=>150,'etiqueta'=>'<b>Fecha</b>','anchoval'=>450,'valor'=>convertirFecha($dataCabecera->fields['fecact']));
 	unset($dataCabecera);
 	
 	//DATA DETALLE 
@@ -65,17 +64,16 @@ if (!$dataCabecera->EOF) {
 	// ---------------------------------------------------------
 	
 	// set font
-	$objTcpdf->SetFont('helvetica', '', 6);
+	$objTcpdf->SetFont('helvetica', '', 9);
 	
 	// add a page
 	$objTcpdf->AddPage();
 	
 	$arrConfig [0] = array('titulo'=>'<b>Modulo</b>','datind'=>'codmod','ancho'=>40,'alicol'=>'center','formato'=>'t');
-	$arrConfig [1] = array('titulo'=>'<b>Solicitante</b>','datind'=>'rescli','ancho'=>90,'alicol'=>'center','formato'=>'t');
-	$arrConfig [2] = array('titulo'=>'<b>Situacion Planteada/Asignacion Recibida</b>','datind'=>'desinc','ancho'=>130,'alicol'=>'left','formato'=>'t');
-	$arrConfig [3] = array('titulo'=>'<b>Tipo de Problema</b>','datind'=>'tipinc','ancho'=>110,'alicol'=>'left','formato'=>'t');
-	$arrConfig [4] = array('titulo'=>'<b>Solucion/Recomendacion/Observaciones</b>','datind'=>'desact','ancho'=>210,'alicol'=>'justify','formato'=>'t');
-	$arrConfig [5] = array('titulo'=>'<b>Cant. Horas</b>','datind'=>'canhor','ancho'=>50,'alicol'=>'center','formato'=>'t');
+	$arrConfig [1] = array('titulo'=>'<b>Situacion Planteada/Asignacion Recibida</b>','datind'=>'desinc','ancho'=>130,'alicol'=>'left','formato'=>'t');
+	$arrConfig [2] = array('titulo'=>'<b>Servicio</b>','datind'=>'tipinc','ancho'=>110,'alicol'=>'left','formato'=>'t');
+	$arrConfig [3] = array('titulo'=>'<b>Solucion/Recomendacion/Observaciones</b>','datind'=>'desact','ancho'=>300,'alicol'=>'justify','formato'=>'t');
+	$arrConfig [4] = array('titulo'=>'<b>Horas</b>','datind'=>'canhor','ancho'=>50,'alicol'=>'center','formato'=>'t');
 	
 	$strHtmlCabecera = $objTcpdf->cabeceraGenerica($arrCabecera);
 	$objTcpdf->writeHTML($strHtmlCabecera, true, false, false, false, '');

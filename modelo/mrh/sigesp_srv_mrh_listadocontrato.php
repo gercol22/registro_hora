@@ -58,6 +58,15 @@ class ServicioListadoContrato {
 			}
 		}
 		
+		if ($objFiltro->contra != '') {
+			if ($filtroSQL == '') {
+				$filtroSQL .= " CON.contra = '{$objFiltro->contra}' ";
+			}
+			else {
+				$filtroSQL .= " AND CON.contra = '{$objFiltro->contra}' ";
+			}
+		}
+		
 		$filtroSUM = '';
 		if ($objFiltro->hordes != '' && $objFiltro->horhas != '') {
 			$filtroSUM .= " HAVING SUM(MOD.canhor) BETWEEN {$objFiltro->hordes} AND {$objFiltro->horhas} ";
@@ -67,13 +76,30 @@ class ServicioListadoContrato {
 			$filtroSQL = $filtroSQL.' AND ';
 		}
 		
-		$cadenaSQL = "SELECT CLI.razsoc, CON.codcon, CON.tipcon, CON.feccon, CON.canhor, CON.estcon, COALESCE(SUM(MOD.canhor), 0) AS canhoreje
+		$strOrder = '';
+		switch ($objFiltro->camord) {
+			case 'CL':
+				$strOrder = 'ORDER BY 1';
+				break;
+			case 'FE':
+				$strOrder = 'ORDER BY 4';
+				break;
+			case 'TC':
+				$strOrder = 'ORDER BY 3';
+				break;
+			case 'ES':
+				$strOrder = 'ORDER BY 6';
+				break;
+		}
+		
+		$cadenaSQL = "SELECT CLI.razsoc, CON.numcon, CON.tipcon, CON.feccon, CON.canhor, CON.estcon, CON.moncon, 
+							 COALESCE(SUM(MOD.canhor), 0) AS canhoreje
   						FROM contrato CON
   						LEFT OUTER JOIN actividad ACT ON CON.codcon=ACT.codcon
   						LEFT OUTER JOIN modact MOD ON ACT.numact=MOD.numact
   						INNER JOIN cliente CLI ON CON.rifcli=CLI.rifcli
   						WHERE {$filtroSQL} CON.codcon <> '----'
-  						GROUP BY 1,2,3,4,5,6 {$filtroSUM}";
+  						GROUP BY 1,2,3,4,5,6,7 {$filtroSUM} {$strOrder}";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}
 }

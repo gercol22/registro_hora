@@ -13,8 +13,9 @@ if ($_POST['ObjSon']) {
 			$numero     = $servicioContrato->buscarNumero();
 			$dataTipCon = generarJsonArreglo($arrTipCon);
 			$dataEstCon = generarJsonArreglo($arrEstCon);
-			echo $dataTipCon.'|'.$dataEstCon.'|'.$numero;
-			unset($dataTipCon);unset($dataEstCon);unset($numero);
+			$dataContra = generarJsonArreglo($arrContra);
+			echo $dataTipCon.'|'.$dataEstCon.'|'.$dataContra.'|'.$numero;
+			unset($dataTipCon);unset($dataEstCon);unset($dataContra);unset($numero);
 			unset($servicioContrato);
 			break;
 			

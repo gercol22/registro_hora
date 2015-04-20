@@ -26,7 +26,7 @@ Ext.onReady(function(){
 		altogrid: 350,
 		anchoven: 500,
 		altoven: 420,
-		anchofieldset:850,
+		anchofieldset:800,
 		datosgridcat: dsCliente,
 		colmodelocat: cmCliente,
 		rutacontrolador:'../../controlador/mrh/sigesp_ctr_mrh_contrato.php',
@@ -38,12 +38,12 @@ Ext.onReady(function(){
 		idtxt:'rifcli',
 		campovalue:'rifcli',
 		anchoetiquetatext:130,
-		anchotext:130,
-		anchocoltext:0.40,
+		anchotext:90,
+		anchocoltext:0.30,
 		idlabel:'razsoc',
 		labelvalue:'razsoc',
-		anchocoletiqueta:0.53,
-		anchoetiqueta:250,
+		anchocoletiqueta:0.63,
+		anchoetiqueta:400,
 		tipbus:'P',
 		binding:'C',
 		hiddenvalue:'',
@@ -51,6 +51,34 @@ Ext.onReady(function(){
 		allowblank:false
 	});
 	//fin componente campocatalogo para el campo cliente
+	
+	//combo contratante
+	var reContratante = Ext.data.Record.create([
+	    {name: 'codigo'},    
+	    {name: 'descripcion'}
+	]);
+	                               	                               	                                  	
+	var dsContratante =  new Ext.data.Store({
+	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reContratante)
+	});
+	
+	var cmbContratante = new Ext.form.ComboBox({
+		store: dsContratante,
+		labelSeparator: '',
+		fieldLabel:'Contratante',
+		displayField:'descripcion',
+		valueField:'codigo',
+        id:'contra',
+        forceSelection: true,  
+        typeAhead: true,
+        mode: 'local',
+        binding:true,
+        editable: false,
+        width:150,
+        triggerAction: 'all',
+        allowBlank:false
+	});
+	//fin combo contratante
 	
 	//combo tipo contrato
 	var reTipCon = Ext.data.Record.create([
@@ -213,9 +241,11 @@ Ext.onReady(function(){
 			var datos = datos.split("|");
 			var objDataTip = eval('(' + datos[0] + ')');
 			var objDataEst = eval('(' + datos[1] + ')');
+			var objDataCon = eval('(' + datos[2] + ')');
 			dsTipCon.loadData(objDataTip);
 			dsEstado.loadData(objDataEst);
-			Ext.getCmp('codcon').setValue(datos[2]);
+			dsContratante.loadData(objDataCon);
+			Ext.getCmp('codcon').setValue(datos[3]);
 		},
 		failure: function ( result, request){ 
 				Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
@@ -227,7 +257,7 @@ Ext.onReady(function(){
 		title: "<H1 align='center'>Contrato</H1>",
 		style: 'position:relative;top:10px;left:150px', 
 		height: 450,
-		width: 750,
+		width: 800,
 	   	applyTo:'formulario',
 	   	frame: true,
 	   	/******************************** BARRA HERRAMIENTA ********************************************/
@@ -337,7 +367,9 @@ Ext.onReady(function(){
 	        		{name: 'fecini'},
 	        		{name: 'fecfinest'},
 	        		{name: 'estcon'},
-	        		{name: 'numcon'}
+	        		{name: 'numcon'},
+	        		{name: 'contra'},
+	        		{name: 'moncon'}
 	        	]);
 	        	
 	        	var dsContrato =  new Ext.data.Store({
@@ -442,6 +474,7 @@ Ext.onReady(function(){
 			style: 'position:absolute;left:15px;top:10px',
 			items: [{
 				layout: "form",
+				width: 350,
 				border: false,
 				labelWidth: 130,
 				items: [{
@@ -456,6 +489,13 @@ Ext.onReady(function(){
 					defaultvalue:'',
 					allowBlank:false
 				}]
+			},{
+				width: 400,
+				layout: "form",
+				border: false,
+				labelWidth: 130,
+				style: 'padding-left:35px',
+				items: [cmbContratante]
 			}]
 		},comtcCliente.fieldsetCatalogo,
 		{
@@ -469,11 +509,11 @@ Ext.onReady(function(){
 				labelWidth: 130,
 				items: [cmbTipCon]
 			},{
-				width: 250,
+				width: 400,
 				layout: "form",
 				border: false,
 				labelWidth: 130,
-				style: 'padding-left:15px',
+				style: 'padding-left:35px',
 				items: [{
 					xtype:"datefield",
     				fieldLabel:"Fecha",
@@ -509,11 +549,11 @@ Ext.onReady(function(){
 					allowBlank:false
 				}]
 			},{
-				width: 250,
+				width: 400,
 				layout: "form",
 				border: false,
 				labelWidth: 130,
-				style: 'padding-left:15px',
+				style: 'padding-left:35px',
 				items: [{
 					xtype:"datefield",
     				fieldLabel:"Fecha Inicio",
@@ -538,11 +578,11 @@ Ext.onReady(function(){
 				labelWidth: 130,
 				items: [cmbEstado]
 			},{
-				width: 350,
+				width: 400,
 				layout: "form",
 				border: false,
 				labelWidth: 130,
-				style: 'padding-left:15px',
+				style: 'padding-left:35px',
 				items: [{
 					xtype:"datefield",
     				fieldLabel:"Fecha Fin Estimada",
@@ -561,6 +601,7 @@ Ext.onReady(function(){
 			defaults: {border: false},
 			style: 'position:absolute;left:15px;top:180px',
 			items: [{
+				width: 350,
 				layout: "form",
 				border: false,
 				labelWidth: 130,
@@ -574,6 +615,30 @@ Ext.onReady(function(){
 					hiddenvalue:'',
 					defaultvalue:'',
 					allowBlank:true
+				}]
+			},{
+				width: 400,
+				layout: "form",
+				border: false,
+				labelWidth: 130,
+				style: 'padding-left:35px',
+				items: [{
+					xtype: 'textfield',
+					fieldLabel:'Monto del Contrato',
+					id:'moncon',
+					width:100,
+					autoCreate: {tag: 'input', type: 'text', size: '17', autocomplete: 'off', maxlength: '17',onkeypress: "return keyRestrict(event,'0123456789.,');"},
+					labelSeparator:'',
+					listeners: {
+                    	'blur': function(){
+                        			var formatonumero = formatoNumericoMostrar(this.getValue(),2,'.',',','','','-','');
+									this.setValue(formatonumero);
+						}
+					},
+					binding:true,
+					hiddenvalue:'',
+					defaultvalue:'',
+					allowBlank:false
 				}]
 			}]
 		},gridNotas]

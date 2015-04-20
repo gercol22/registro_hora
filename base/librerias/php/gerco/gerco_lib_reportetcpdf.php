@@ -18,8 +18,8 @@ class reporteTcpdf extends TCPDF{
 		$numFila = count($arrData);
 		for ($i = 0; $i < $numFila; $i++) {
 			$strHtml .= '<tr>
-							<td width="'.$arrData[$i]['anchoet'].'" align="left">'.$arrData[$i]['etiqueta'].'</td>
-							<td width="'.$arrData[$i]['anchoval'].'" align="left">'.$arrData[$i]['valor'].'</td>		
+							<td width="'.$arrData[$i]['anchoet'].'" align="left">'.utf8_encode($arrData[$i]['etiqueta']).'</td>
+							<td width="'.$arrData[$i]['anchoval'].'" align="left">'.utf8_encode($arrData[$i]['valor']).'</td>		
 						 </tr>';
 		}
 		$strHtml .= '</table>';

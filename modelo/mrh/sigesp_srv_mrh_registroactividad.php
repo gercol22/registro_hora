@@ -212,8 +212,7 @@ class ServicioRegistroActividad {
 									 THEN 'Nuevo Requerimiento'   
 									ELSE 'Entrenamiento / Otros'
 									END) AS tipinc
-								   ,ACT.rescli 
-						FROM modact MOD INNER JOIN actividad ACT ON MOD.numact=ACT.numact 
+						FROM modact MOD 
 						WHERE MOD.numact = '{$numact}'";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}

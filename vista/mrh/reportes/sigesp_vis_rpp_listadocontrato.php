@@ -41,24 +41,53 @@ if (!$dataReporte->EOF) {
 		$arrCabecera[] = array('etiqueta'=>'<b>Cant. de Horas Ejecutadas</b>','valor'=>'mayor a '.$objetoData->hordes.' y menor a '.$objetoData->horhas);
 	}
 	
+	if ($objetoData->contra != '') {
+		$denCont = $reporte->obtenerDenominacion($arrContra, $objetoData->contra);
+		$arrCabecera[] = array('etiqueta'=>'<b>Contratante</b>','valor'=>$denCont);
+	}
+	
 	$totcon = 0;
 	$toteje = 0;
+	$montot = 0;
 	$arrDataDetalle = array();
-	while (!$dataReporte->EOF) {
-		$totcon += $dataReporte->fields['canhor'];
-		$toteje += $dataReporte->fields['canhoreje'];
-		$denEst = $reporte->obtenerDenominacion($arrEstCon, $dataReporte->fields['estcon']);
-		$contrato = $reporte->obtenerDenCon($arrTipCon, $dataReporte->fields['tipcon'], $dataReporte->fields['codcon']);
-		$arrDataDetalle[] = array('razsoc'=>$dataReporte->fields['razsoc'],'codcon'=>$contrato,'feccon'=>$reporte->formatoFecha($dataReporte->fields['feccon']),
-				     			  'canhor'=>$dataReporte->fields['canhor'],'canhoreje'=>$dataReporte->fields['canhoreje'],'estcon'=>$denEst);
-		
-		$dataReporte->MoveNext();
+	if ($objetoData->monconimp == 1) {
+		while (!$dataReporte->EOF) {
+			$totcon += $dataReporte->fields['canhor'];
+			$toteje += $dataReporte->fields['canhoreje'];
+			$montot += $dataReporte->fields['moncon'];
+			$denEst = $reporte->obtenerDenominacion($arrEstCon, $dataReporte->fields['estcon']);
+			$contrato = $reporte->obtenerDenCon($arrTipCon, $dataReporte->fields['tipcon'], $dataReporte->fields['numcon']);
+			$arrDataDetalle[] = array('razsoc'=>$dataReporte->fields['razsoc'],'codcon'=>$contrato,'feccon'=>$reporte->formatoFecha($dataReporte->fields['feccon']),
+					     			  'canhor'=>$dataReporte->fields['canhor'],'canhoreje'=>$dataReporte->fields['canhoreje'],'estcon'=>$denEst,
+									  'moncon'=>number_format($dataReporte->fields['moncon'], 2, ',', '.'));
+			
+			$dataReporte->MoveNext();
+		}
+	}
+	else {
+		$montot = 0;
+		while (!$dataReporte->EOF) {
+			$totcon += $dataReporte->fields['canhor'];
+			$toteje += $dataReporte->fields['canhoreje'];
+			$denEst = $reporte->obtenerDenominacion($arrEstCon, $dataReporte->fields['estcon']);
+			$contrato = $reporte->obtenerDenCon($arrTipCon, $dataReporte->fields['tipcon'], $dataReporte->fields['numcon']);
+			$arrDataDetalle[] = array('razsoc'=>$dataReporte->fields['razsoc'],'codcon'=>$contrato,'feccon'=>$reporte->formatoFecha($dataReporte->fields['feccon']),
+					'canhor'=>$dataReporte->fields['canhor'],'canhoreje'=>$dataReporte->fields['canhoreje'],'estcon'=>$denEst,
+					'moncon'=>'0,00');
+			$dataReporte->MoveNext();
+		}
 	}
 	unset($dataReporte);
 	
 	//CONSTRUYENDO REPORTE
 	$reporte->encabezadoFechaReporte('LISTADO DE CONTRATOS', 'landscape');
 	$reporte->cabeceraEstandar($arrCabecera);
-	$reporte->detalleListadoContrato($arrDataDetalle, $totcon, $toteje);
+	$reporte->detalleListadoContrato($arrDataDetalle, $montot, $totcon, $toteje);
 	$reporte->imprimirReporte();
+}
+else {
+	echo '<script language=JavaScript>';
+	echo "alert('No hay nada que Reportar');";
+	echo 'close();';
+	echo '</script>';
 }

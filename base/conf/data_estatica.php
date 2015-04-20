@@ -127,4 +127,8 @@ $arrMod[18]['descripcion'] = 'Solicitud de Ejecuci&#243;n Presupuestaria';
 $arrMod[19]['codigo'] = 'NAP';
 $arrMod[19]['descripcion'] = 'No Aplica';
 
-
+/***********************DATA CONTRATANTE*******************************/
+$arrContra[0]['codigo'] = 'S';
+$arrContra[0]['descripcion'] = 'SIGESP';
+$arrContra[1]['codigo'] = 'I';
+$arrContra[1]['descripcion'] = 'IEAGER';

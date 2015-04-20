@@ -11,8 +11,9 @@ if ($_POST['ObjSon']) {
 		case 'DAT_INI':
 			$dataTipCon = generarJsonArreglo($arrTipCon);
 			$dataEstCon = generarJsonArreglo($arrEstCon);
-			echo $dataTipCon.'|'.$dataEstCon.'|';
-			unset($dataTipCon);unset($dataEstCon);
+			$dataContra = generarJsonArreglo($arrContra);
+			echo $dataTipCon.'|'.$dataEstCon.'|'.$dataContra;
+			unset($dataTipCon);unset($dataEstCon);unset($dataContra);
 			break;
 			
 		case 'OBT_CLI':
