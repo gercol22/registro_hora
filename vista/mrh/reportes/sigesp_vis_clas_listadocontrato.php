@@ -18,7 +18,7 @@ class reporteListadoContrato extends reporteEzpdf {
 	
 	public function detalleListadoContrato($arrCampos, $montot, $totcon, $toteje) {
 		$this->obtenerObjPdf()->ezSetDy(-20);
-		$la_columna=array('razsoc'=>'<b>Cliente</b>','codcon'=>'<b>Contrato</b>','feccon'=>'<b>Fecha</b>','estcon'=>'<b>Estado</b>',
+		$la_columna=array('item'=>'<b>Item</b>','razsoc'=>'<b>Cliente</b>','codcon'=>'<b>Contrato</b>','feccon'=>'<b>Fecha</b>','estcon'=>'<b>Estado</b>',
 						  'moncon'=>'<b>Monto</b>','canhor'=>'<b>Horas Contratadas </b>','canhoreje'=>'<b>Horas Ejecutadas</b>');
 		$la_config=array('showHeadings'=>1, // Mostrar encabezados
 						 'titleFontSize' => 11, //Tamaño de Letras Encabezador
@@ -26,7 +26,9 @@ class reporteListadoContrato extends reporteEzpdf {
 						 'showLines'=>1, // Mostrar Líneas
 						 'shaded'=>1, // Sombra entre líneas
 						 'xOrientation'=>'center', // Orientación de la tabla
-						 'cols'=>array('razsoc'=>array('justification'=>'center','width'=>290),
+					     'alignHeadings' => 'center',
+						 'cols'=>array('item'=>array('justification'=>'center','width'=>30),
+						 		       'razsoc'=>array('justification'=>'left','width'=>290),
 							  		   'codcon'=>array('justification'=>'center','width'=>110),
 						 			   'feccon'=>array('justification'=>'center','width'=>60),
 						 			   'estcon'=>array('justification'=>'center','width'=>50),
@@ -44,7 +46,7 @@ class reporteListadoContrato extends reporteEzpdf {
 						 'shadeCol' =>array(0.9,0.9,0.9),
 						 'shadeCol2' =>array(0.9,0.9,0.9),
 						 'xOrientation'=>'center', // Orientación de la tabla
-						 'cols'=>array('etiqueta'=>array('justification'=>'right','width'=>510),
+						 'cols'=>array('etiqueta'=>array('justification'=>'right','width'=>540),
 									   'montot'=>array('justification'=>'center','width'=>80),
 						 			   'totcon'=>array('justification'=>'center','width'=>70),
 						 			   'toteje'=>array('justification'=>'center','width'=>70)));

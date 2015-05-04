@@ -31,6 +31,35 @@ if ($_POST['ObjSon']) {
 			unset($servicioProgramacion);
 			break;
 		
+		case 'DAT_DESACT':
+			switch ($objetoData->codact) {
+				case 'T1':
+					$dataDesAct = generarJsonArreglo($arrDesActDes);
+					break;
+			
+				case 'F1':
+					$dataDesAct = generarJsonArreglo($arrDesActAtc);
+					break;
+			
+				case 'F2':
+					$dataDesAct = generarJsonArreglo($arrDesActImp);
+					break;
+				
+				case 'F3':
+					$dataDesAct = generarJsonArreglo($arrDesActMan);
+					break;
+					
+				case 'F4':
+					$dataDesAct = generarJsonArreglo($arrDesActSer);
+					break;
+					
+				case 'F4':
+					$dataDesAct = generarJsonArreglo($arrDesActPre);
+					break;
+			}
+			echo $dataDesAct;
+			break;
+		
 		case 'OBT_NUM':
 			$servicioProgramacion = new ServicioProgramacion();
 			echo $servicioProgramacion->buscarNumero();

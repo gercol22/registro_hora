@@ -122,6 +122,25 @@ Ext.onReady(function(){
 	});
 	//fin componente campocatalogo para el campo consultor
 	
+	function dataDesAct() {
+		var myJSONObject = {"operacion":"DAT_DESACT","codact":Ext.getCmp('tipact').getValue()};
+		var ObjSon=Ext.util.JSON.encode(myJSONObject);
+		var parametros ='ObjSon='+ObjSon;
+		Ext.Ajax.request({
+			url: '../../controlador/mrh/sigesp_ctr_mrh_programacion.php',
+			params: parametros,
+			method: 'POST',
+			success: function ( result, request ) {
+				var datos = result.responseText;
+				var objDataAct = eval('(' + datos + ')');
+				dsDesAct.loadData(objDataAct);
+			},
+			failure: function ( result, request){ 
+					Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
+			}
+		});
+	}
+	
 	//combo tipo actividad
 	var reTipoActividad = Ext.data.Record.create([
 	    {name: 'codigo'},    
@@ -146,6 +165,11 @@ Ext.onReady(function(){
         editable: false,
         width:200,
         triggerAction: 'all',
+        listeners: {
+        	'select': function() {
+        		dataDesAct();        		            			
+			}
+		},
         allowBlank:false
 	});
 	//fin combo tipo actividad
@@ -204,6 +228,32 @@ Ext.onReady(function(){
 	});
 	//fin combo modulo
 	
+	//combo descripcion tarea
+	var reDesAct = Ext.data.Record.create([
+	   {name: 'descripcion'}
+	]);
+	                               	                               	                                  	
+	var dsDesAct =  new Ext.data.Store({
+	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reModulo)
+	});
+	
+	var cmbDesAct = new Ext.form.ComboBox({
+		store: dsDesAct,
+		labelSeparator: '',
+		displayField:'descripcion',
+		valueField:'descripcion',
+        id:'codmod',
+        listWidth : 250,
+        forceSelection: true,  
+        typeAhead: true,
+        mode: 'local',
+        binding:true,
+        editable: false,
+        width:280,
+        triggerAction: 'all'
+	});
+	//fin combo descripcion tarea
+	
 	//registro y store de la grid de tareas
 	reTarea = Ext.data.Record.create([
 	    {name: 'codmod'},    
@@ -227,7 +277,7 @@ Ext.onReady(function(){
 	    ds: dsTarea,
        	cm: new Ext.grid.ColumnModel([
             {header: "M&#243;dulo", width: 20, sortable: true, dataIndex: 'codmod',editor : cmbModulo},
-            {header: "Descripci&#243;n", width: 60, sortable: true, dataIndex: 'desact',editor : new Ext.form.TextArea()},
+            {header: "Descripci&#243;n", width: 60, sortable: true, dataIndex: 'desact',editor : cmbDesAct},
             {header: "Caso mantis", width: 20, setEditable: true, sortable: true, dataIndex: 'casman',editor : new Ext.form.NumberField({allowBlank : true,decimalPrecision : 2,decimalSeparator : ','})},
             {header: "Cant. Horas", width: 20, setEditable: true, sortable: true, dataIndex: 'canhorest',editor : new Ext.form.NumberField({allowBlank : true,decimalPrecision : 2,decimalSeparator : ','})}
         ]),

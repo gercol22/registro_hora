@@ -46,6 +46,7 @@ if (!$dataReporte->EOF) {
 		$arrCabecera[] = array('etiqueta'=>'<b>Contratante</b>','valor'=>$denCont);
 	}
 	
+	$numcon = 0;
 	$totcon = 0;
 	$toteje = 0;
 	$montot = 0;
@@ -55,9 +56,10 @@ if (!$dataReporte->EOF) {
 			$totcon += $dataReporte->fields['canhor'];
 			$toteje += $dataReporte->fields['canhoreje'];
 			$montot += $dataReporte->fields['moncon'];
+			$numcon++;
 			$denEst = $reporte->obtenerDenominacion($arrEstCon, $dataReporte->fields['estcon']);
 			$contrato = $reporte->obtenerDenCon($arrTipCon, $dataReporte->fields['tipcon'], $dataReporte->fields['numcon']);
-			$arrDataDetalle[] = array('razsoc'=>$dataReporte->fields['razsoc'],'codcon'=>$contrato,'feccon'=>$reporte->formatoFecha($dataReporte->fields['feccon']),
+			$arrDataDetalle[] = array('item'=>$numcon,'razsoc'=>$dataReporte->fields['razsoc'],'codcon'=>$contrato,'feccon'=>$reporte->formatoFecha($dataReporte->fields['feccon']),
 					     			  'canhor'=>$dataReporte->fields['canhor'],'canhoreje'=>$dataReporte->fields['canhoreje'],'estcon'=>$denEst,
 									  'moncon'=>number_format($dataReporte->fields['moncon'], 2, ',', '.'));
 			
@@ -65,13 +67,13 @@ if (!$dataReporte->EOF) {
 		}
 	}
 	else {
-		$montot = 0;
 		while (!$dataReporte->EOF) {
 			$totcon += $dataReporte->fields['canhor'];
 			$toteje += $dataReporte->fields['canhoreje'];
+			$numcon++;
 			$denEst = $reporte->obtenerDenominacion($arrEstCon, $dataReporte->fields['estcon']);
 			$contrato = $reporte->obtenerDenCon($arrTipCon, $dataReporte->fields['tipcon'], $dataReporte->fields['numcon']);
-			$arrDataDetalle[] = array('razsoc'=>$dataReporte->fields['razsoc'],'codcon'=>$contrato,'feccon'=>$reporte->formatoFecha($dataReporte->fields['feccon']),
+			$arrDataDetalle[] = array('item'=>$numcon,'razsoc'=>$dataReporte->fields['razsoc'],'codcon'=>$contrato,'feccon'=>$reporte->formatoFecha($dataReporte->fields['feccon']),
 					'canhor'=>$dataReporte->fields['canhor'],'canhoreje'=>$dataReporte->fields['canhoreje'],'estcon'=>$denEst,
 					'moncon'=>'0,00');
 			$dataReporte->MoveNext();

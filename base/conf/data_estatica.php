@@ -132,3 +132,43 @@ $arrContra[0]['codigo'] = 'S';
 $arrContra[0]['descripcion'] = 'SIGESP';
 $arrContra[1]['codigo'] = 'I';
 $arrContra[1]['descripcion'] = 'IEAGER';
+
+/***********************DATA ACTIVIDAD PROGRAMACION*********************/
+$arrDesActDes[0]['descripcion'] = 'Entrenamiento T&#233;cnico';
+$arrDesActDes[1]['descripcion'] = 'Instalaci&#243;n';
+$arrDesActDes[2]['descripcion'] = 'Desarrollo Mantenimiento';
+$arrDesActDes[3]['descripcion'] = 'Nuevo Desarrollo';
+$arrDesActDes[4]['descripcion'] = 'Consultoria T&#233;cnica';
+$arrDesActDes[5]['descripcion'] = 'Soporte T&#233;cnico Tel&#233;fonico';
+
+$arrDesActAtc[0]['descripcion'] = 'Consultoria Atenci&#243;n al Cliente';
+$arrDesActAtc[1]['descripcion'] = 'Apertura Fase 1';
+$arrDesActAtc[2]['descripcion'] = 'Apertura Fase 2';
+$arrDesActAtc[3]['descripcion'] = 'Migraci&#243;n de Datos';
+
+$arrDesActImp[0]['descripcion'] = 'Instalaci&#243;n';
+$arrDesActImp[1]['descripcion'] = 'Levantamiento de Informaci&#243;n';
+$arrDesActImp[2]['descripcion'] = 'Adecuaci&#243;n de Reportes';
+$arrDesActImp[3]['descripcion'] = 'Configuraci&#243;n Inicial';
+$arrDesActImp[4]['descripcion'] = 'Migraci&#243;n de Datos';
+$arrDesActImp[5]['descripcion'] = 'Carga de Data Ejecutada';
+$arrDesActImp[6]['descripcion'] = 'Configuraci&#243;n General de N&#243;mina';
+$arrDesActImp[7]['descripcion'] = 'Calculo de N&#243;mina';
+$arrDesActImp[8]['descripcion'] = 'Entrenamiento Simulado';
+$arrDesActImp[9]['descripcion'] = 'Entrenamiento en Vivo';
+
+$arrDesActMan[0]['descripcion'] = 'Servicio de Consultoria en Sitio';
+$arrDesActMan[1]['descripcion'] = 'Consultoria T&#233;cnica';
+$arrDesActMan[2]['descripcion'] = 'Apertura Fase 1';
+$arrDesActMan[3]['descripcion'] = 'Apertura Fase 2';
+$arrDesActMan[4]['descripcion'] = 'Instalaci&#243;n';
+
+$arrDesActSer[0]['descripcion'] = 'Servicio de Consultoria en Sitio';
+$arrDesActSer[1]['descripcion'] = 'Consultoria T&#233;cnica';
+$arrDesActSer[2]['descripcion'] = 'Apertura Fase 1';
+$arrDesActSer[3]['descripcion'] = 'Apertura Fase 2';
+$arrDesActSer[4]['descripcion'] = 'Instalaci&#243;n';
+
+$arrDesActPre[0]['descripcion'] = 'Presentaci&#243;n';
+
+
