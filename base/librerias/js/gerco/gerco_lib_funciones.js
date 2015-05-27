@@ -678,11 +678,13 @@ function limpiarFormulario(componente){
 
 function limpiarSaltoLinea(cadena){
 	var cadfinal = '';
+	var letra = '';
+	var cod = '';
 	for (j = 0; j < cadena.length; j++) {
 		letra = cadena.substr(j, 1);
 		cod = escape(letra);
 		if (cod == '%0A') {
-			letra = ' ';
+			letra = '\\n';
 		}
 		cadfinal = cadfinal + letra;
 	}

@@ -49,7 +49,7 @@ Ext.onReady(function(){
 	});
 	//fin componente campocatalogo para el campo cliente
 	
-	 //combo tipo de estructura
+	//combo campo orden
     var campOrden = [['Cliente', 'CL'], 
                      ['Fecha', 'FE'],
                      ['Tipo Contrato', 'TC'],
@@ -72,7 +72,7 @@ Ext.onReady(function(){
         triggerAction: 'all',
         mode: 'local'
     })
-    //fin combo estructura
+    //fin combo campo orden
 	
 	//combo contratante
 	var reContratante = Ext.data.Record.create([

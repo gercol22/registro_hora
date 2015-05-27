@@ -67,6 +67,15 @@ class ServicioListadoActividad {
 			}
 		}
 		
+		if ($objFiltro->logcon != '') {
+			if ($filtroSQL == '') {
+				$filtroSQL .= " ACT.logcon = '{$objFiltro->logcon}' ";
+			}
+			else {
+				$filtroSQL .= " AND ACT.logcon = '{$objFiltro->logcon}' ";
+			}
+		}
+		
 		if ($objFiltro->esthorimp == 0) {
 			if ($filtroSQL == '') {
 				$filtroSQL .= " MOD.estfac = 1 ";
@@ -80,12 +89,29 @@ class ServicioListadoActividad {
 			$filtroSQL = ' WHERE '.$filtroSQL;
 		}
 		
-		$cadenaSQL = "SELECT CLI.razsoc, ACT.codcon, ACT.fecact, CON.tipcon, MOD.casman, MOD.desact, MOD.canhor
+		$strOrder = '';
+		switch ($objFiltro->camord) {
+			case 'CL':
+				$strOrder = 'ORDER BY 1';
+				break;
+			case 'FE':
+				$strOrder = 'ORDER BY 2';
+				break;
+			case 'CN':
+				$strOrder = 'ORDER BY 4';
+				break;
+			case 'CO':
+				$strOrder = 'ORDER BY 3';
+				break;
+		}
+		
+		$cadenaSQL = "SELECT CLI.razsoc, ACT.fecact, CNS.nomcon, CON.numcon, CON.tipcon, MOD.casman, MOD.desact, MOD.canhor
   						FROM actividad ACT
 							INNER JOIN cliente CLI ON ACT.rifcli=CLI.rifcli
 							INNER JOIN modact MOD ON ACT.numact=MOD.numact
 							INNER JOIN contrato CON ON ACT.codcon=CON.codcon
-						{$filtroSQL} ";
+							INNER JOIN consultor CNS ON ACT.logcon=CNS.logcon
+						{$filtroSQL} {$strOrder}";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}
 }

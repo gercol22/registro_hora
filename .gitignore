@@ -44,3 +44,4 @@ Temporary Items
 .buildpath
 *.project
 .settings/org.eclipse.php.core.prefs
+base/conf/conf_conexion.ini

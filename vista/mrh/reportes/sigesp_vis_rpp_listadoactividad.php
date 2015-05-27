@@ -55,9 +55,10 @@ if (!$dataReporte->EOF) {
 	$arrDataDetalle = array();
 	while (!$dataReporte->EOF) {
 		$total += $dataReporte->fields['canhor'];
-		$contrato = $reporte->obtenerDenCon($arrTipCon, $dataReporte->fields['tipcon'], $dataReporte->fields['codcon']);
-		$arrDataDetalle[] = array('razsoc'=>$dataReporte->fields['razsoc'],'codcon'=>$contrato,'fecact'=>$reporte->formatoFecha($dataReporte->fields['fecact']),
-				     			  'casman'=>$dataReporte->fields['casman'],'desact'=>$dataReporte->fields['desact'],
+		$contrato = $reporte->obtenerDenCon($arrTipCon, $dataReporte->fields['tipcon'], $dataReporte->fields['numcon']);
+		$arrDataDetalle[] = array('razsoc'=>$dataReporte->fields['razsoc'],'nomcon'=>$dataReporte->fields['nomcon'],'codcon'=>$contrato,
+				   				  'fecact'=>$reporte->formatoFecha($dataReporte->fields['fecact']),
+				     			  'casman'=>$dataReporte->fields['casman'],'desact'=>wordwrap($dataReporte->fields['desact'],60),
 								  'canhor'=>$dataReporte->fields['canhor']);
 		
 		$dataReporte->MoveNext();
@@ -69,4 +70,10 @@ if (!$dataReporte->EOF) {
 	$reporte->cabeceraEstandar($arrCabecera);
 	$reporte->detalleListadoActividad($arrDataDetalle,$total);
 	$reporte->imprimirReporte();
+}
+else {
+	echo '<script language=JavaScript>';
+	echo "alert('No hay nada que Reportar');";
+	echo 'close();';
+	echo '</script>';
 }

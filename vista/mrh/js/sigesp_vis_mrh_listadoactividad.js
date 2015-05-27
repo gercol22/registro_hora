@@ -71,6 +71,57 @@ Ext.onReady(function(){
 	});
 	//fin componente campocatalogo para el campo cliente
 	
+	//creando datastore y columnmodel para el catalogo consultores
+	var reConsultor = Ext.data.Record.create([
+		{name: 'logcon'},
+		{name: 'nomcon'}
+	]);
+	
+	var dsConsultor =  new Ext.data.Store({
+		reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reConsultor)
+	});
+						
+	var cmConsultor = new Ext.grid.ColumnModel([
+	    {header: "C&#233;dula", width: 20, sortable: true,   dataIndex: 'logcon'},
+		{header: "Nombre", width: 40, sortable: true, dataIndex: 'nomcon'}
+	]);
+	//fin creando datastore y columnmodel para el catalogo consultores
+	
+	//componente campocatalogo para el campo consultor
+	var comtcConsultor = new com.gerco.vista.comCampoCatalogo({
+		titvencat: 'Consultores',
+		anchoformbus: 450,
+		altoformbus:130,
+		anchogrid: 450,
+		altogrid: 350,
+		anchoven: 500,
+		altoven: 420,
+		anchofieldset:850,
+		datosgridcat: dsConsultor,
+		colmodelocat: cmConsultor,
+		rutacontrolador:'../../controlador/mrh/sigesp_ctr_mrh_programacion.php',
+		parametros: "ObjSon={'operacion': 'OBT_CON'}",
+		arrfiltro:[{etiqueta:'C&#233;dula',id:'logcons',valor:'logcon'},
+				   {etiqueta:'Nombre',id:'nomcons',valor:'nomcon'}],
+		posicion:'position:absolute;left:5px;top:185px',
+		tittxt:'Consultor',
+		idtxt:'logcon',
+		campovalue:'logcon',
+		anchoetiquetatext:130,
+		anchotext:130,
+		anchocoltext:0.40,
+		idlabel:'nomcon',
+		labelvalue:'nomcon',
+		anchocoletiqueta:0.53,
+		anchoetiqueta:250,
+		tipbus:'L',
+		binding:'C',
+		hiddenvalue:'',
+		defaultvalue:'',
+		allowblank:false,
+	});
+	//fin componente campocatalogo para el campo consultor
+	
 	//combo contrato
 	var reContrato = Ext.data.Record.create([
 	    {name: 'codigo'},    
@@ -180,6 +231,31 @@ Ext.onReady(function(){
 	});
 	//fin combo tipo situacion
 	
+	//combo campo orden
+    var campOrden = [['Cliente', 'CL'], 
+                     ['Fecha', 'FE'],
+                     ['Contrato', 'CN'],
+                     ['Consultor', 'CO']];
+    var stCampOrden = new Ext.data.SimpleStore({
+        fields: ['etiqueta', 'valor'],
+        data: campOrden
+    });
+    
+    var cmbOrden = new Ext.form.ComboBox({
+        store: stCampOrden,
+        editable: false,
+        displayField: 'etiqueta',
+        valueField: 'valor',
+        labelSeparator: '',
+		fieldLabel:'Ordenar por',
+        id: 'camord',
+        typeAhead: true,
+        forceSelection: true,
+        triggerAction: 'all',
+        mode: 'local'
+    })
+    //fin combo campo orden
+	
 	//OBETENIEDO LA DATA INICIAL...
 	var myJSONObject = {"operacion":"DAT_INI"};
 	var ObjSon=Ext.util.JSON.encode(myJSONObject);
@@ -207,7 +283,7 @@ Ext.onReady(function(){
 	var plListadoActividad = new Ext.FormPanel({
 		title: "<H1 align='center'>Listado Actividades</H1>",
 		style: 'position:relative;top:50px;left:150px', 
-		height: 340,
+		height: 400,
 		width: 750,
 	   	applyTo:'formulario',
 	   	frame: true,
@@ -235,6 +311,8 @@ Ext.onReady(function(){
 	        						"tipact":Ext.getCmp('tipact').getValue(),
 	        						"codmod":Ext.getCmp('codmod').getValue(),
 	        						"tipinc":Ext.getCmp('tipinc').getValue(),
+	        						"logcon":Ext.getCmp('logcon').getValue(),
+	        						"camord":Ext.getCmp('camord').getValue(),
 	        						"esthorimp":esthorimp};
 	    		var ObjSon=Ext.util.JSON.encode(myJSONObject);
 	    		var pagina = "reportes/sigesp_vis_rpp_listadoactividad.php?ObjSon="+ObjSon;
@@ -330,10 +408,21 @@ Ext.onReady(function(){
 				labelWidth: 130,
 				items: [cmbTipInc]
 			}]
+		},comtcConsultor.fieldsetCatalogo,
+		{
+			layout: "column",
+			defaults: {border: false},
+			style: 'position:absolute;left:15px;top:230px',
+			items: [{
+				layout: "form",
+				border: false,
+				labelWidth: 130,
+				items: [cmbOrden]
+			}]
 		},{
 			layout: "column",
 			defaults: {border: false},
-			style: 'position:absolute;left:15px;top:200px',
+			style: 'position:absolute;left:15px;top:260px',
 			items: [{
 				layout: "form",
 				border: false,
