@@ -9,7 +9,6 @@ require_once ($dirsrvdoc.'/base/librerias/php/gerco/gerco_lib_fabricadao.php');
 class ServicioRegistroActividad {
 	private $conexionBD;
 	private $daoActividad;
-	private $daoModAct;
 	public  $mensaje = '';
 		
 	public function ServicioRegistroActividad() {
@@ -43,6 +42,28 @@ class ServicioRegistroActividad {
 		$this->conexionBD->Execute($cadenaSQL);
 	}
 	
+	public function guardarTarea($objJson, $numact) {
+		$respuesta = true;
+		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
+		if ($objJson->estbdt == 'N') {
+			$cadenaSQL = "INSERT INTO modact(codmod, numact, canhor, desact, desinc, tipinc, casman, estfac)
+							VALUES ('{$objJson->codmod}', '{$numact}', {$objJson->canhor}, '{$objJson->desact}',
+									'{$objJson->desinc}', '{$objJson->tipinc}', '{$objJson->casman}', 0)";
+		}
+		else {
+			$cadenaSQL = "UPDATE modact 
+							SET canhor={$objJson->canhor}, desact='{$objJson->desact}', desinc='{$objJson->desinc}', 
+								tipinc='{$objJson->tipinc}', casman='{$objJson->casman}', codmod='{$objJson->codmod}'
+							WHERE numtar={$objJson->numtar}";
+		}
+		
+		if ($this->conexionBD->Execute($cadenaSQL) === false) {
+			$respuesta = false;
+		}
+		
+		return $respuesta;
+	}
+	
 	public function insertarActividad($objJson) {
 		$respuesta = true;
 		//ConexionBaseDatos::getInstanciaConexion()->debug = true;
@@ -51,12 +72,8 @@ class ServicioRegistroActividad {
 		$this->daoActividad->logcon = $_SESSION['logcon'];
 		if ($this->daoActividad->incluir(false, true, 'numact', 6)) {
 			foreach ($objJson->arrModAct as $recdetalle) {
-				$this->daoModAct = FabricaDao::CrearDAO('N', 'modact');
-				$this->daoModAct->setData($recdetalle);
-				$this->daoModAct->numact = $this->daoActividad->numact;
-				$this->daoModAct->estfac = 0;
-				if (!$this->daoModAct->incluir()) {
-					$this->mensaje = 'Ocurri&#243; un error al insertar los destalles '.$this->daoModAct->ErrorMsg();
+				if (!$this->guardarTarea($recdetalle, $this->daoActividad->numact)) {
+					$this->mensaje = 'Ocurri&#243; un error al insertar los destalles '.$this->conexionBD->ErrorMsg();
 					$this->eliminarTareas($this->daoActividad->numact);
 					$this->daoActividad->eliminar();
 					$respuesta = false;
@@ -95,29 +112,13 @@ class ServicioRegistroActividad {
 		$this->daoActividad->rescli = utf8_decode($objJson->rescli);
 		if ($this->daoActividad->modificar() != 0) {
 			foreach ($objJson->arrModAct as $recdetalle) {
-				$cadenaPkDt = "codmod = '{$recdetalle->codmod}' AND numact = '{$this->daoActividad->numact}'";
-				$this->daoModAct = FabricaDao::CrearDAO('C', 'modact', array(), $cadenaPkDt);
-				if (!$this->daoModAct->_saved) {
-					$this->daoModAct->setData($recdetalle);
-					$this->daoModAct->numact = $this->daoActividad->numact;
-					$this->daoModAct->estfac = 0;
-				}
-				else {
-					$this->daoModAct->desinc = utf8_decode($recdetalle->desinc);
-					$this->daoModAct->tipinc = $recdetalle->tipinc;
-					$this->daoModAct->desact = utf8_decode($recdetalle->desact);
-					$this->daoModAct->canhor = $recdetalle->canhor;
-					$this->daoModAct->casman = $recdetalle->casman;
-				}
-				
-				if ($this->daoModAct->modificar() == 0) {
-					$this->mensaje = 'Ocurrio un error al modificar los destalles '.$this->daoModAct->ErrorMsg();
+				if (!$this->guardarTarea($recdetalle, $this->daoActividad->numact)) {
+					$this->mensaje = 'Ocurrio un error al modificar los destalles '.$this->conexionBD->ErrorMsg();
 					$this->eliminarTareas($this->daoActividad->numact);
 					$this->daoActividad->eliminar();
 					$respuesta = false;
 					break;
 				}
-				unset($this->daoModAct);
 			}
 				
 			if ($respuesta) {

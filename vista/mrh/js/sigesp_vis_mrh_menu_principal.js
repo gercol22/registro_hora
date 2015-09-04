@@ -35,6 +35,13 @@ Ext.onReady(function(){
        	href: 'sigesp_vis_mrh_imputarhora.html'
 	});
 	
+	var actBad = new  Ext.menu.Item({
+		text: 'Actualizar Base de Datos',
+		id:'actBD',
+       	iconCls: 'menuproceso',
+       	href: 'sigesp_vis_mrh_actualizarbd.html'
+	});
+	
 	menuRegistroHoras.addItem(salir);
 	
 	
@@ -124,6 +131,7 @@ Ext.onReady(function(){
 					menuRegistroHoras.addItem(regAct);
 					menuRegistroHoras.addItem(proAct);
 					menuRegistroHoras.addItem(impHor);
+					menuRegistroHoras.addItem(actBad);
 					//DEFINICIONES
 					menuDefinicion.addItem(cliente);
 					menuDefinicion.addItem(contrato);

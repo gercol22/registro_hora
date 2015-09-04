@@ -160,58 +160,6 @@ Ext.onReady(function(){
 	});
 	//fin combo tipo actividad
 	
-	//combo modulo
-	var reModulo = Ext.data.Record.create([
-	    {name: 'codigo'},    
-	    {name: 'descripcion'}
-	]);
-	                               	                               	                                  	
-	var dsModulo =  new Ext.data.Store({
-	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reModulo)
-	});
-	
-	var cmbModulo = new Ext.form.ComboBox({
-		store: dsModulo,
-		labelSeparator: '',
-		displayField:'descripcion',
-		valueField:'codigo',
-        id:'codmod',
-        listWidth : 250,
-        forceSelection: true,  
-        typeAhead: true,
-        mode: 'local',
-        binding:true,
-        editable: false,
-        triggerAction: 'all'
-	});
-	//fin combo modulo
-	
-	//combo tipo situacion
-	var reTipInc = Ext.data.Record.create([
-	    {name: 'codigo'},    
-	    {name: 'descripcion'}
-	]);
-	                               	                               	                                  	
-	var dsTipInc =  new Ext.data.Store({
-	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reTipInc)
-	});
-	
-	var cmbTipInc = new Ext.form.ComboBox({
-		store: dsTipInc,
-		labelSeparator: '',
-		displayField:'descripcion',
-		valueField:'codigo',
-        id:'tipinc',
-        forceSelection: true,  
-        typeAhead: true,
-        mode: 'local',
-        listWidth : 200,
-        binding:true,
-        editable: false,
-        triggerAction: 'all'
-	});
-	//fin combo tipo situacion
-	
 	//Etiqueta tipo situacion
 	function tipoSituacion(codigo) {
 		switch (codigo) {
@@ -241,8 +189,274 @@ Ext.onReady(function(){
 		}
 	}
 	
+	//dataStore combo modulo
+	var reModulo = Ext.data.Record.create([
+	    {name: 'codigo'},    
+	    {name: 'descripcion'}
+	]);
+	                               	                               	                               	                                  	
+    var dsModulo =  new Ext.data.Store({
+        reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reModulo)
+    });
+    //fin dataStore combo modulo
+    
+    //dataStore combo tipo situacion
+	var reTipInc = Ext.data.Record.create([
+	    {name: 'codigo'},    
+	    {name: 'descripcion'}
+	]);
+	                               	                               	                                  	
+	var dsTipInc =  new Ext.data.Store({
+	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reTipInc)
+	});
+	//fin dataStore combo tipo situacion
+	
+	function calcularTotal() {
+		var totalHora = 0;
+		gridTareas.store.each(function (registrostore) {
+			var valor = String(registrostore.get('canhor')).replace(',','.');
+			totalHora = totalHora + parseFloat(valor);
+		});
+		Ext.getCmp('tothor').setValue(totalHora);
+	}
+    
+	//VENTANA PARA PROCESAR LAS TAREAS DE UNA ACTIVIDAD
+    function ventanaTarea(regTarea) {
+    	//combo modulo
+    	var cmbModulo = new Ext.form.ComboBox({
+    		store: dsModulo,
+    		width: 250,
+    		labelSeparator: '',
+    		fieldLabel:'Modulo (*)',
+    		displayField:'descripcion',
+    		valueField:'codigo',
+            id:'codmod',
+            listWidth : 250,
+            forceSelection: true,  
+            typeAhead: true,
+            mode: 'local',
+            binding:true,
+            editable: false,
+            triggerAction: 'all',
+            value: regTarea.get('codmod')	
+    	});
+    	//fin combo modulo
+    	
+    	//combo tipo situacion
+    	var cmbTipInc = new Ext.form.ComboBox({
+    		store: dsTipInc,
+    		width: 200,
+    		labelSeparator: '',
+    		fieldLabel:'Tipo Situaci&#243;n (*)',
+    		displayField:'descripcion',
+    		valueField:'codigo',
+            id:'tipinc',
+            forceSelection: true,  
+            typeAhead: true,
+            mode: 'local',
+            listWidth : 200,
+            binding:true,
+            editable: false,
+            triggerAction: 'all',
+            value: regTarea.get('tipinc')	
+    	});
+    	//fin combo tipo situacion
+    	
+    	var plTarea = new Ext.FormPanel({
+    		height: 500,
+    		width: 745,
+    	   	frame: true,
+    	   	tbar:[{
+      			text:'Procesar',
+    	        tooltip:'Procesa las actividades actualizadas en pantalla',
+    	        iconCls:'barraprocesar',
+    	        handler: function() {
+    	        	if(Ext.getCmp('codmod').getValue()!=''&&Ext.getCmp('canhor').getValue()!='0'&&Ext.getCmp('desact').getValue()!=''&&
+    	        	   Ext.getCmp('desinc').getValue()!=''&&Ext.getCmp('tipinc').getValue()!='') {
+    	        		regTarea.set('codmod',Ext.getCmp('codmod').getValue());
+        	        	regTarea.set('canhor',Ext.getCmp('canhor').getValue());
+        	        	regTarea.set('desact',Ext.getCmp('desact').getValue());
+        	        	regTarea.set('casman',Ext.getCmp('casman').getValue());
+        	        	regTarea.set('desinc',Ext.getCmp('desinc').getValue());
+        	        	regTarea.set('tipinc',Ext.getCmp('tipinc').getValue());
+        	        	venTarea.destroy();
+        	        	calcularTotal();
+    	        	}
+    	        	else {
+    	        		Ext.Msg.show({
+    						title:'Mensaje',
+    						msg: 'Debe llenar todos los campos marcados con (*) de la ventana',
+    						buttons: Ext.Msg.OK,
+    						icon: Ext.MessageBox.WARNING
+    					});
+    	        	}
+    	        	
+    	        }
+            },{
+      			text:'Salir',
+    	        tooltip:'Le permite volver al menu principal',
+    	        iconCls:'barrasalir',
+    	        handler: function() {
+    	        	venTarea.destroy();
+    	        }
+      		}],
+    		items: [{
+    			layout: "column",
+    			defaults: {border: false},
+    			style: 'position:absolute;left:15px;top:15px',
+    			items: [{
+    				width: 250,
+    				layout: "form",
+    				border: false,
+    				labelWidth: 130,
+    				items: [{
+    					xtype:'textfield',
+    					fieldLabel:'Actividad',
+    					style:'font-weight: bold; border:none;background:#f1f1f1',
+    					id:'actividad',
+    					width:90,
+    					labelSeparator:'',
+    					value:Ext.getCmp('numact').getValue(),
+    					readOnly:true
+    				}]
+    			},{
+    				width: 450,
+    				layout: "form",
+    				border: false,
+    				labelWidth: 100,
+    				style: 'padding-left:5px',
+    				items: [{
+    					xtype:'textfield',
+    					fieldLabel:'Cliente',
+    					style:'font-weight: bold; border:none;background:#f1f1f1',
+    					id:'cliente',
+    					width:340,
+    					labelSeparator:'',
+    					value:Ext.getCmp('razsoc').getValue(),
+    					readOnly:true
+    				}]
+    			}]
+    		},{
+    			layout: "column",
+    			defaults: {border: false},
+    			style: 'position:absolute;left:15px;top:50px',
+    			items: [{
+    				layout: "form",
+    				border: false,
+    				labelWidth: 130,
+    				items: [cmbModulo],
+    			}]
+    		},{
+    			layout: "column",
+    			defaults: {border: false},
+    			style: 'position:absolute;left:15px;top:85px',
+    			items: [{
+    				layout: "form",
+    				border: false,
+    				labelWidth: 130,
+    				items: [{
+    					xtype: 'textarea',
+    					labelSeparator :'',
+    					fieldLabel: 'Situaci&#243;n Planteada / Asignaci&#243;n (*)',
+    					id: 'desinc',
+    					width: 570,
+    					height: 40,
+    					binding:true,
+    					hiddenvalue:'',
+    					defaultvalue:'',
+    					allowBlank:false,
+    					autoCreate: {tag: 'textarea', type: 'text', size: '100', onkeypress: "return keyRestrict(event,'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.;,!@%&/\()�?�-+*[]{}');"},
+    					value: regTarea.get('desinc')
+    				}]
+    			}]
+    		},{
+    			layout: "column",
+    			defaults: {border: false},
+    			style: 'position:absolute;left:15px;top:135px',
+    			items: [{
+    				layout: "form",
+    				border: false,
+    				labelWidth: 130,
+    				items: [cmbTipInc]
+    			}]
+    		},{
+    			layout: "column",
+    			defaults: {border: false},
+    			style: 'position:absolute;left:15px;top:170px',
+    			items: [{
+    				width: 250,
+    				layout: "form",
+    				border: false,
+    				labelWidth: 130,
+    				items: [{
+    					xtype:'textfield',
+    					fieldLabel:'Cantidad Horas (*)',
+    					id:'canhor',
+    					autoCreate: {tag: 'input', type: 'text', onkeypress: "return keyRestrict(event,'0123456789,.');"},
+    					width:50,
+    					labelSeparator:'',
+    					value: regTarea.get('canhor')	
+    				}]
+    			},{
+    				width: 450,
+    				layout: "form",
+    				border: false,
+    				labelWidth: 100,
+    				style: 'padding-left:5px',
+    				items: [{
+    					xtype:'textfield',
+    					fieldLabel:'Caso mantis',
+    					id:'casman',
+    					width:60,
+    					labelSeparator:'',
+    					autoCreate: {tag: 'input', type: 'text', onkeypress: "return keyRestrict(event,'0123456789');"},
+    					value: regTarea.get('casman')
+    				}]
+    			}]
+    		},{
+    			layout: "column",
+    			defaults: {border: false},
+    			style: 'position:absolute;left:15px;top:205px',
+    			items: [{
+    				layout: "form",
+    				border: false,
+    				labelWidth: 130,
+    				items: [{
+    					xtype: 'textarea',
+    					labelSeparator :'',
+    					fieldLabel: 'Descripci&#243;n (*)',
+    					id: 'desact',
+    					width: 570,
+    					height: 225,
+    					binding:true,
+    					hiddenvalue:'',
+    					defaultvalue:'',
+    					allowBlank:false,
+    					autoCreate: {tag: 'textarea', type: 'text', onkeypress: "return keyRestrict(event,'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.;,!@%&/\()�?�-+*[]{}');"},
+    					value: regTarea.get('desact')
+    				}]
+    			}]
+    		}]
+    	});
+    	
+    	plTarea.doLayout();
+    	
+    	//Ventana de tareas a procesar
+    	var venTarea = new Ext.Window({
+    		title: "<H1 align='center'>Tareas</H1>",
+		    width:750,
+            height:505,
+            modal: true,
+            closable:false,
+            plain: false,
+            items:[plTarea]
+        });
+    	venTarea.show();
+    }
+	
 	//registro y store de la grid de tareas
 	reTarea = Ext.data.Record.create([
+	    {name: 'numtar'},                              
 	    {name: 'codmod'},    
 	    {name: 'canhor'},
 	    {name: 'desact'},
@@ -258,7 +472,7 @@ Ext.onReady(function(){
 	});
 	
 	//Grid de tareas por modulo
-	var gridTareas = new Ext.grid.EditorGridPanel({
+	var gridTareas = new Ext.grid.GridPanel({
 		title: "<H1 align='center'>Tareas Realizadas</H1>",
 		width:800,
 	    height:150,
@@ -266,12 +480,12 @@ Ext.onReady(function(){
 	    style: 'position:absolute;left:15px;top:210px',
 	    ds: dsTarea,
        	cm: new Ext.grid.ColumnModel([
-            {header: "M&#243;dulo", width: 20, sortable: true, dataIndex: 'codmod',editor : cmbModulo},
-            {header: "Situaci&#243;n Planteada / Asignaci&#243;n", width: 40, sortable: true, dataIndex: 'desinc',editor : new Ext.form.TextArea()},
-            {header: "Tipo Situaci&#243;n", width: 40, sortable: true, dataIndex: 'tipinc',editor : cmbTipInc, renderer :tipoSituacion},
-            {header: "Descripci&#243;n", width: 60, sortable: true, dataIndex: 'desact',editor : new Ext.form.TextArea()},
-            {header: "Caso mantis", width: 20, setEditable: true, sortable: true, dataIndex: 'casman',editor : new Ext.form.NumberField({allowBlank : true,decimalPrecision : 2,decimalSeparator : ','})},
-            {header: "Cant. Horas", width: 20, setEditable: true, sortable: true, dataIndex: 'canhor',editor : new Ext.form.NumberField({allowBlank : true,decimalPrecision : 2,decimalSeparator : ','})}
+            {header: "M&#243;dulo", width: 20, sortable: true, dataIndex: 'codmod'},
+            {header: "Situaci&#243;n Planteada / Asignaci&#243;n", width: 40, sortable: true, dataIndex: 'desinc'},
+            {header: "Tipo Situaci&#243;n", width: 40, sortable: true, dataIndex: 'tipinc',renderer :tipoSituacion},
+            {header: "Descripci&#243;n", width: 60, sortable: true, dataIndex: 'desact'},
+            {header: "Caso mantis", width: 20, setEditable: true, sortable: true, dataIndex: 'casman'},
+            {header: "Cant. Horas", width: 20, setEditable: true, sortable: true, dataIndex: 'canhor'}
         ]),
        	sm: new Ext.grid.CheckboxSelectionModel({}),
 		viewConfig: {forceFit:true},
@@ -281,16 +495,27 @@ Ext.onReady(function(){
             tooltip:'Agregar tareas realizadas por modulo ',
             iconCls:'barraagregar',
             handler: function(){
-            	var tarea = new reTarea({
-					'codmod':'',
-					'desinc':'',
-					'tipinc':'',
-					'canhor':'0',
-					'desact':'',
-					'casman':'',
-					'estbdt':'N'
-				});
-            	gridTareas.store.add(tarea);
+            	if(Ext.getCmp('razsoc').getValue()!='') {
+            		var tarea = new reTarea({
+                		'numtar':'',
+                		'codmod':'',
+    					'desinc':'',
+    					'tipinc':'',
+    					'canhor':'0',
+    					'desact':'',
+    					'casman':'',
+    					'estbdt':'N'
+    				});
+            		gridTareas.store.add(tarea);
+            	}
+            	else {
+        			Ext.Msg.show({
+        				title:'Mensaje',
+        				msg: 'Debe seleccionar un cliente para registrar las tareas',
+        				buttons: Ext.Msg.OK,
+        				icon: Ext.MessageBox.WARNING
+        			});
+        		}
             }
         }, '-', {
             text:'Eliminar tarea',
@@ -365,42 +590,11 @@ Ext.onReady(function(){
         }]
     });
 	
-	function calcularTotal() {
-		var totalHora = 0;
-		gridTareas.store.each(function (registrostore) {
-			var valor = String(registrostore.get('canhor')).replace(',','.');
-			totalHora = totalHora + parseFloat(valor);
-		});
-		Ext.getCmp('tothor').setValue(totalHora);
-	}
-	
-	gridTareas.on('afteredit', function(Obj) {
-		if (Obj.value != '' && Obj.field == 'canhor') {
-			calcularTotal();
-		}
-	});
-	
-	gridTareas.on('cellclick', function(grid, rowIndex, columnIndex, e) {
+	gridTareas.on('celldblclick', function(grid, rowIndex, columnIndex, e) {
 		var record = grid.getStore().getAt(rowIndex);
-		var campo  = grid.getColumnModel().getDataIndex(columnIndex);
-		var codmod = record.get('codmod');
-		var estbdt = record.get('estbdt');
-		
-		if(campo == 'codmod') {
-			if(codmod != '' && estbdt == 'S') {
-				Ext.Msg.show({
-					title:'Mensaje',
-					msg: 'El modulo no puede ser modificado si desea cambiarlo elimine la tarea e inserte una con el nuevo modulo',
-					buttons: Ext.Msg.OK,
-					icon: Ext.MessageBox.WARNING
-				});
-			}
-			
-			return false;
-		}
+		ventanaTarea(record);
 	});
-	 
-	
+		
 	//OBETENIEDO LA DATA INICIAL...
 	var rolcon = '';
 	var myJSONObject = {"operacion":"DAT_INI"};
@@ -457,9 +651,10 @@ Ext.onReady(function(){
 				        	                 {etiqueta:'Situaci&#243;n Planteada / Asignaci&#243;n', campo:'desinc', tipo:'s', requerido: true},
 				        	                 {etiqueta:'Tipo Situaci&#243;n', campo:'tipinc', tipo:'s', requerido: true},
 				        	                 {etiqueta:'Descripci&#243;n', campo:'desact', tipo:'s', requerido: true},
-				        	                 {etiqueta:'Descripci&#243;n', campo:'desact', tipo:'s', requerido: true},
-				        					 {etiqueta:'Caso mantis', campo:'casman', tipo:'s', requerido: false},
-				        					 {etiqueta:'Cant. Horas', campo:'canhor', tipo:'n', requerido: true}];
+				        	                 {etiqueta:'Caso mantis', campo:'casman', tipo:'s', requerido: false},
+				        					 {etiqueta:'Cant. Horas', campo:'canhor', tipo:'n', requerido: true},
+				        					 {etiqueta:'Basedato', campo:'estbdt', tipo:'s', requerido: false},
+				        					 {etiqueta:'Tarea', campo:'numtar', tipo:'s', requerido: false}];
 				        	var strJsonGrid = getJsonGrid(dataTarea, arrCampos);
 				        	if(strJsonGrid != false) {
 				        		var operacion = '';

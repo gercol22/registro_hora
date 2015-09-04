@@ -2538,7 +2538,12 @@ function getJsonGrid(store, arrCampos) {
 				if (j == 0) {
 					if(arrCampos[j].tipo == 'n'){
 						valorCampo = String(valorCampo).replace(',','.');
-						cadenajson = cadenajson + "'"+arrCampos[j].campo+"':"+valorCampo;
+						if(valorCampo != ''){
+							cadenajson = cadenajson + "'"+arrCampos[j].campo+"':"+valorCampo;
+						}
+						else {
+							cadenajson = cadenajson + "'"+arrCampos[j].campo+"': 0";
+						}
 					}
 					else if(arrCampos[j].tipo == 'f'){
 						arrfecdes = valorCampo.split("/");
@@ -2554,7 +2559,12 @@ function getJsonGrid(store, arrCampos) {
 				else {
 					if(arrCampos[j].tipo == 'n'){
 						valorCampo = String(valorCampo).replace(',','.');
-						cadenajson = cadenajson + ",'"+arrCampos[j].campo+"':"+valorCampo;
+						if(valorCampo != ''){
+							cadenajson = cadenajson + ",'"+arrCampos[j].campo+"':"+valorCampo;
+						}
+						else {
+							cadenajson = cadenajson + ",'"+arrCampos[j].campo+"': 0";
+						}
 					}
 					else if(arrCampos[j].tipo == 'f'){
 						arrfecdes = valorCampo.split("/");
@@ -2587,7 +2597,12 @@ function getJsonGrid(store, arrCampos) {
 				if (j == 0) {
 					if(arrCampos[j].tipo == 'n'){
 						valorCampo = String(valorCampo).replace(',','.');
-						cadenajson = cadenajson + "'"+arrCampos[j].campo+"':"+valorCampo;
+						if(valorCampo != ''){
+							cadenajson = cadenajson + "'"+arrCampos[j].campo+"':"+valorCampo;
+						}
+						else {
+							cadenajson = cadenajson + "'"+arrCampos[j].campo+"': 0";
+						}
 					}
 					else if(arrCampos[j].tipo == 'f'){
 						arrfecdes = valorCampo.split("/");
@@ -2603,7 +2618,12 @@ function getJsonGrid(store, arrCampos) {
 				else {
 					if(arrCampos[j].tipo == 'n'){
 						valorCampo = String(valorCampo).replace(',','.');
-						cadenajson = cadenajson + ",'"+arrCampos[j].campo+"':"+valorCampo;
+						if(valorCampo != ''){
+							cadenajson = cadenajson + ",'"+arrCampos[j].campo+"':"+valorCampo;
+						}
+						else {
+							cadenajson = cadenajson + ",'"+arrCampos[j].campo+"': 0";
+						}
 					}
 					else if(arrCampos[j].tipo == 'f'){
 						arrfecdes = valorCampo.split("/");
