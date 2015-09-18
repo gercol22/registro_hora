@@ -105,7 +105,8 @@ class ServicioListadoActividad {
 				break;
 		}
 		
-		$cadenaSQL = "SELECT CLI.razsoc, ACT.fecact, CNS.nomcon, CON.numcon, CON.tipcon, MOD.casman, MOD.desact, MOD.canhor
+		$cadenaSQL = "SELECT CLI.razsoc, ACT.fecact, CNS.nomcon, CON.numcon, CON.tipcon, MOD.casman, 
+							'<b>Planeamiento: </b>'||MOD.desinc||'. <b>---</b> <b>Respuesta</b>: '||MOD.desact AS desact, MOD.canhor
   						FROM actividad ACT
 							INNER JOIN cliente CLI ON ACT.rifcli=CLI.rifcli
 							INNER JOIN modact MOD ON ACT.numact=MOD.numact

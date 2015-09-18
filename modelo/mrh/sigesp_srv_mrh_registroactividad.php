@@ -146,7 +146,7 @@ class ServicioRegistroActividad {
            								WHERE MOD.numact=ACT.numact AND MOD.estfac=1 LIMIT 1),0) AS estfac	
 						FROM actividad ACT
 						INNER JOIN cliente CLI ON ACT.rifcli = CLI.rifcli 
-						WHERE {$filtroUSU} (ACT.numact ILIKE '%{$numact}%' OR CLI.razsoc ILIKE '%{$razsoc}%') 
+						WHERE {$filtroUSU} ACT.numact ILIKE '%{$numact}%' AND CLI.razsoc ILIKE '%{$razsoc}%' 
 						ORDER BY 1";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}

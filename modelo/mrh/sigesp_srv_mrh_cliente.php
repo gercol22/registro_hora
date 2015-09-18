@@ -20,7 +20,7 @@ class ServicioCliente {
 		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
 		$cadenaSQL = "SELECT rifcli, razsoc
 						FROM cliente 
-						WHERE (rifcli ILIKE '%{$rifcli}%' OR razsoc ILIKE '%{$razsoc}%')
+						WHERE rifcli ILIKE '%{$rifcli}%' AND razsoc ILIKE '%{$razsoc}%'
 						AND rifcli <> '----------'";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}
@@ -29,7 +29,7 @@ class ServicioCliente {
 		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
 		$cadenaSQL = "SELECT *
 						FROM cliente
-						WHERE (rifcli ILIKE '%{$rifcli}%' OR razsoc ILIKE '%{$razsoc}%')
+						WHERE rifcli ILIKE '%{$rifcli}%' AND razsoc ILIKE '%{$razsoc}%'
 						AND rifcli <> '----------'";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}

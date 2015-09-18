@@ -55,7 +55,7 @@ if ($_POST['ObjSon']) {
 			
 		case 'BUS_ACT':
 			$servicioRegistroActividad = new ServicioRegistroActividad();
-			$dataAct = $servicioRegistroActividad->buscarActividad($_SESSION['logcon'], $objetoData->numacti, $objetoData->razsoci);
+			$dataAct = $servicioRegistroActividad->buscarActividad($_SESSION['logcon'], $objetoData->numactiv, $objetoData->razsocial);
 			echo generarJson($dataAct);
 			unset($dataAct);
 			unset($servicioRegistroActividad);
