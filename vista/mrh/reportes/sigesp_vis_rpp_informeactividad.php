@@ -25,7 +25,7 @@ if (!$dataCabecera->EOF) {
 	
 	
 	// set default header data
-	$objTcpdf->SetHeaderData('logo_sigesp.jpg', PDF_HEADER_LOGO_WIDTH, '', str_repeat(' ',50).'INFORME DIARIO');
+	$objTcpdf->SetHeaderData('', PDF_HEADER_LOGO_WIDTH, '', str_repeat(' ',50).'INFORME DIARIO');
 	
 	// set header and footer fonts
 	$objTcpdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -59,10 +59,10 @@ if (!$dataCabecera->EOF) {
 	// add a page
 	$objTcpdf->AddPage();
 	
-	$arrConfig [0] = array('titulo'=>'<b>Modulo</b>','datind'=>'codmod','ancho'=>40,'alicol'=>'center','formato'=>'t');
+	$arrConfig [0] = array('titulo'=>'<b>Modulo</b>','datind'=>'codmod','ancho'=>45,'alicol'=>'center','formato'=>'t');
 	$arrConfig [1] = array('titulo'=>'<b>Situacion Planteada/Asignacion Recibida</b>','datind'=>'desinc','ancho'=>130,'alicol'=>'left','formato'=>'t');
 	$arrConfig [2] = array('titulo'=>'<b>Servicio</b>','datind'=>'tipinc','ancho'=>110,'alicol'=>'left','formato'=>'t');
-	$arrConfig [3] = array('titulo'=>'<b>Solucion/Recomendacion/Observaciones</b>','datind'=>'desact','ancho'=>300,'alicol'=>'justify','formato'=>'t');
+	$arrConfig [3] = array('titulo'=>'<b>Solucion/Recomendacion/Observaciones</b>','datind'=>'desact','ancho'=>295,'alicol'=>'justify','formato'=>'t');
 	$arrConfig [4] = array('titulo'=>'<b>Horas</b>','datind'=>'canhor','ancho'=>50,'alicol'=>'center','formato'=>'t');
 	
 	$strHtmlCabecera = $objTcpdf->cabeceraGenerica($arrCabecera);

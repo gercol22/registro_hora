@@ -66,14 +66,14 @@ class reporteEzpdf{
 		
 		//TITULO E IMAGEN
 		if ($orientacion == 'portrait') {
-			$this->objPDF->addJpegFromFile('../../../base/imagenes/logo_sigesp.jpg',25,703,95,70); // Agregar Logo
+			//$this->objPDF->addJpegFromFile('../../../base/imagenes/logo_sigesp.jpg',25,703,95,70); // Agregar Logo
 			$li_tm=$this->objPDF->getTextWidth(11,$as_titulo);
 			$tm=296-($li_tm/2);
 			$this->objPDF->addText($tm,730,14,$as_titulo); // Agregar el título
 			$this->objPDF->addText(510,760,7,date("d/m/Y")); // Agregar la Fecha
 		}
 		else {
-			$this->objPDF->addJpegFromFile('../../../base/imagenes/logo_sigesp.jpg',100,530,95,70); // Agregar Logo
+			//$this->objPDF->addJpegFromFile('../../../base/imagenes/logo_sigesp.jpg',100,530,95,70); // Agregar Logo
 			$li_tm=$this->objPDF->getTextWidth(11,$as_titulo);
 			$tm=406-($li_tm/2);
 			$this->objPDF->addText($tm,550,14,$as_titulo); // Agregar el título
