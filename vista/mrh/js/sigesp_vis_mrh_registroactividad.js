@@ -751,51 +751,251 @@ Ext.onReady(function(){
 	        		});
 	        	}
 	        	
-	        	var reActividad = Ext.data.Record.create([
-	        		{name: 'numact'},
-	        		{name: 'numpro'},
-	        		{name: 'rifcli'},
-	        		{name: 'razsoc'},
-	        		{name: 'tipact'},
-	        		{name: 'fecact'},
-	        		{name: 'estvis'},
-	        		{name: 'rescli'},
-	        		{name: 'estfac'}
+	        	var reConsultor = Ext.data.Record.create([
+	        	    {name: 'logcon'},    
+	        	    {name: 'nomcon'}
 	        	]);
+	        	                                      	                               	                               	                                  	
+	        	var dsConsultor =  new Ext.data.Store({
+	        	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reConsultor)
+	        	});
 	        	
+	        	var JSONObject = {'operacion' : 'BUS_CON'}			
+				var ObjSon = Ext.util.JSON.encode(JSONObject);
+				var parametros ='ObjSon='+ObjSon;
+				Ext.Ajax.request({
+					url : '../../controlador/mrh/sigesp_ctr_mrh_registroactividad.php',
+					params : parametros,
+					method: 'POST',
+					success: function ( resultado, request){
+						dsActividad.removeAll();
+						Ext.Msg.hide();
+						var datos = resultado.responseText;
+						var objetoConsultor = eval('(' + datos + ')');
+						dsConsultor.loadData(objetoConsultor);
+					}	
+				});
+	        	
+	        	//combo consultor
+	        	var cmbConsultor = new Ext.form.ComboBox({
+	        		store: dsConsultor,
+	        		width: 200,
+	        		labelSeparator: '',
+	        		fieldLabel:'Consultor',
+	        		displayField:'nomcon',
+	        		valueField:'logcon',
+	                id:'consultor',
+	                forceSelection: true,  
+	                typeAhead: true,
+	                mode: 'local',
+	                listWidth : 200,
+	                binding:true,
+	                editable: false,
+	                triggerAction: 'all',
+	            });
+	        	//fin combo consultor
+	        	
+	        	var reActividad = Ext.data.Record.create([
+	        	    {name: 'numact'},
+	        	    {name: 'numpro'},
+	        	    {name: 'rifcli'},
+	        	    {name: 'razsoc'},
+	        	    {name: 'tipact'},
+	        	    {name: 'fecact'},
+	        	    {name: 'estvis'},
+	        	    {name: 'rescli'},
+	        	    {name: 'estfac'},
+	        	    {name: 'nomcon'},
+	        	    {name: 'tothor'}
+	        	]);
+	        	                      	        	                      	        	
 	        	var dsActividad =  new Ext.data.Store({
 	        		reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reActividad)
 	        	});
 	        						
 	        	var cmActividad = new Ext.grid.ColumnModel([
 	                {header: "N&#250;mero", width: 20, sortable: true,   dataIndex: 'numact'},
-	                {header: "Fecha", width: 40, sortable: true, dataIndex: 'fecact'},
-	                {header: "Cliente", width: 40, sortable: true, dataIndex: 'razsoc'}
+	                {header: "Fecha", width: 20, sortable: true, dataIndex: 'fecact'},
+	                {header: "Cliente", width: 40, sortable: true, dataIndex: 'razsoc'},
+	                {header: "Consultor", width: 40, sortable: true, dataIndex: 'nomcon'},
+	                {header: "Horas", width: 10, sortable: true, dataIndex: 'tothor'}
 	            ]);
 	        	
-	        	
-	        	var comCatActividad = new com.gerco.vista.comCatalogo({
-	        		titvencat: 'Catalogo de Actividades',
-	        		anchoformbus: 450,
-	        		altoformbus:130,
-	        		anchogrid: 450,
-	        		altogrid: 400,
-	        		anchoven: 500,
-	        		altoven: 400,
-	        		datosgridcat: dsActividad,
-	        		colmodelocat: cmActividad,
-	        		arrfiltro:[{etiqueta:'N&#250;mero',id:'numactiv',valor:'numact'},
-	        				   {etiqueta:'Cliente',id:'razsocial',valor:'razsoc'}],
-	        		rutacontrolador:'../../controlador/mrh/sigesp_ctr_mrh_registroactividad.php',
-	        		parametros: "ObjSon={'operacion': 'BUS_ACT'",
-	        		tipbus:'P',
-	        		setdatastyle:'F',
-	        		formulario:plActividad,
-	        		onAceptar:true,
-	        		fnOnAceptar: cargarTareas
+	        	var gridActividadCat = new Ext.grid.GridPanel({
+	        	 	width: 640,
+	        	 	height: 200,
+	        	 	style: 'position:absolute;left:20px;top:170px',
+	        	 	enableColumnHide: false,
+	        	 	autoScroll:true,
+	             	border:true,
+	             	ds: dsActividad,
+	               	cm: cmActividad,
+	               	stripeRows: true,
+	              	viewConfig: {forceFit:true}
 	        	});
 	        	
-	        	comCatActividad.mostrarVentana();
+	        	var plActividadCat = new Ext.FormPanel({
+	        		width: 700,
+	        		height: 450,
+	        		frame: true,
+	        	   	items: [{
+	        			layout: "column",
+	        			defaults: {border: false},
+	        			style: 'position:absolute;left:15px;top:15px',
+	        			items: [{
+	        				layout: "form",
+	        				border: false,
+	        				labelWidth: 100,
+	        				items: [{
+	        					xtype:'textfield',
+	        					fieldLabel:'Numero',
+	        					labelSeparator:'',
+	        					id:'numactiv',
+	        					width:90
+	        				}]
+	        			}]
+	        		},{
+	        			layout: "column",
+	        			defaults: {border: false},
+	        			style: 'position:absolute;left:15px;top:50px',
+	        			items: [{
+	        				layout: "form",
+	        				border: false,
+	        				labelWidth: 100,
+	        				items: [{
+	        					xtype:'textfield',
+	        					fieldLabel:'Cliente',
+	        					labelSeparator:'',
+	        					id:'razsocial',
+	        					width:340
+	        				}],
+	        			}]
+	        		},{
+	        			layout: "column",
+	        			defaults: {border: false},
+	        			style: 'position:absolute;left:15px;top:85px',
+	        			items: [{
+	        				layout: "form",
+	        				border: false,
+	        				labelWidth: 100,
+	        				items: [{
+	        					xtype:"datefield",
+	            				fieldLabel:"Fecha",
+	        					labelSeparator :'',
+	            				width:100,
+	        					id:"fecactivi"
+	        				}]
+	        			}]
+	        		},{
+	        			layout: "column",
+	        			border: false,
+	        			style: 'position:absolute;left:15px;top:120px',
+	        			items: [{
+	        				layout: "form",
+	        				border: false,
+	        				labelWidth: 100,
+	        				items: [cmbConsultor]
+	        			}]
+	        		},{
+						layout:"column",
+						defaults: {border: false},
+						style: 'position:absolute;left:500px;top:120px',
+						border:false,
+						items:[{
+							layout:"form",
+							border:false,
+							items:[{
+								xtype: 'button',
+								text: 'Buscar',
+								iconCls: 'barrabuscar',
+								handler: function() {
+									Ext.MessageBox.wait('Procesando', 'Espere mientras se procesa su solicitud...');
+									var fecha = Ext.getCmp('fecactivi').getValue();
+									if (fecha != ''){
+										var dt = new Date(fecha);
+					   					var fecha = dt.format('Y-m-d');
+									}
+									
+									var JSONObject = {
+										'operacion' : 'BUS_ACT',
+										'numactiv'  : Ext.getCmp('numactiv').getValue(),
+										'razsocial' : Ext.getCmp('razsocial').getValue(),
+										'fecactivi' : fecha,
+										'consultor' : Ext.getCmp('consultor').getValue()
+									}			
+									var ObjSon = Ext.util.JSON.encode(JSONObject);
+		    						var parametros ='ObjSon='+ObjSon;
+									Ext.Ajax.request({
+										url : '../../controlador/mrh/sigesp_ctr_mrh_registroactividad.php',
+										params : parametros,
+										method: 'POST',
+										success: function ( resultado, request){
+											dsActividad.removeAll();
+											Ext.Msg.hide();
+											var datos = resultado.responseText;
+											var objetoActividad = eval('(' + datos + ')');
+											if(objetoActividad != ''){
+												if(objetoActividad.raiz == null || objetoActividad.raiz ==''){
+													Ext.MessageBox.show({
+														title:'Advertencia',
+														msg:'No existen datos para mostrar',
+														buttons: Ext.Msg.OK,
+														icon: Ext.MessageBox.WARNING
+													});
+												}
+												else{
+													//gridActividadCat.store.loadData(objetoProveedores);
+													dsActividad.loadData(objetoActividad);
+												}
+											}
+										}	
+									});
+								}
+							}]
+						}]
+					},gridActividadCat]
+	        	});
+	        	
+	        	gridActividadCat.on({
+	        		'celldblclick': {
+	        			fn: function () {
+	        				var registro =  gridActividadCat.getSelectionModel().getSelected();
+	        		    	if(registro != undefined) {
+	        		    		setDataFrom(plActividad,registro);
+	        		    		cargarTareas();
+							}
+	        		    	venCatActividad.destroy();
+	        			}
+	        		}
+	        	});
+	        	
+	        	//Ventana de tareas a procesar
+	        	var venCatActividad = new Ext.Window({
+	        		title: "<H1 align='center'>Catalogo de Actividades</H1>",
+	    		    width:700,
+	                height:450,
+	                modal: true,
+	                closable:false,
+	                plain: false,
+	                items:[plActividadCat],
+	                buttons: [{
+	        			text:'Aceptar',  
+	        		    handler: function () {
+	        		    	var registro =  gridActividadCat.getSelectionModel().getSelected();
+	        		    	if(registro != undefined) {
+	        		    		setDataFrom(plActividad,registro);
+	        		    		cargarTareas();
+							}
+	        		    	venCatActividad.destroy();
+	        		    }
+	        		},{
+	        		    text: 'Salir',
+	        		    handler:function () {
+	        		    	venCatActividad.destroy();
+	        		    }
+	                }]
+	            });
+	        	venCatActividad.show();	        	
 	        }
   		},{
   			text:'Emitir',
@@ -899,6 +1099,7 @@ Ext.onReady(function(){
 			defaults: {border: false},
 			style: 'position:absolute;left:15px;top:10px',
 			items: [{
+				width: 350,
 				layout: "form",
 				border: false,
 				labelWidth: 130,
@@ -913,6 +1114,19 @@ Ext.onReady(function(){
 					hiddenvalue:'',
 					defaultvalue:'',
 					allowBlank:false
+				}]
+			},{
+				width: 450,
+				layout: "form",
+				border: false,
+				labelWidth: 80,
+				items: [{
+					xtype:'textfield',
+					fieldLabel:'Consultor',
+					style:'font-weight: bold; border:none;background:#f1f1f1',
+					id:'nomcon',
+					width:350,
+					labelSeparator:''
 				}]
 			}]
 		},comtcProgramacion.fieldsetCatalogo,

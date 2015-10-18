@@ -133,20 +133,35 @@ class ServicioRegistroActividad {
 		return $respuesta;
 	}
 	
-	public function buscarActividad($logcon, $numact, $razsoc) {
+	public function buscarActividad($logcon, $numact, $razsoc, $fecact, $logconfiltro) {
 		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
 		$filtroUSU = '';
 		if($_SESSION['rolcon'] != 'A'){
-			$filtroUSU = " logcon = '{$logcon}' AND ";			
+			$filtroUSU = " CON.logcon = '{$logcon}' AND ";			
+		}
+		else {
+			if (!empty($logconfiltro)) {
+				$filtroUSU = " CON.logcon = '{$logconfiltro}' AND ";
+			}
 		}
 		
-		$cadenaSQL = "SELECT ACT.numact, ACT.numpro, ACT.rifcli, CLI.razsoc, ACT.tipact, ACT.fecact, ACT.estvis, ACT.rescli, 
+		$filtroFecha = '';
+		if (!empty($fecact)) {
+			$filtroFecha = " AND ACT.fecact = '{$fecact}' ";
+		}
+		
+		$cadenaSQL = "SELECT ACT.numact, ACT.numpro, ACT.rifcli, CLI.razsoc, ACT.tipact, ACT.fecact, ACT.estvis, ACT.rescli, CON.nomcon,
 							 COALESCE((SELECT MOD.estfac 
            								FROM modact MOD 
-           								WHERE MOD.numact=ACT.numact AND MOD.estfac=1 LIMIT 1),0) AS estfac	
+           								WHERE MOD.numact=ACT.numact AND MOD.estfac=1 LIMIT 1),0) AS estfac,
+           					 COALESCE((SELECT SUM(MOD.canhor) 
+           								FROM modact MOD 
+           								WHERE MOD.numact=ACT.numact 
+           								GROUP BY numact),0) AS tothor				
 						FROM actividad ACT
-						INNER JOIN cliente CLI ON ACT.rifcli = CLI.rifcli 
-						WHERE {$filtroUSU} ACT.numact ILIKE '%{$numact}%' AND CLI.razsoc ILIKE '%{$razsoc}%' 
+						INNER JOIN cliente CLI ON ACT.rifcli = CLI.rifcli
+						INNER JOIN consultor CON ON ACT.logcon = CON.logcon 
+						WHERE {$filtroUSU} ACT.numact ILIKE '%{$numact}%' AND CLI.razsoc ILIKE '%{$razsoc}%' {$filtroFecha}
 						ORDER BY 1";
 		return $this->conexionBD->Execute($cadenaSQL);
 	}

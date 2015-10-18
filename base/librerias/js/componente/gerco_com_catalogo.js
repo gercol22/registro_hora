@@ -28,35 +28,55 @@ com.gerco.vista.comCatalogo = function(options){
 	var cadenafiltro="[";
 	for (var i = 0; i < options.arrfiltro.length; i++) {
        	if(i==options.arrfiltro.length-1){
-			cadenafiltro =  cadenafiltro + "{fieldLabel:'"+options.arrfiltro[i].etiqueta+"',id:'"+options.arrfiltro[i].id+"',"+
-							"autoCreate: {tag: 'input', type: 'text', maxlength: '"+validarLongitud(options.arrfiltro[i].longitud)+"'},"+
-							"width: "+validarAncho(options.arrfiltro[i].ancho)+","+				
-							"changeCheck: function(){"+
-							"var valor = this.getValue();"+
-							"copiadatastorecatalogo.filter('"+options.arrfiltro[i].valor+"',valor,"+validarAnyMatch(options.arrfiltro[i].anyMatch)+",false);"+
-							"if(String(valor) !== String(this.startValue)){"+
-								"this.fireEvent('change', this, valor, this.startValue);"+
-							"}"+ 
-							"},"+								 
-							"initEvents : function(){"+
-								"AgregarKeyPress(this);"+
-							"}"+              
-    						"}";
-		}else{
-			cadenafiltro =  cadenafiltro + "{fieldLabel:'"+options.arrfiltro[i].etiqueta+"',id:'"+options.arrfiltro[i].id+"',"+
-							"autoCreate: {tag: 'input', type: 'text', maxlength: '"+validarLongitud(options.arrfiltro[i].longitud)+"'},"+
-							"width: "+validarAncho(options.arrfiltro[i].ancho)+","+				
-							"changeCheck: function(){"+
-							"var valor = this.getValue();"+
-							"copiadatastorecatalogo.filter('"+options.arrfiltro[i].valor+"',valor,"+validarAnyMatch(options.arrfiltro[i].anyMatch)+",false);"+
-							"if(String(valor) !== String(this.startValue)){"+
-								"this.fireEvent('change', this, valor, this.startValue);"+
-							"}"+ 
-							"},"+							 
-							"initEvents : function(){"+
-								"AgregarKeyPress(this);"+
-							"}"+               
-     						"},";
+       		switch (options.arrfiltro[i].tipo) {
+       			case 'texto':
+       				cadenafiltro =  cadenafiltro + "{xtype:'textfield',fieldLabel:'"+options.arrfiltro[i].etiqueta+"',id:'"+options.arrfiltro[i].id+"',"+
+					"autoCreate: {tag: 'input', type: 'text', maxlength: '"+validarLongitud(options.arrfiltro[i].longitud)+"'},"+
+					"width: "+validarAncho(options.arrfiltro[i].ancho)+","+				
+					"changeCheck: function(){"+
+					"var valor = this.getValue();"+
+					"copiadatastorecatalogo.filter('"+options.arrfiltro[i].valor+"',valor,"+validarAnyMatch(options.arrfiltro[i].anyMatch)+",false);"+
+					"if(String(valor) !== String(this.startValue)){"+
+						"this.fireEvent('change', this, valor, this.startValue);"+
+					"}"+ 
+					"},"+								 
+					"initEvents : function(){"+
+						"AgregarKeyPress(this);"+
+					"}"+              
+					"}";	
+       				break;
+       			
+       			case 'fecha':
+       				cadenafiltro =  cadenafiltro + "{xtype:'datefield',fieldLabel:'"+options.arrfiltro[i].etiqueta+"',id:'"+options.arrfiltro[i].id+"',"+
+					"width: "+validarAncho(options.arrfiltro[i].ancho)+"}";
+       				break;
+			
+			}
+		}
+       	else{
+			switch (options.arrfiltro[i].tipo) {
+				case 'texto':
+					cadenafiltro =  cadenafiltro + "{xtype:'textfield',fieldLabel:'"+options.arrfiltro[i].etiqueta+"',id:'"+options.arrfiltro[i].id+"',"+
+					"autoCreate: {tag: 'input', type: 'text', maxlength: '"+validarLongitud(options.arrfiltro[i].longitud)+"'},"+
+					"width: "+validarAncho(options.arrfiltro[i].ancho)+","+				
+					"changeCheck: function(){"+
+					"var valor = this.getValue();"+
+					"copiadatastorecatalogo.filter('"+options.arrfiltro[i].valor+"',valor,"+validarAnyMatch(options.arrfiltro[i].anyMatch)+",false);"+
+					"if(String(valor) !== String(this.startValue)){"+
+						"this.fireEvent('change', this, valor, this.startValue);"+
+					"}"+ 
+					"},"+								 
+					"initEvents : function(){"+
+						"AgregarKeyPress(this);"+
+					"}"+              
+					"},";	
+					break;
+   			
+	   			case 'fecha':
+	   				cadenafiltro =  cadenafiltro + "{xtype:'datefield',fieldLabel:'"+options.arrfiltro[i].etiqueta+"',id:'"+options.arrfiltro[i].id+"',"+
+					"width: "+validarAncho(options.arrfiltro[i].ancho)+"},";
+	   				break;
+			}
 		}
 	}
 	
@@ -93,9 +113,9 @@ com.gerco.vista.comCatalogo = function(options){
 		width: options.anchoformbus-22,
 		height:options.altoformbus-7,
 		border:true,
-		defaultType: 'textfield',
+		//defaultType: 'textfield',
 		style: 'position:absolute;left:5px;top:0px',
-    	defaults: {width: 230, labelSeparator:''},
+    	defaults: {labelSeparator:''},
 		cls:'fondo',
 		items: objetofiltro
 	})
@@ -165,8 +185,18 @@ com.gerco.vista.comCatalogo = function(options){
 	this.buscarDataCatalogo = function(){
 		var nuevosparamentros = options.parametros;
 							
-		for (var i = 0; i < options.arrfiltro.length; i++) {                               
-       		nuevosparamentros = nuevosparamentros +",'"+options.arrfiltro[i].id+"':'"+Ext.getCmp(options.arrfiltro[i].id).getValue()+"'";
+		for (var i = 0; i < options.arrfiltro.length; i++) {
+			switch (options.arrfiltro[i].tipo) {
+   				case 'texto':
+   					nuevosparamentros = nuevosparamentros +",'"+options.arrfiltro[i].id+"':'"+Ext.getCmp(options.arrfiltro[i].id).getValue()+"'";
+   					break;
+   				case 'fecha':
+   					var dt = new Date(Ext.getCmp(options.arrfiltro[i].id).getValue());
+   					var fecha = dt.format('Y-m-d');
+   					nuevosparamentros = nuevosparamentros +",'"+options.arrfiltro[i].id+"':'"+fecha+"'";
+   					break;
+			}	
+       		
 		}
 		
 		if(options.arrtxtfiltro!=undefined){
