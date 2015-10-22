@@ -18,7 +18,7 @@ class ServicioConsultor {
 	
 	public function buscarConsultores() {
 		$this->conexionBD = ConexionBaseDatos::getInstanciaConexion();
-		$cadenaSQL = "SELECT logcon, nomcon, rolcon
+		$cadenaSQL = "SELECT logcon, nomcon, rolcon, tipcon
 						FROM consultor 
 						WHERE logcon <> '--------------------' AND estcon = 1";
 		return $this->conexionBD->Execute($cadenaSQL);
@@ -71,6 +71,7 @@ class ServicioConsultor {
 		if ($this->daoConsultor->_saved) {
 			$this->daoConsultor->nomcon    = utf8_decode($objJson->nomcon);
 			$this->daoConsultor->rolcon    = $objJson->rolcon;
+			$this->daoConsultor->tipcon    = $objJson->tipcon;
 			if ($objJson->pascon != '') {
 				$this->daoConsultor->pascon = $objJson->pascon;
 			}

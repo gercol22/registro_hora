@@ -173,4 +173,9 @@ $arrDesActSer[4]['descripcion'] = 'Instalaci&#243;n';
 
 $arrDesActPre[0]['descripcion'] = 'Presentaci&#243;n';
 
+/***********************TIPO CONSULTOR*******************************/
+$arrTipConsul[0]['codigo'] = 'I';
+$arrTipConsul[0]['descripcion'] = 'Consultor Interno';
+$arrTipConsul[1]['codigo'] = 'E';
+$arrTipConsul[1]['descripcion'] = 'Consultor Externo';
 

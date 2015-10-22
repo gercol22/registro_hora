@@ -28,6 +28,34 @@ Ext.onReady(function(){
 	});
 	//fin combo rol
 	
+	//combo tipo
+	var reTipo = Ext.data.Record.create([
+	    {name: 'codigo'},    
+	    {name: 'descripcion'}
+	]);
+	                               	                               	                                  	
+	var dsTipo =  new Ext.data.Store({
+	    reader: new Ext.data.JsonReader({root: 'raiz',id: "id"},reTipo)
+	});
+	
+	var cmbTipo = new Ext.form.ComboBox({
+		store: dsTipo,
+		labelSeparator: '',
+		fieldLabel:'Tipo',
+		displayField:'descripcion',
+		valueField:'codigo',
+        id:'tipcon',
+        forceSelection: true,  
+        typeAhead: true,
+        mode: 'local',
+        binding:true,
+        editable: false,
+        width:150,
+        triggerAction: 'all',
+        allowBlank:false
+	});
+	//fin combo tipo
+	
 	//OBETENIEDO LA DATA INICIAL...
 	var myJSONObject = {"operacion":"DAT_INI"};
 	var ObjSon=Ext.util.JSON.encode(myJSONObject);
@@ -38,8 +66,11 @@ Ext.onReady(function(){
 		method: 'POST',
 		success: function ( result, request ) {
 			var datos = result.responseText;
-			var objData = eval('(' + datos + ')');
-			dsRol.loadData(objData);
+			var datos = datos.split("|");
+			var objDataRol = eval('(' + datos[0] + ')');
+			var objDataTip = eval('(' + datos[1] + ')');
+			dsRol.loadData(objDataRol);
+			dsTipo.loadData(objDataTip);
 		},
 		failure: function ( result, request){ 
 				Ext.MessageBox.alert('Error', 'Error de comunicacion con el servidor'); 
@@ -51,7 +82,7 @@ Ext.onReady(function(){
 		title: "<H1 align='center'>Consultores</H1>",
 		style: 'position:absolute;top:70px;left:250px', 
 		height: 300,
-		width: 500,
+		width: 600,
 	   	applyTo:'formulario',
 	   	frame: true,
 	   	bodyStyle:'padding:15px 15px 0',
@@ -70,6 +101,7 @@ Ext.onReady(function(){
 	        	var logcon = Ext.getCmp('logcon').getValue();
 	        	var nomcon = Ext.getCmp('nomcon').getValue();
 	        	var rolcon = Ext.getCmp('rolcon').getValue();
+	        	var tipcon = Ext.getCmp('tipcon').getValue();
 	        	var claveNueva = Ext.getCmp('clavenue').getValue();
 	        	var claveNuevaRep = Ext.getCmp('clavenuerep').getValue();
 	        	var objetoData = null;
@@ -91,6 +123,7 @@ Ext.onReady(function(){
 		        	    	        	'logcon': logcon,
 		        	    	        	'nomcon': nomcon,
 		        	    	        	'rolcon': rolcon,
+		        	    	        	'tipcon': tipcon,
 		        	    	        	'pascon': b64_sha1('b2c'+claveNueva)
 		        	    	        };
 		        	        	}
@@ -110,6 +143,7 @@ Ext.onReady(function(){
 	        	    	        	'logcon': logcon,
 	        	    	        	'nomcon': nomcon,
 	        	    	        	'rolcon': rolcon,
+	        	    	        	'tipcon': tipcon,
 	        	    	        	'pascon': ''
 	        	    	        };
 		        			}
@@ -192,7 +226,8 @@ Ext.onReady(function(){
 	        	var reConsultor = Ext.data.Record.create([
 	        	    {name: 'logcon'},
 	        	    {name: 'nomcon'},
-	        	    {name: 'rolcon'}
+	        	    {name: 'rolcon'},
+	        	    {name: 'tipcon'}
 	        	]);
 	        	                       	
                	var dsConsultor =  new Ext.data.Store({
@@ -328,8 +363,25 @@ Ext.onReady(function(){
 					labelSeparator:''
 				}]
 			}]
-		},cmbRol,
-		{
+		},{
+			layout: "column",
+			defaults: {border: false},
+			items: [{
+				layout: "form",
+				border: false,
+				labelWidth: 100,
+				items: [cmbRol]
+			}]
+		},{
+			layout: "column",
+			defaults: {border: false},
+			items: [{
+				layout: "form",
+				border: false,
+				labelWidth: 100,
+				items: [cmbTipo]
+			}]
+		},{
 			layout: "column",
 			defaults: {border: false},
 			items: [{

@@ -606,7 +606,7 @@ Ext.onReady(function(){
 		method: 'POST',
 		success: function ( result, request ) {
 			var datos = result.responseText;
-			var datos = datos.split("|");;
+			var datos = datos.split("|");
 			var objDataAct = eval('(' + datos[0] + ')');
 			var objDataTip = eval('(' + datos[1] + ')');
 			var objDataMod = eval('(' + datos[2] + ')');

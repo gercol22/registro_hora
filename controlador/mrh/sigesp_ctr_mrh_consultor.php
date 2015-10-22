@@ -8,7 +8,7 @@ if ($_POST['ObjSon']) {
 	
 	switch ($objetoData->operacion) {
 		case 'DAT_INI':
-			echo generarJsonArreglo($arrRolCon);
+			echo generarJsonArreglo($arrRolCon).'|'.generarJsonArreglo($arrTipConsul);
 			break;
 			
 		case 'INS_CON':
