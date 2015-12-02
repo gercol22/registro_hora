@@ -667,12 +667,15 @@ Ext.onReady(function(){
 				        		var strJsonActTar = "{'operacion':'"+operacion+"',"+strJsonActividad+",'arrModAct':"+strJsonGrid+"}";
 				        		var objjson = Ext.util.JSON.decode(strJsonActTar);
 				        		if (typeof(objjson) == 'object') {
+				        			Ext.MessageBox.wait('Procesando', 'Espere mientras se procesa su solicitud...');
 				        			var parametros ='ObjSon='+strJsonActTar;
 				    	        	Ext.Ajax.request({
 				    	        		url: '../../controlador/mrh/sigesp_ctr_mrh_registroactividad.php',
 				    	        		params: parametros,
 				    	        		method: 'POST',
+				    	        		timeout: 9999999999999,
 				    	        		success: function ( result, request ) {
+				    	        			Ext.Msg.hide();
 				    	        			var respuesta = result.responseText;
 				    						var datajson = eval('(' + respuesta + ')');
 				    						if(datajson.raiz.valido==true){
